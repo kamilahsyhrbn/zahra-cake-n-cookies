@@ -6,13 +6,27 @@ import {
   getCategoryById,
   updateCategory,
 } from "../controller/category.controller.js";
+import { adminOnly, protectedRoute } from "../middleware/verifyToken.js";
+import { uploadSingle } from "../middleware/uploadImage.js";
 
 const categoryRouter = express.Router();
 
-categoryRouter.post("/", createCategory);
+categoryRouter.post(
+  "/",
+  protectedRoute,
+  adminOnly,
+  uploadSingle,
+  createCategory
+);
 categoryRouter.get("/", getAllCategories);
-categoryRouter.get("/:id", getCategoryById);
-categoryRouter.put("/:id", updateCategory);
-categoryRouter.delete("/:id", deleteCategory);
+categoryRouter.get("/:id", protectedRoute, adminOnly, getCategoryById);
+categoryRouter.put(
+  "/:id",
+  protectedRoute,
+  adminOnly,
+  uploadSingle,
+  updateCategory
+);
+categoryRouter.delete("/:id", protectedRoute, adminOnly, deleteCategory);
 
 export default categoryRouter;

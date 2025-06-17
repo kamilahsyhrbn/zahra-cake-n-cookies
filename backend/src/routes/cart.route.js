@@ -5,12 +5,13 @@ import {
   getCart,
   removeCartItem,
 } from "../controller/cart.controller.js";
+import { protectedRoute } from "../middleware/verifyToken.js";
 
 const cartRouter = express.Router();
 
-cartRouter.post("/", addToCart);
-cartRouter.get("/", getCart);
-cartRouter.delete("/", clearCart);
-cartRouter.delete("/:id", removeCartItem);
+cartRouter.post("/", protectedRoute, addToCart);
+cartRouter.get("/", protectedRoute, getCart);
+cartRouter.delete("/", protectedRoute, clearCart);
+cartRouter.delete("/:id", protectedRoute, removeCartItem);
 
 export default cartRouter;
