@@ -12,6 +12,7 @@ const orderSchema = new mongoose.Schema(
         menu: { type: mongoose.Schema.Types.ObjectId, ref: "Menu" },
         price: { type: Number, required: true },
         quantity: { type: Number, required: true },
+        isReviewed: { type: Boolean, default: false },
       },
     ],
     shipping: {

@@ -12,7 +12,7 @@ import { adminOnly, protectedRoute } from "../middleware/verifyToken.js";
 const orderRouter = express.Router();
 
 orderRouter.post("/", protectedRoute, createOrder);
-orderRouter.get("/", protectedRoute, getAllOrders);
+orderRouter.get("/", protectedRoute, adminOnly, getAllOrders);
 orderRouter.get("/user", protectedRoute, getOrderByUserId);
 orderRouter.get("/:id", protectedRoute, getOrderById);
 orderRouter.put("/:id", protectedRoute, updateOrderStatus);

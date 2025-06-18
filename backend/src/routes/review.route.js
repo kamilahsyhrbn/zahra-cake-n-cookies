@@ -3,12 +3,15 @@ import {
   createReview,
   deleteReview,
   getAllReviews,
+  updateReview,
 } from "../controller/review.controller.js";
+import { protectedRoute } from "../middleware/verifyToken.js";
 
 const reviewRouter = express.Router();
 
-reviewRouter.post("/", createReview);
 reviewRouter.get("/:id", getAllReviews);
-reviewRouter.delete("/:id", deleteReview);
+reviewRouter.post("/", protectedRoute, createReview);
+reviewRouter.put("/:id", protectedRoute, updateReview);
+reviewRouter.delete("/:id", protectedRoute, deleteReview);
 
 export default reviewRouter;
