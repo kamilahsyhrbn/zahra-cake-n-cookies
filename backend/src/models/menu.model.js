@@ -15,13 +15,19 @@ const menuSchema = new mongoose.Schema(
       min: 0,
       required: true,
     },
+    weight: {
+      type: Number,
+      min: 0,
+      required: true,
+    },
     category: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
       required: true,
     },
     description: {
       type: String,
-      required: true,
+      default: "",
     },
     isPreOrder: {
       type: Boolean,

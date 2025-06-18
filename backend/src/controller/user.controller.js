@@ -148,3 +148,31 @@ export const deleteAccount = async (req, res) => {
     });
   }
 };
+
+export const getLikedMenu = async (req, res) => {
+  try {
+    const { id } = req.user;
+
+    const user = await User.findById(id).populate("likedMenus");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Pengguna tidak ditemukan",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mendapatkan data menu yang disukai",
+      data: user.likedMenus,
+    });
+  } catch (error) {
+    console.log("Error in getting liked menu", error);
+    res.status(500).json({
+      success: false,
+      message: "Error in getting liked menu",
+      error: error.message,
+    });
+  }
+};
