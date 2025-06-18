@@ -39,17 +39,4 @@ const cartSchema = new mongoose.Schema(
   }
 );
 
-cartSchema.pre("save", function (next) {
-  if (this.isModified("menus")) {
-    this.updateTotalPrice().then(() => next());
-  } else {
-    next();
-  }
-});
-
-cartSchema.methods.updateTotalPrice = function () {
-  this.totalPrice = this.menus.reduce((total, item) => total + item.total, 0);
-  return this.save();
-};
-
 export default mongoose.model("Cart", cartSchema);

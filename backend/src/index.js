@@ -11,6 +11,7 @@ import cartRouter from "./routes/cart.route.js";
 import orderRouter from "./routes/order.route.js";
 import transactionRouter from "./routes/transaction.route.js";
 import reviewRouter from "./routes/review.route.js";
+import rajaOngkirRouter from "./routes/rajaOngkir.route.js";
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/order", orderRouter);
 app.use("/api/v1/transaction", transactionRouter);
 app.use("/api/v1/review", reviewRouter);
+app.use("/api/v1/rajaOngkir", rajaOngkirRouter);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);

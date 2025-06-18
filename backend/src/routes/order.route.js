@@ -5,16 +5,17 @@ import {
   getAllOrders,
   getOrderById,
   getOrderByUserId,
-  updateOrder,
+  updateOrderStatus,
 } from "../controller/order.controller.js";
+import { adminOnly, protectedRoute } from "../middleware/verifyToken.js";
 
 const orderRouter = express.Router();
 
-orderRouter.post("/", createOrder);
-orderRouter.get("/", getAllOrders);
-orderRouter.get("/user/:id", getOrderByUserId);
-orderRouter.get("/:id", getOrderById);
-orderRouter.put("/:id", updateOrder);
-orderRouter.delete("/:id", deleteOrder);
+orderRouter.post("/", protectedRoute, createOrder);
+orderRouter.get("/", protectedRoute, getAllOrders);
+orderRouter.get("/user", protectedRoute, getOrderByUserId);
+orderRouter.get("/:id", protectedRoute, getOrderById);
+orderRouter.put("/:id", protectedRoute, updateOrderStatus);
+orderRouter.delete("/:id", protectedRoute, deleteOrder);
 
 export default orderRouter;
