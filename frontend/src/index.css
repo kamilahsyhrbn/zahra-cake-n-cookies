@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fcfcfc;
+  overscroll-behavior: none;
+  font-family: "Poppins", sans-serif;
+}
+
+.text-primary {
+  color: #54b0a2;
+}
+
+.text-secondary {
+  color: #f7c7a3;
+}
+
+.text-accent {
+  color: #1d6f64;
+}
+
+.bg-primary {
+  background-color: #54b0a2;
+}
+
+.bg-secondary {
+  background-color: #f7c7a3;
+}
+
+.bg-accent {
+  background-color: #1d6f64;
+}
