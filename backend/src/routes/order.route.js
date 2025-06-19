@@ -5,6 +5,7 @@ import {
   getAllOrders,
   getOrderById,
   getOrderByUserId,
+  report,
   updateOrderStatus,
 } from "../controller/order.controller.js";
 import { adminOnly, protectedRoute } from "../middleware/verifyToken.js";
@@ -13,6 +14,7 @@ const orderRouter = express.Router();
 
 orderRouter.post("/", protectedRoute, createOrder);
 orderRouter.get("/", protectedRoute, adminOnly, getAllOrders);
+orderRouter.get("/report", protectedRoute, adminOnly, report);
 orderRouter.get("/user", protectedRoute, getOrderByUserId);
 orderRouter.get("/:id", protectedRoute, getOrderById);
 orderRouter.put("/:id", protectedRoute, updateOrderStatus);

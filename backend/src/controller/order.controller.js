@@ -246,3 +246,34 @@ export const deleteOrder = async (req, res) => {
     });
   }
 };
+
+export const report = async (req, res) => {
+  try {
+    const { startDate, endDate, status } = req.body;
+
+    const filter = {
+      createdAt: { $gte: startDate, $lt: endDate },
+    };
+
+    if (status && status !== "all") {
+      filter.status = status;
+    }
+
+    const orders = await Order.find(filter)
+      .populate("user")
+      .populate("items.menu");
+
+    res.status(200).json({
+      success: true,
+      message: "Order berhasil diambil",
+      data: orders,
+    });
+  } catch (error) {
+    console.log("Error in getting all orders", error);
+    res.status(500).json({
+      success: false,
+      message: "Error in getting all orders",
+      error: error.message,
+    });
+  }
+};
