@@ -25,6 +25,7 @@ const orderSchema = new mongoose.Schema(
       service: { type: String, required: true },
       cost: { type: Number, required: true },
       estimation: { type: String, required: true },
+      notes: { type: String, default: "" },
     },
     totalWeight: { type: Number, required: true },
     totalPrice: { type: Number, required: true },

@@ -7,7 +7,7 @@ import Transaction from "../models/transaction.model.js";
 
 export const createOrder = async (req, res) => {
   try {
-    const { items, name, phone, address, province, city } = req.body;
+    const { items, name, phone, address, province, city, notes } = req.body;
 
     if (!items || !name || !phone || !address || !province || !city) {
       return res.status(400).json({
@@ -81,6 +81,7 @@ export const createOrder = async (req, res) => {
         service: shippingData.service + "-" + shippingData.description,
         cost: shippingCost,
         estimation: shippingData.cost[0].etd,
+        notes,
       },
       totalWeight,
       totalPrice: grandTotal,
