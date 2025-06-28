@@ -239,7 +239,7 @@ export const searchMenu = async (req, res) => {
   try {
     const { query } = req.query;
 
-    if (!query.trim()) {
+    if (!query || query.trim() === "") {
       return res.status(400).json({
         success: false,
         message: "Query tidak boleh kosong",

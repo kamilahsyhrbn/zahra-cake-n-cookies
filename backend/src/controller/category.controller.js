@@ -6,7 +6,7 @@ export const createCategory = async (req, res) => {
     const { name, description } = req.body;
     const image = req.file && req.file.path;
 
-    if (!name.trim()) {
+    if (!name || name.trim() === "") {
       return res.status(400).json({
         success: false,
         message: "Nama kategori harus diisi",

@@ -7,14 +7,24 @@ export const register = async (req, res) => {
   try {
     const { name, email, phone, password, role } = req.body;
 
-    if (!name.trim() || !email.trim() || !password.trim()) {
+    if (
+      !name ||
+      !email ||
+      !password ||
+      name.trim() === "" ||
+      email.trim() === "" ||
+      password.trim() === ""
+    ) {
       return res.status(400).json({
         success: false,
         message: "Semua field harus diisi",
       });
     }
 
-    if (role === "user" && !phone.trim()) {
+    if (
+      (role === "user" && !phone) ||
+      (role === "user" && phone.trim() === "")
+    ) {
       return res.status(400).json({
         success: false,
         message: "Nomor telepon harus diisi",
@@ -30,7 +40,7 @@ export const register = async (req, res) => {
     }
 
     const existingPhone = await User.findOne({ phone });
-    if (existingPhone) {
+    if (role === "user" && existingPhone) {
       return res.status(400).json({
         success: false,
         message: "Nomor telepon sudah terdaftar",
@@ -40,7 +50,7 @@ export const register = async (req, res) => {
     const user = await User.create({
       name,
       email,
-      phone,
+      phone: role === "admin" ? null : phone,
       password,
       role,
     });
@@ -64,7 +74,7 @@ export const login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
 
-    if (!email || !password) {
+    if (!email || !password || email.trim() === "" || password.trim() === "") {
       return res.status(400).json({
         success: false,
         message: "Semua field harus diisi",
@@ -119,6 +129,13 @@ export const login = async (req, res) => {
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
+
+    if (!email || email.trim() === "") {
+      return res.status(400).json({
+        success: false,
+        message: "Email harus diisi",
+      });
+    }
 
     const user = await User.findOne({ email });
 
@@ -203,7 +220,12 @@ export const changePassword = async (req, res) => {
 
     const user = await User.findById(req.user.id);
 
-    if (!currentPassword.trim() || !newPassword.trim()) {
+    if (
+      !currentPassword ||
+      !newPassword ||
+      currentPassword === "" ||
+      newPassword === ""
+    ) {
       return res.status(400).json({
         success: false,
         message: "Semua field harus diisi",
