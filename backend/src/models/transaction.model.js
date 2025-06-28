@@ -2,21 +2,26 @@ import mongoose from "mongoose";
 
 const transactionSchema = new mongoose.Schema(
   {
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     order: { type: mongoose.Schema.Types.ObjectId, ref: "Order" },
-    midtransOrderId: {
+    orderId: {
       type: String,
       required: true,
       unique: true,
     },
-    transactionStatus: String,
-    paymentType: String,
-    grossAmount: String,
-    fraudStatus: String,
-    vaNumbers: [{ bank: String, va_number: String }],
-    ewalletType: String,
-    paymentCode: String,
-    pdfUrl: String,
-    rawData: Object,
+    amount: {
+      type: Number,
+      required: true,
+    },
+    paymentUrl: {
+      type: String,
+      required: true,
+    },
+    transactionStatus: {
+      type: String,
+      enum: ["pending", "success", "failed"],
+      default: "pending",
+    },
   },
   {
     timestamps: true,

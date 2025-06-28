@@ -33,3 +33,30 @@ export const getCities = async (req, res) => {
     res.status(500).json({ message: "Gagal mengambil data kota", error });
   }
 };
+
+export const getCosts = async (req, res) => {
+  const { destination, weight } = req.body;
+
+  try {
+    const response = await axios.post(
+      `${process.env.RAJAONGKIR_BASE_URL}/cost`,
+      new URLSearchParams({
+        origin: "133",
+        destination,
+        weight,
+        courier: "jne",
+      }),
+      {
+        headers: {
+          key: process.env.RAJAONGKIR_API_KEY,
+          "content-type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    const costs = response.data.rajaongkir.results;
+    res.json(costs);
+  } catch (error) {
+    res.status(500).json({ message: "Gagal mengambil data tarif", error });
+  }
+};

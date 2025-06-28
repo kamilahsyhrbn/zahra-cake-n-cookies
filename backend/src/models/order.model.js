@@ -29,7 +29,6 @@ const orderSchema = new mongoose.Schema(
     },
     totalWeight: { type: Number, required: true },
     totalPrice: { type: Number, required: true },
-    paymentUrl: { type: String, required: true },
     status: {
       type: String,
       enum: ["pending", "in-progress", "delivered", "completed", "cancelled"],
