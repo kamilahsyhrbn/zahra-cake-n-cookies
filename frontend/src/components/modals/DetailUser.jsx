@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
-import { id } from "date-fns/locale";
+import { da, id } from "date-fns/locale";
 
 export const DetailUser = ({ data, onClose }) => {
   const [show, setShow] = useState(false);
@@ -21,8 +21,8 @@ export const DetailUser = ({ data, onClose }) => {
         <div className="flow-root my-10">
           <div className="flex justify-center mb-5">
             <img
-              src={"/avatar.png"}
-              alt="avatar"
+              src={data?.image || "/avatar.png"}
+              alt={data?.name}
               className="w-32 h-32 rounded-full object-cover"
             />
           </div>
@@ -30,32 +30,34 @@ export const DetailUser = ({ data, onClose }) => {
           <dl className="-my-3 divide-y divide-gray-100 text-sm">
             <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
               <dt className="font-medium text-gray-900">Nama</dt>
-              <dd className="text-gray-700 sm:col-span-2">John Doe</dd>
+              <dd className="text-gray-700 sm:col-span-2">{data?.name}</dd>
             </div>
 
             <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
               <dt className="font-medium text-gray-900">Email</dt>
               <dd className="text-gray-700 sm:col-span-2 flex items-center justify-between">
-                johndoe@gmail.com
+                {data?.email}
               </dd>
             </div>
 
             <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
               <dt className="font-medium text-gray-900">Nomor Telepon</dt>
-              <dd className="text-gray-700 sm:col-span-2">081234567890</dd>
+              <dd className="text-gray-700 sm:col-span-2">
+                {data?.phone || "-"}
+              </dd>
             </div>
 
             <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
               <dt className="font-medium text-gray-900">Alamat</dt>
               <dd className="text-gray-700 sm:col-span-2">
-                Jl. Contoh No. 123, Kota Contoh
+                {data?.address || "-"}
               </dd>
             </div>
 
             <div className="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
               <dt className="font-medium text-gray-900">Tanggal Bergabung</dt>
               <dd className="text-gray-700 sm:col-span-2">
-                {format(new Date("2023-01-01"), "dd MMMM yyyy", {
+                {format(new Date(data?.createdAt), "dd MMMM yyyy", {
                   locale: id,
                 })}
               </dd>

@@ -64,16 +64,16 @@ export const MenuForm = () => {
               required
             />
             {/* Preview Gambar */}
-            {images.map((image, index) => (
-              <div key={index} className="relative w-36 h-36">
+            {images.map((image, i) => (
+              <div key={i} className="relative w-36 h-36">
                 <img
                   src={isUpdate ? image.preview || image : image.preview}
-                  alt={`Product preview ${index + 1}`}
+                  alt={`Product preview ${i + 1}`}
                   className="w-full h-full object-cover rounded-xl border border-gray-300 shadow"
                 />
                 <button
                   type="button"
-                  onClick={() => removeImage(index, image)}
+                  onClick={() => removeImage(i, image)}
                   className="absolute top-2 right-2 bg-red-500 text-white rounded-full cursor-pointer"
                 >
                   <IoMdClose size={20} />

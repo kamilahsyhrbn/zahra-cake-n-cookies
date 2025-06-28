@@ -17,6 +17,8 @@ import { Users } from "../pages/admin/Users";
 import { Download } from "../pages/admin/report/Download";
 import { Report } from "../pages/admin/report/Report";
 
+import ProtectedRoute from "../utils/protectedRoute";
+
 export const routes = createBrowserRouter([
   {
     path: "*",
@@ -36,47 +38,91 @@ export const routes = createBrowserRouter([
     children: [
       {
         path: "/admin/dashboard",
-        element: <Dashboard />,
+        element: (
+          <ProtectedRoute role="admin">
+            <Dashboard />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/admin/admins",
-        element: <Admin />,
+        element: (
+          <ProtectedRoute role="admin">
+            <Admin />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/admin/admin-form/:id?",
-        element: <AdminForm />,
+        element: (
+          <ProtectedRoute role="admin">
+            <AdminForm />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/admin/menus",
-        element: <Menu />,
+        element: (
+          <ProtectedRoute role="admin">
+            <Menu />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/admin/menu-form/:id?",
-        element: <MenuForm />,
+        element: (
+          <ProtectedRoute role="admin">
+            <MenuForm />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/admin/categories",
-        element: <Category />,
+        element: (
+          <ProtectedRoute role="admin">
+            <Category />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/admin/category-form/:id?",
-        element: <CategoryForm />,
+        element: (
+          <ProtectedRoute role="admin">
+            <CategoryForm />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/admin/orders",
-        element: <Order />,
+        element: (
+          <ProtectedRoute role="admin">
+            <Order />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/admin/order-detail/:id",
-        element: <OrderDetails />,
+        element: (
+          <ProtectedRoute role="admin">
+            <OrderDetails />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/admin/users",
-        element: <Users />,
+        element: (
+          <ProtectedRoute role="admin">
+            <Users />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/admin/report",
-        element: <Report />,
+        element: (
+          <ProtectedRoute role="admin">
+            <Report />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

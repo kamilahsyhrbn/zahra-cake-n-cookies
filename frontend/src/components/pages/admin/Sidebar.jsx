@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import useAuthStore from "../../../store/authStore";
+import { showSuccessToast } from "../../common/Toast";
+import Danger from "../../modals/Danger";
 
 export const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { logout, currentUser } = useAuthStore();
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -14,6 +19,17 @@ export const Sidebar = () => {
   useEffect(() => {
     setIsOpen(false);
   }, [location]);
+
+  const handleShowDeleteModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const handleLogout = () => {
+    logout();
+    showSuccessToast("Berhasil keluar, sampai jumpa kembali!");
+    navigate("/");
+    setIsModalOpen(false);
+  };
 
   return (
     <>
@@ -156,26 +172,40 @@ export const Sidebar = () => {
         </div>
 
         <div className="sticky inset-x-0 bottom-0 border-t border-gray-200">
-          <button className="border-b border-gray-200 flex items-center w-full p-4 text-sm hover:font-medium cursor-pointer hover:text-red-700">
+          <button
+            onClick={handleShowDeleteModal}
+            className="border-b border-gray-200 flex items-center w-full p-4 text-sm hover:font-medium cursor-pointer hover:text-red-700"
+          >
             Keluar
           </button>
           <div className="flex items-center gap-2 bg-white p-4 hover:bg-gray-50">
             <img
-              alt="Admin's Avatar"
+              alt={currentUser?.name}
               src={"/avatar.png"}
               className="size-9 rounded-full object-cover"
             />
 
             <div>
               <p className="text-xs">
-                <strong className="block font-medium">admin name</strong>
+                <strong className="block font-medium">
+                  {currentUser?.name}
+                </strong>
 
-                <span className="truncate">admin email</span>
+                <span className="truncate">{currentUser?.email}</span>
               </p>
             </div>
           </div>
         </div>
       </div>
+
+      {isModalOpen && (
+        <Danger
+          title="Keluar"
+          message="Apakah anda yakin ingin keluar?"
+          onClose={handleShowDeleteModal}
+          onSubmit={handleLogout}
+        />
+      )}
     </>
   );
 };

@@ -81,13 +81,22 @@ export const Download = () => {
         </section>
       </div>
 
-      <section className="flex justify-end items-end flex-col gap-6">
-        <h4 className="text-center font-semibold">
-          Gresik,{" "}
-          {format(new Date("2023-01-01"), "dd MMMM yyyy", {
-            locale: id,
-          })}
-        </h4>
+      <section className="flex justify-end items-end">
+        <div className="flex flex-col justify-between gap-24">
+          <div>
+            <h4 className="text-center font-semibold">
+              Gresik,{" "}
+              {format(new Date("2025-01-01"), "dd MMMM yyyy", {
+                locale: id,
+              })}
+            </h4>
+          </div>
+          <div>
+            <h4 className="text-center font-medium">
+              (Admin Zahra Cake & Cookies)
+            </h4>
+          </div>
+        </div>
       </section>
     </div>
   );
