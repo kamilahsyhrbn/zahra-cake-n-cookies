@@ -1,0 +1,59 @@
+import React from "react";
+import { TitleDesc } from "../../../components/pages/user/TitleDesc";
+
+export const Contact = () => {
+  const address = "Jl. Malik Ibrahim No. 36, Gresik";
+  return (
+    <div className="container mb-10">
+      <TitleDesc
+        title="Kontak Kami"
+        desc="Hubungi tim kami untuk pertanyaan, bantuan, atau informasi lebih lanjut."
+      />
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8 my-10">
+        <div
+          className="h-32 rounded bg-[#54B0A2]/25 flex flex-col items-center justify-center gap-3 cursor-pointer"
+          onClick={() => window.open("https://wa.me/6287856065038")}
+        >
+          <h4 className="font-medium text-xl">Nomor Telepon</h4>
+          <p className="">+62 87856065038</p>
+        </div>
+
+        <div
+          className="h-32 rounded bg-[#54B0A2]/25 flex flex-col items-center justify-center gap-3 cursor-pointer"
+          onClick={() => window.open("mailto:zahracakencookies@gmail.com")}
+        >
+          <h4 className="font-medium text-xl">Email</h4>
+          <p className="">zahracakencookies@gmail.com</p>
+        </div>
+
+        <div
+          className="h-32 rounded bg-[#54B0A2]/25 flex flex-col items-center justify-center gap-3 cursor-pointer"
+          onClick={() =>
+            window.open(
+              `https://www.google.com/maps?q=${encodeURIComponent(address)}`
+            )
+          }
+        >
+          <h4 className="font-medium text-xl">Alamat</h4>
+          <p className=""> Jl. Malik Ibrahim No. 36</p>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-3 items-center justify-center">
+        <h4 className="font-semibold text-xl">Lokasi</h4>
+        <iframe
+          src={`https://www.google.com/maps?q=${encodeURIComponent(
+            address
+          )}&output=embed`}
+          width="100%"
+          height="300"
+          style={{ border: 0 }}
+          allowFullScreen=""
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </div>
+  );
+};

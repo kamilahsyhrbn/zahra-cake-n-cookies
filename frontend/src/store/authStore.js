@@ -94,6 +94,34 @@ const useAuthStore = create((set) => ({
     removeAccessToken();
     set({ currentUser: null });
   },
+
+  forgotPassword: async (email) => {
+    set({ isLoading: true });
+    try {
+      const response = await api.post("/auth/forgot-password", { email });
+      return response;
+    } catch (error) {
+      showErrorToast(error.response.data.message || "Terjadi kesalahan");
+      return error;
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  resetPassword: async (token, password) => {
+    set({ isLoading: true });
+    try {
+      const response = await api.post(`/auth/reset-password/${token}`, {
+        password,
+      });
+      return response;
+    } catch (error) {
+      showErrorToast(error.response.data.message || "Terjadi kesalahan");
+      return error;
+    } finally {
+      set({ isLoading: false });
+    }
+  },
 }));
 
 export default useAuthStore;

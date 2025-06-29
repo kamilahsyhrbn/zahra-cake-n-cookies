@@ -17,8 +17,14 @@ import { Users } from "../pages/admin/Users";
 import { Download } from "../pages/admin/report/Download";
 import { Report } from "../pages/admin/report/Report";
 
+import LoginUser from "../pages/user/auth/Login";
+
 import ProtectedRoute from "../utils/protectedRoute";
 import PublicOnlyRoute from "../utils/publicOnlyRoute";
+import { Register } from "../pages/user/auth/Register";
+import { ForgotPassword } from "../pages/user/auth/ForgotPassword";
+import { ResetPassword } from "../pages/user/auth/ResetPassword";
+import { Contact } from "../pages/user/main/Contact";
 
 export const routes = createBrowserRouter([
   {
@@ -139,6 +145,42 @@ export const routes = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
+      {
+        path: "/login",
+        element: (
+          <PublicOnlyRoute>
+            <LoginUser />
+          </PublicOnlyRoute>
+        ),
+      },
+      {
+        path: "/register",
+        element: (
+          <PublicOnlyRoute>
+            <Register />
+          </PublicOnlyRoute>
+        ),
+      },
+      {
+        path: "/forgot-password",
+        element: (
+          <PublicOnlyRoute>
+            <ForgotPassword />
+          </PublicOnlyRoute>
+        ),
+      },
+      {
+        path: "/reset-password/:token",
+        element: (
+          <PublicOnlyRoute>
+            <ResetPassword />
+          </PublicOnlyRoute>
+        ),
       },
     ],
   },
