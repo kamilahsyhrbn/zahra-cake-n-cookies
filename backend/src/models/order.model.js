@@ -26,6 +26,7 @@ const orderSchema = new mongoose.Schema(
       cost: { type: Number, required: true },
       estimation: { type: String, required: true },
       notes: { type: String, default: "" },
+      trackingNumber: { type: String, default: "" },
     },
     totalWeight: { type: Number, required: true },
     totalPrice: { type: Number, required: true },

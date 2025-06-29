@@ -1,23 +1,94 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { TitleCard } from "../../../components/pages/admin/TitleCard";
 import { Input } from "../../../components/pages/admin/Input";
+import useCategoryStore from "../../../store/categoryStore";
+import {
+  showErrorToast,
+  showSuccessToast,
+} from "../../../components/common/Toast";
 
 export const CategoryForm = () => {
-  const location = useLocation();
-  const [isUpdate, setIsUpdate] = useState(true);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { updateCategory, createCategory, getCategoryById, isLoading } =
+    useCategoryStore();
+  const [isUpdate, setIsUpdate] = useState(false);
   const [preview, setPreview] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    image: null,
+  });
 
   useEffect(() => {
-    if (location.pathname === "/admin/category-form") {
-      setIsUpdate(false);
+    if (id) {
+      setIsUpdate(true);
+
+      const fetchCategory = async () => {
+        try {
+          const category = await getCategoryById(id);
+          setFormData({
+            name: category.data.name,
+            description: category.data.description,
+            image: category.data.image,
+          });
+          setPreview(category.data.image);
+        } catch (error) {
+          console.log("Error in getting category by id", error);
+          showErrorToast(error.response.data.message || "Terjadi kesalahan");
+        }
+      };
+      fetchCategory();
     }
-  }, [location]);
+  }, [id, getCategoryById]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleFileChange = (e) => {
+    e.preventDefault();
     const file = e.target.files[0];
     if (file) {
       setPreview(URL.createObjectURL(file));
+      setFormData({ ...formData, image: file });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const data = new FormData();
+      data.append("name", formData.name.toLocaleLowerCase());
+      data.append("description", formData.description || "");
+      data.append("image", formData.image || "");
+      let response;
+
+      if (isUpdate) {
+        response = await updateCategory(id, data);
+      } else {
+        response = await createCategory(data);
+      }
+
+      if (response?.success) {
+        showSuccessToast(
+          isUpdate
+            ? "Kategori berhasil diubah"
+            : "Kategori berhasil ditambahkan"
+        );
+        navigate("/admin/categories");
+
+        setFormData({
+          name: "",
+          description: "",
+          image: null,
+        });
+        setPreview(null);
+      }
+    } catch (error) {
+      showErrorToast(error.response.data.message || "Terjadi kesalahan");
     }
   };
 
@@ -25,13 +96,15 @@ export const CategoryForm = () => {
     <div>
       <TitleCard title={`${isUpdate ? "Ubah" : "Tambah"} Kategori`} />
 
-      <form className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <Input
           title={"Nama Kategori"}
           type={"text"}
-          name={"category"}
-          id={"category"}
+          name={"name"}
+          id={"name"}
           placeholder={"Masukkan nama kategori"}
+          value={formData.name}
+          onChange={handleChange}
         />
 
         <Input
@@ -40,6 +113,8 @@ export const CategoryForm = () => {
           name={"description"}
           id={"description"}
           placeholder={"Masukkan deskripsi kategori"}
+          value={formData.description}
+          onChange={handleChange}
         />
 
         <div className="flex items-center gap-6">
@@ -71,6 +146,7 @@ export const CategoryForm = () => {
               id="File"
               className="sr-only"
               onChange={handleFileChange}
+              accept="image/*"
             />
           </label>
 
@@ -94,9 +170,14 @@ export const CategoryForm = () => {
           </Link>
           <button
             type="submit"
-            className="bg-[#1D6F64] hover:bg-[#2a4d48] focus:ring-4 focus:outline-none focus:ring-[#2a4d48] transition-colors duration-300 font-medium rounded-xl w-auto px-5 py-2.5 text-center disabled:opacity-50 disabled:cursor-not-allowed text-white cursor-pointer"
+            disabled={isLoading}
+            className="bg-[#1D6F64] hover:bg-[#2a4d48] focus:ring-4 focus:outline-none focus:ring-[#2a4d48] transition-colors duration-300 font-medium rounded-xl w-auto px-5 py-2.5 text-center disabled:opacity-50 disabled:cursor-not-allowed text-white cursor-pointer disabled:bg-[#1D6F64]/50 "
           >
-            {isUpdate ? "Ubah Kategori" : "Tambah Kategori"}
+            {isLoading
+              ? "Memuat..."
+              : isUpdate
+              ? "Ubah Kategori"
+              : "Tambah Kategori"}
           </button>
         </div>
       </form>

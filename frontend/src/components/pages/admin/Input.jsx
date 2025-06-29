@@ -10,6 +10,7 @@ export const Input = ({
   onChange,
   min,
   required,
+  disabled,
 }) => {
   return (
     <div className="flex flex-col gap-1">
@@ -25,7 +26,8 @@ export const Input = ({
         placeholder={placeholder}
         min={min}
         required={required}
-        className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:ring-1 focus:ring-[#54B0A2] focus:border-[#54B0A2] block w-full p-2.5"
+        className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:ring-1 focus:ring-[#54B0A2] focus:border-[#54B0A2] block w-full p-2.5 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400"
+        disabled={disabled}
       />
     </div>
   );

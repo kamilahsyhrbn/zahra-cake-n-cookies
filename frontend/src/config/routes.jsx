@@ -18,6 +18,7 @@ import { Download } from "../pages/admin/report/Download";
 import { Report } from "../pages/admin/report/Report";
 
 import ProtectedRoute from "../utils/protectedRoute";
+import PublicOnlyRoute from "../utils/publicOnlyRoute";
 
 export const routes = createBrowserRouter([
   {
@@ -31,7 +32,11 @@ export const routes = createBrowserRouter([
   // Admin
   {
     path: "/admin/login",
-    element: <Login />,
+    element: (
+      <PublicOnlyRoute>
+        <Login />
+      </PublicOnlyRoute>
+    ),
   },
   {
     element: <AdminLayout />,

@@ -18,14 +18,11 @@ export const Menu = () => {
   };
 
   useEffect(() => {
-    getAllMenus();
+    getAllMenus({ category: "", sort: "newest" });
   }, []);
-
-  console.log("menus", menus);
 
   const handleDeleteMenu = async () => {
     const response = await deleteMenu(selectedMenu);
-    console.log("response", response);
     if (response?.success) {
       showSuccessToast("Menu berhasil dihapus");
       getAllMenus();
@@ -114,7 +111,7 @@ export const Menu = () => {
                     <img
                       src={menu?.images[0]}
                       alt={menu?.name}
-                      className="min-w-20 h-20 object-cover rounded-md"
+                      className="w-20 h-20 object-cover rounded-md"
                     />
                   </td>
                   <td className="px-6 py-10 flex gap-3">

@@ -101,7 +101,7 @@ export const Login = () => {
                 </div>
               </div>
 
-              <div>
+              <div className="mt-8">
                 <button
                   className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-gray-900 bg-secondary focus:outline-none focus:ring-2 cursor-pointer"
                   type="submit"

@@ -31,3 +31,9 @@ body {
 .bg-accent {
   background-color: #1d6f64;
 }
+
+.title {
+  font-family: "Corinthia", cursive;
+  font-weight: 700;
+  font-style: normal;
+}

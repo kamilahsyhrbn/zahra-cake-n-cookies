@@ -40,6 +40,7 @@ const useAuthStore = create((set) => ({
       return response;
     } catch (error) {
       showErrorToast(error.response.data.message || "Terjadi kesalahan");
+      return error;
     } finally {
       set({ isLoading: false });
     }
@@ -52,7 +53,6 @@ const useAuthStore = create((set) => ({
       saveAccessToken(response?.data?.token);
       return response;
     } catch (error) {
-      console.log("error", error);
       return error;
     } finally {
       set({ isLoading: false });
@@ -71,7 +71,19 @@ const useAuthStore = create((set) => ({
       });
       return response;
     } catch (error) {
-      console.log("error", error);
+      return error;
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  changePassword: async (data) => {
+    set({ isLoading: true });
+    try {
+      const response = await api.put(`/auth/change-password`, data);
+      return response;
+    } catch (error) {
+      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });

@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuthStore from "../../../store/authStore";
 import { showSuccessToast } from "../../common/Toast";
 import Danger from "../../modals/Danger";
+import { AdminProfile } from "../../modals/AdminProfile";
 
 export const Sidebar = () => {
   const location = useLocation();
@@ -10,10 +11,15 @@ export const Sidebar = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { logout, currentUser } = useAuthStore();
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleShowProfileModal = () => {
+    setIsProfileOpen(!isProfileOpen);
   };
 
   useEffect(() => {
@@ -54,9 +60,7 @@ export const Sidebar = () => {
         </button>
 
         <Link to="/admin/dashboard">
-          <h1 className="font-title text-2xl md:text-3xl text-center">
-            Zahra Cake & Cookies
-          </h1>
+          <h1 className="title text-3xl text-center">Zahra Cake & Cookies</h1>
         </Link>
       </div>
 
@@ -68,8 +72,8 @@ export const Sidebar = () => {
       >
         <div className="px-4 py-6">
           <Link to="/admin/dashboard" className="hidden md:block">
-            <h1 className="font-title lg:text-xl text-center">
-              Zahra Cake & Cookies
+            <h1 className="title lg:text-4xl md:text-3xl text-center">
+              Zahra <br /> Cake & Cookies
             </h1>
           </Link>
 
@@ -178,7 +182,10 @@ export const Sidebar = () => {
           >
             Keluar
           </button>
-          <div className="flex items-center gap-2 bg-white p-4 hover:bg-gray-50">
+          <div
+            className="flex items-center gap-2 bg-white p-4 hover:bg-gray-50 cursor-pointer"
+            onClick={handleShowProfileModal}
+          >
             <img
               alt={currentUser?.name}
               src={"/avatar.png"}
@@ -206,6 +213,8 @@ export const Sidebar = () => {
           onSubmit={handleLogout}
         />
       )}
+
+      {isProfileOpen && <AdminProfile onClose={handleShowProfileModal} />}
     </>
   );
 };

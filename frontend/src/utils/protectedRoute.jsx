@@ -38,7 +38,7 @@ export const protectedRoute = ({ children, role }) => {
         }
       }
     }
-  }, [currentUser, isChecking]);
+  }, [isChecking]);
 
   return children;
 };

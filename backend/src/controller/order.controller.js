@@ -200,10 +200,10 @@ export const getAllOrders = async (req, res) => {
   }
 };
 
-export const updateOrderStatus = async (req, res) => {
+export const updateOrder = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status } = req.body;
+    const { status, trackingNumber } = req.body;
 
     const order = await Order.findById(id);
 
@@ -214,7 +214,9 @@ export const updateOrderStatus = async (req, res) => {
       });
     }
 
-    order.status = status;
+    order.status = status || order.status;
+    order.shipping.trackingNumber =
+      trackingNumber || order.shipping.trackingNumber;
     await order.save();
 
     res.status(200).json({
@@ -271,29 +273,33 @@ export const report = async (req, res) => {
   try {
     const { startDate, endDate, status } = req.body;
 
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    end.setDate(end.getDate() + 1);
+
     const filter = {
-      createdAt: { $gte: startDate, $lt: endDate },
+      createdAt: { $gte: start, $lt: end },
     };
 
     if (status && status !== "all") {
       filter.status = status;
     }
 
-    const orders = await Order.find(filter)
+    const report = await Order.find(filter)
       .populate("user")
       .populate("items.menu")
       .populate("transaction");
 
     res.status(200).json({
       success: true,
-      message: "Order berhasil diambil",
-      data: orders,
+      message: "Laporan berhasil diambil",
+      data: report,
     });
   } catch (error) {
-    console.log("Error in getting all orders", error);
+    console.log("Error in getting report", error);
     res.status(500).json({
       success: false,
-      message: "Error in getting all orders",
+      message: "Error in getting report",
       error: error.message,
     });
   }

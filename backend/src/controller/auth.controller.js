@@ -244,19 +244,21 @@ export const changePassword = async (req, res) => {
     user.password = newPassword;
     await user.save();
 
-    const token = generateToken(user._id, "15m");
+    if (user.role !== "admin") {
+      const token = generateToken(user._id, "15m");
 
-    const resetLink = `${process.env.CLIENT_URL}/reset-password/${token}`;
+      const resetLink = `${process.env.CLIENT_URL}/reset-password/${token}`;
 
-    const templatePath = "src/lib/email/change-password.html";
+      const templatePath = "src/lib/email/change-password.html";
 
-    let emailTemplate = fs.readFileSync(templatePath, "utf-8");
+      let emailTemplate = fs.readFileSync(templatePath, "utf-8");
 
-    emailTemplate = emailTemplate
-      .replace("{{resetLink}}", resetLink)
-      .replace("{{name}}", user.name);
+      emailTemplate = emailTemplate
+        .replace("{{resetLink}}", resetLink)
+        .replace("{{name}}", user.name);
 
-    sendEmail(user.email, "Kata Sandi Diubah", emailTemplate);
+      sendEmail(user.email, "Kata Sandi Diubah", emailTemplate);
+    }
 
     return res.status(200).json({
       success: true,

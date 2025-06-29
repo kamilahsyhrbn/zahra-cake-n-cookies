@@ -1,12 +1,14 @@
+import { useNavigate } from "react-router-dom";
 import { formatCurrency } from "../../../utils/formatNumber";
 
-export const MenuCard = () => {
+export const MenuCard = ({ menu }) => {
+  const navigate = useNavigate();
   return (
     <div className="bg-white shadow-lg hover:shadow-2xl rounded-lg min-w-72 md:min-w-90 hover:scale-105 transition duration-300 ease-in-out border-gray-300">
       <div className="flex flex-col">
         <img
-          src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
-          alt="lorem  "
+          src={menu.images[0]}
+          alt={menu.name}
           className="w-full h-64 object-cover rounded-t-lg cursor-pointer"
           // onClick={() => navigate(`/detail-menu/${menu?._id}`)}
         />
@@ -15,13 +17,13 @@ export const MenuCard = () => {
             className="text-lg font-bold truncate cursor-pointer"
             //   onClick={() => navigate(`/detail-menu/${menu?._id}`)}
           >
-            lorem
+            {menu.name}
           </h2>
           <p
             className="text-nowrap cursor-pointer font-semibold mb-2"
-            onClick={() => navigate(`/detail-menu/${menu._id}`)}
+            // onClick={() => navigate(`/detail-menu/${menu._id}`)}
           >
-            {formatCurrency(10000)}
+            {formatCurrency(menu.price)}
           </p>
           <div className="flex items-center gap-2 cursor-pointer">
             <p className="flex items-center gap-1">
@@ -40,10 +42,10 @@ export const MenuCard = () => {
                   d="M22,9.81a1,1,0,0,0-.83-.69l-5.7-.78L12.88,3.53a1,1,0,0,0-1.76,0L8.57,8.34l-5.7.78a1,1,0,0,0-.82.69,1,1,0,0,0,.28,1l4.09,3.73-1,5.24A1,1,0,0,0,6.88,20.9L12,18.38l5.12,2.52a1,1,0,0,0,.44.1,1,1,0,0,0,1-1.18l-1-5.24,4.09-3.73A1,1,0,0,0,22,9.81Z"
                 />
               </svg>{" "}
-              5
+              {menu.averageRating}
             </p>
             <p>|</p>
-            <p>3 terjual</p>
+            <p>{menu.totalSold} terjual</p>
           </div>
         </div>
       </div>

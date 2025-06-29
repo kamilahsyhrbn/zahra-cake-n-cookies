@@ -1,21 +1,67 @@
 import React, { useEffect, useState } from "react";
 import { TitleCard } from "../../../components/pages/admin/TitleCard";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaCamera } from "react-icons/fa";
 import { Input } from "../../../components/pages/admin/Input";
 import { IoMdClose } from "react-icons/io";
+import useMenuStore from "../../../store/menuStore";
+import useCategoryStore from "../../../store/categoryStore";
+import {
+  showErrorToast,
+  showSuccessToast,
+} from "../../../components/common/Toast";
 
 export const MenuForm = () => {
-  const location = useLocation();
-  const [isUpdate, setIsUpdate] = useState(true);
-  const [images, setImages] = useState([]);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [isUpdate, setIsUpdate] = useState(false);
   const [deletedImages, setDeletedImages] = useState([]);
+  const [formData, setFormData] = useState({
+    name: "",
+    category: "",
+    price: 500,
+    weight: 1,
+    description: "",
+    isPreOrder: false,
+    preOrderEst: 1,
+    stock: 1,
+    images: [],
+  });
+  const { getMenuById, createMenu, updateMenu, isLoading } = useMenuStore();
+  const { getAllCategories, categories } = useCategoryStore();
 
   useEffect(() => {
-    if (location.pathname === "/admin/form-menu") {
-      setIsUpdate(false);
+    if (id) {
+      setIsUpdate(true);
+
+      const fetchMenu = async () => {
+        try {
+          const menu = await getMenuById(id);
+
+          setFormData({
+            name: menu.data.name,
+            category: menu.data.category._id,
+            price: menu.data.price,
+            weight: menu.data.weight,
+            description: menu.data.description,
+            isPreOrder: menu.data.isPreOrder,
+            preOrderEst: menu.data.preOrderEst,
+            stock: menu.data.stock,
+            images: menu.data.images,
+          });
+        } catch (error) {
+          console.log("Error in getting menu by id", error);
+          showErrorToast(error.response.data.message || "Terjadi kesalahan");
+        }
+      };
+
+      fetchMenu();
     }
-  }, [location]);
+  }, [id, getMenuById]);
+
+  useEffect(() => {
+    getAllCategories();
+  }, [getAllCategories]);
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
@@ -24,26 +70,167 @@ export const MenuForm = () => {
       preview: URL.createObjectURL(file),
     }));
 
-    setImages((prevImages) => [...prevImages, ...newImages].slice(0, 10));
+    setFormData((prevData) => ({
+      ...prevData,
+      images: [...prevData.images, ...newImages].slice(0, 10),
+    }));
   };
 
   const removeImage = (indexToRemove, imageId) => {
     setDeletedImages((prevDeletedImages) => [...prevDeletedImages, imageId]);
-    const filteredImages = images.filter((_, index) => index !== indexToRemove);
-    setImages(filteredImages);
+    const filteredImages = formData.images.filter(
+      (_, index) => index !== indexToRemove
+    );
+
+    setFormData((prevData) => ({
+      ...prevData,
+      images: filteredImages,
+    }));
   };
 
-  useEffect(() => {
-    if (location.pathname === "/admin/menu-form") {
-      setIsUpdate(false);
+  const handleFormChange = (e) => {
+    const { name, value, type } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]:
+        name === "isPreOrder"
+          ? value === "yes"
+            ? true
+            : false
+          : type === "number"
+          ? Number(value)
+          : value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (
+      !formData.name ||
+      !formData.category ||
+      !formData.images ||
+      !formData.price ||
+      !formData.weight ||
+      !formData.category ||
+      !formData.stock
+    ) {
+      showErrorToast("");
+      return;
     }
-  }, [location]);
+
+    const requiredFields = [
+      { field: formData.name, message: "Nama Menu harus diisi" },
+      { field: formData.category, message: "Kategori harus diisi" },
+      {
+        field: formData.images,
+        message: "Foto Menu harus diisi minimal 1 foto",
+      },
+      { field: formData.price, message: "Harga harus diisi" },
+      { field: formData.weight, message: "Berat harus diisi" },
+      { field: formData.category, message: "Kategori harus diisi" },
+      { field: formData.stock, message: "Stok harus diisi" },
+    ];
+
+    const errorField = requiredFields.find(({ field }) => !field);
+
+    if (errorField) {
+      showErrorToast(errorField.message);
+      return;
+    }
+
+    if (formData.images.length < 1) {
+      showErrorToast("Foto Menu harus diisi minimal 1 foto");
+      return;
+    }
+
+    if (formData.images.length > 10) {
+      showErrorToast("Foto Menu tidak boleh lebih dari 10 foto");
+      return;
+    }
+
+    if (formData.stock < 0) {
+      showErrorToast("Stok tidak boleh kurang dari 0");
+      return;
+    }
+
+    if (formData.weight < 0) {
+      showErrorToast("Berat tidak boleh kurang dari 0");
+      return;
+    }
+
+    if (formData.price < 500) {
+      showErrorToast("Harga tidak boleh kurang dari 500");
+      return;
+    }
+
+    if (formData.isPreOrder && formData.preOrderEst < 0) {
+      showErrorToast("Estimasi pre-order tidak boleh kurang dari 0");
+      return;
+    }
+
+    console.log("formData", formData);
+    const data = new FormData();
+
+    data.append("name", formData.name);
+    data.append("category", formData.category);
+    data.append("price", formData.price);
+    data.append("weight", formData.weight);
+    data.append("description", formData.description);
+    data.append("isPreOrder", formData.isPreOrder);
+    data.append("preOrderEst", formData.preOrderEst);
+    data.append("stock", formData.stock);
+
+    formData.images.forEach((image, index) => {
+      data.append("images", image.file);
+    });
+
+    if (deletedImages.length > 0) {
+      deletedImages.forEach((imageId) => {
+        data.append("deletedImages", imageId);
+      });
+    }
+
+    try {
+      let response;
+      if (isUpdate) {
+        response = await updateMenu(id, data);
+      } else {
+        response = await createMenu(data);
+      }
+      if (response?.success) {
+        if (isUpdate) {
+          showSuccessToast("Menu berhasil diubah");
+        } else {
+          showSuccessToast("Menu berhasil ditambahkan");
+        }
+        navigate("/admin/menus");
+
+        setFormData({
+          name: "",
+          category: "",
+          price: 0,
+          weight: 0,
+          description: "",
+          isPreOrder: false,
+          preOrderEst: 0,
+          stock: 0,
+          images: [],
+        });
+        setDeletedImages([]);
+      }
+    } catch (error) {
+      console.log("Error in creating menu", error);
+      showErrorToast(error.response.data.message || "Terjadi kesalahan");
+    }
+  };
 
   return (
     <div>
       <TitleCard title={`${isUpdate ? "Ubah" : "Tambah"} Menu`} />
 
-      <form action="" className="flex flex-col gap-3">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
           <h3 className="text-sm font-medium">Foto Menu</h3>
           <div className="flex flex-wrap gap-4">
@@ -57,18 +244,18 @@ export const MenuForm = () => {
             <input
               type="file"
               id="upload"
-              className="hidden w-0 h-0"
+              name="images"
               multiple
+              className="hidden w-0 h-0"
               accept="image/*"
               onChange={handleImageUpload}
-              required
             />
             {/* Preview Gambar */}
-            {images.map((image, i) => (
+            {formData.images.map((image, i) => (
               <div key={i} className="relative w-36 h-36">
                 <img
                   src={isUpdate ? image.preview || image : image.preview}
-                  alt={`Product preview ${i + 1}`}
+                  alt={`Menu preview ${i + 1}`}
                   className="w-full h-full object-cover rounded-xl border border-gray-300 shadow"
                 />
                 <button
@@ -90,6 +277,8 @@ export const MenuForm = () => {
           id={"name"}
           placeholder={"Masukkan nama menu"}
           required
+          value={formData.name}
+          onChange={handleFormChange}
         />
 
         <div className="flex flex-col gap-1">
@@ -98,13 +287,18 @@ export const MenuForm = () => {
             name="category"
             id="category"
             required
-            className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:ring-1 focus:ring-[#54B0A2] focus:border-[#54B0A2] block w-full p-2.5"
+            value={formData.category}
+            onChange={handleFormChange}
+            className="border border-gray-300 text-gray-900 text-sm capitalize rounded-lg focus:outline-none focus:ring-1 focus:ring-[#54B0A2] focus:border-[#54B0A2] block w-full p-2.5"
           >
             <option value="" selected disabled>
               Pilih Kategori
             </option>
-            <option value="kue">Kue</option>
-            <option value="biskuit">Biskuit</option>
+            {categories.map((category) => (
+              <option key={category?._id} value={category?._id}>
+                {category?.name}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -115,12 +309,13 @@ export const MenuForm = () => {
               Rp
             </span>
             <input
-              type="text"
-              // value={formatPrice(price)}
-              // onChange={handlePriceChange}
+              type="number"
+              name="price"
               placeholder="Masukkan harga"
               min={1000}
               required
+              value={formData.price}
+              onChange={handleFormChange}
               className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:ring-1 focus:ring-[#54B0A2] focus:border-[#54B0A2] block w-full pl-10 p-2.5"
             />
           </div>
@@ -134,6 +329,8 @@ export const MenuForm = () => {
           min={1}
           required
           placeholder={"Masukkan berat"}
+          value={formData.weight}
+          onChange={handleFormChange}
         />
         <p className="text-xs text-gray-500">*dalam gram</p>
 
@@ -147,6 +344,8 @@ export const MenuForm = () => {
                 id="isPreOrderYes"
                 value="yes"
                 className="h-4 w-4"
+                onChange={handleFormChange}
+                checked={formData.isPreOrder === true}
               />
               <label
                 htmlFor="isPreOrderYes"
@@ -162,6 +361,8 @@ export const MenuForm = () => {
                 id="isPreOrderNo"
                 value="no"
                 className="h-4 w-4"
+                onChange={handleFormChange}
+                checked={formData.isPreOrder === false}
               />
               <label
                 htmlFor="isPreOrderNo"
@@ -173,14 +374,18 @@ export const MenuForm = () => {
           </div>
         </div>
 
-        <Input
-          title={"Estimasi Pre-order"}
-          type={"number"}
-          name={"preOrderEstimate"}
-          id={"preOrderEstimate"}
-          min={1}
-          placeholder={"Masukkan estimasi pre-order"}
-        />
+        {formData.isPreOrder && (
+          <Input
+            title={"Estimasi Pre-order"}
+            type={"number"}
+            name={"preOrderEst"}
+            id={"preOrderEst"}
+            min={1}
+            placeholder={"Masukkan estimasi pre-order"}
+            value={formData.preOrderEst}
+            onChange={handleFormChange}
+          />
+        )}
 
         <Input
           title={"Stok"}
@@ -190,6 +395,8 @@ export const MenuForm = () => {
           min={1}
           placeholder={"Masukkan stok"}
           required
+          value={formData.stock}
+          onChange={handleFormChange}
         />
 
         <div className="flex flex-col gap-1">
@@ -200,6 +407,8 @@ export const MenuForm = () => {
             rows={4}
             placeholder="Masukkan deskripsi"
             className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:ring-1 focus:ring-[#54B0A2] focus:border-[#54B0A2] block w-full p-2.5"
+            value={formData.description}
+            onChange={handleFormChange}
           />
         </div>
 
@@ -207,6 +416,7 @@ export const MenuForm = () => {
           <Link to="/admin/menus">
             <button
               type="button"
+              disabled={isLoading}
               className="bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-300 transition-colors duration-300 font-medium rounded-xl w-auto px-5 py-2.5 text-center cursor-pointer"
             >
               Batal
@@ -214,9 +424,10 @@ export const MenuForm = () => {
           </Link>
           <button
             type="submit"
-            className="bg-[#1D6F64] hover:bg-[#2a4d48] focus:ring-4 focus:outline-none focus:ring-[#2a4d48] transition-colors duration-300 font-medium rounded-xl w-auto px-5 py-2.5 text-center disabled:opacity-50 disabled:cursor-not-allowed text-white cursor-pointer"
+            disabled={isLoading}
+            className="bg-[#1D6F64] hover:bg-[#2a4d48] focus:ring-4 focus:outline-none focus:ring-[#2a4d48] transition-colors duration-300 font-medium rounded-xl w-auto px-5 py-2.5 text-center disabled:opacity-50 disabled:cursor-not-allowed text-white cursor-pointer disabled:bg-[#1D6F64]/50"
           >
-            {isUpdate ? "Ubah Menu" : "Tambah Menu"}
+            {isLoading ? "Memuat..." : isUpdate ? "Ubah Menu" : "Tambah Menu"}
           </button>
         </div>
       </form>
