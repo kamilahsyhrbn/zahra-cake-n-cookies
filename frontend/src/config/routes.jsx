@@ -25,6 +25,9 @@ import { Register } from "../pages/user/auth/Register";
 import { ForgotPassword } from "../pages/user/auth/ForgotPassword";
 import { ResetPassword } from "../pages/user/auth/ResetPassword";
 import { Contact } from "../pages/user/main/Contact";
+import MenuUser from "../pages/user/main/menu/Menu";
+import { SearchResult } from "../pages/user/main/SearchResult";
+import { DetailMenu } from "../pages/user/main/menu/DetailMenu";
 
 export const routes = createBrowserRouter([
   {
@@ -149,6 +152,18 @@ export const routes = createBrowserRouter([
       {
         path: "/contact",
         element: <Contact />,
+      },
+      {
+        path: "/menus",
+        element: <MenuUser />,
+      },
+      {
+        path: "/detail-menu/:id",
+        element: <DetailMenu />,
+      },
+      {
+        path: "/search-result",
+        element: <SearchResult />,
       },
       {
         path: "/login",

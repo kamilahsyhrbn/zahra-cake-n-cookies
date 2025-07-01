@@ -1,10 +1,20 @@
 import React from "react";
 import { TitleDesc } from "../../../components/pages/user/TitleDesc";
+import { Link } from "react-router-dom";
 
 export const Contact = () => {
   const address = "Jl. Malik Ibrahim No. 36, Gresik";
   return (
     <div className="container mb-10">
+      {/* STEPPER */}
+      <nav className="text-sm text-accent pt-4">
+        <Link to="/" className="hover:underline hover:text-[#1D6F64]">
+          Beranda
+        </Link>{" "}
+        <span className="text-[#1D6F64] font-medium">{">"}</span>{" "}
+        <span className="text-gray-800 font-semibold">Kontak Kami</span>
+      </nav>
+
       <TitleDesc
         title="Kontak Kami"
         desc="Hubungi tim kami untuk pertanyaan, bantuan, atau informasi lebih lanjut."

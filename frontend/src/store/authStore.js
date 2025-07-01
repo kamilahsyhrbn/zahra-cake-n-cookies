@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { axiosInstance as api } from "../config/axiosInstance";
-import { showErrorToast, showSuccessToast } from "../components/common/Toast";
 import {
   decodeToken,
   getAccessToken,
@@ -39,7 +38,6 @@ const useAuthStore = create((set) => ({
       set({ currentUser: response.data });
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });
@@ -83,7 +81,6 @@ const useAuthStore = create((set) => ({
       const response = await api.put(`/auth/change-password`, data);
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });
@@ -101,7 +98,6 @@ const useAuthStore = create((set) => ({
       const response = await api.post("/auth/forgot-password", { email });
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });
@@ -116,7 +112,6 @@ const useAuthStore = create((set) => ({
       });
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });

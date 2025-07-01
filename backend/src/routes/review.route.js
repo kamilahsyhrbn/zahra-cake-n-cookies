@@ -9,7 +9,7 @@ import { protectedRoute } from "../middleware/verifyToken.js";
 
 const reviewRouter = express.Router();
 
-reviewRouter.get("/:id", getAllReviews);
+reviewRouter.get("/", getAllReviews);
 reviewRouter.post("/", protectedRoute, createReview);
 reviewRouter.put("/:id", protectedRoute, updateReview);
 reviewRouter.delete("/:id", protectedRoute, deleteReview);

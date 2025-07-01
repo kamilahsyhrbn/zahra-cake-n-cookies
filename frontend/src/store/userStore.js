@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { axiosInstance as api } from "../config/axiosInstance";
-import { showErrorToast, showSuccessToast } from "../components/common/Toast";
 
 const useUserStore = create((set) => ({
   admins: [],
@@ -16,7 +15,6 @@ const useUserStore = create((set) => ({
       set({ admins: response?.data });
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });
@@ -30,7 +28,6 @@ const useUserStore = create((set) => ({
       set({ users: response?.data });
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });
@@ -44,7 +41,6 @@ const useUserStore = create((set) => ({
       set({ user: response?.data });
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isUserLoading: false });
@@ -57,7 +53,6 @@ const useUserStore = create((set) => ({
       const response = await api.put(`/user/${id}`, data);
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });
@@ -70,7 +65,6 @@ const useUserStore = create((set) => ({
       const response = await api.delete(`/user/${id}`);
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });

@@ -71,9 +71,9 @@ export const getAllMenus = async (req, res) => {
 
     let sortOptions = {};
     if (sort === "price-asc") {
-      sortOptions.price = 1;
-    } else if (sort === "price-desc") {
       sortOptions.price = -1;
+    } else if (sort === "price-desc") {
+      sortOptions.price = 1;
     } else if (sort === "newest") {
       sortOptions.createdAt = -1;
     } else if (sort === "oldest") {

@@ -13,6 +13,8 @@ import useAuthStore from "../../../store/authStore";
 import Danger from "../../modals/Danger";
 import { showSuccessToast } from "../../common/Toast";
 import { Loader } from "../../common/Loader";
+import useCartStore from "../../../store/cartStore";
+import { getAccessToken } from "../../../utils/tokenManager";
 
 export const Navbar = () => {
   const location = useLocation();
@@ -21,8 +23,10 @@ export const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
   const { currentUser, getCurrentUser, logout, isLoading } = useAuthStore();
+  const { carts, getCarts, isLoading: isLoadingCart } = useCartStore();
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -60,6 +64,34 @@ export const Navbar = () => {
     navigate("/");
     setIsModalOpen(false);
   };
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const query = params.get("query");
+
+    if (query) {
+      setSearchValue(query);
+    } else {
+      setSearchValue("");
+    }
+  }, [location.search]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const query = e.target.search.value.trim();
+
+    if (!query) {
+      return;
+    }
+
+    navigate(`/search-result?query=${query}`);
+  };
+
+  useEffect(() => {
+    if (currentUser && getAccessToken()) {
+      getCarts();
+    }
+  }, [currentUser]);
 
   if (currentUser && isLoading) {
     return <Loader />;
@@ -146,7 +178,7 @@ export const Navbar = () => {
             className={`relative ${
               showSearch ? "block w-full" : "hidden"
             } lg:block ml-2`}
-            // onSubmit={handleSearch}
+            onSubmit={handleSearch}
           >
             <IoSearchOutline className="absolute top-1/2 left-3 -translate-y-1/2 opacity-50 text-xl" />
 
@@ -158,8 +190,8 @@ export const Navbar = () => {
               autoCorrect="off"
               placeholder="Cari..."
               className="bg-[#F2F2F2] rounded-xl pl-9 pr-2 w-full py-1.5 focus:outline-[#54B0A2]"
-              // value={searchValue}
-              // onChange={(e) => setSearchValue(e.target.value)}
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
             />
           </form>
 
@@ -176,7 +208,7 @@ export const Navbar = () => {
                 >
                   <IoCartOutline className="text-3xl" />
                   <div className="absolute -top-1 -right-1.5 w-4 h-4 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
-                    1
+                    {carts?.menus?.length}
                   </div>
                 </Link>
                 <div className="relative">
@@ -408,17 +440,15 @@ export const Navbar = () => {
                       className="size-10 rounded-full object-cover"
                     />
 
-                    <Link to="/profile">
-                      <p className="text-xs">
-                        <strong className="block font-medium">
-                          {currentUser?.name}
-                        </strong>
+                    <p className="text-xs">
+                      <strong className="block font-medium">
+                        {currentUser?.name}
+                      </strong>
 
-                        <span className="text-gray-500">
-                          {currentUser?.email}
-                        </span>
-                      </p>
-                    </Link>
+                      <span className="text-gray-500">
+                        {currentUser?.email}
+                      </span>
+                    </p>
                   </Link>
                 </div>
               </>

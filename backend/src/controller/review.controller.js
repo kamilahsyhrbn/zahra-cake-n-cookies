@@ -55,12 +55,23 @@ export const createReview = async (req, res) => {
 
 export const getAllReviews = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id, sort, rating } = req.query;
+    let filter = { menu: id };
+    let sortOptions = {};
 
-    const reviews = await Review.find({ menu: id })
+    if (sort === "newest") {
+      sortOptions.createdAt = -1;
+    } else if (sort === "oldest") {
+      sortOptions.createdAt = 1;
+    }
+
+    if (rating) {
+      filter.rating = +rating;
+    }
+
+    const reviews = await Review.find(filter)
       .populate("user", "name image")
-      .select("-order")
-      .select("-menu");
+      .sort(sortOptions);
 
     res.status(200).json({
       success: true,
@@ -120,7 +131,7 @@ export const deleteReview = async (req, res) => {
     if (!review) {
       return res.status(404).json({
         success: false,
-        message: "Review tidak ditemukan",
+        message: "Ulasan tidak ditemukan",
       });
     }
 

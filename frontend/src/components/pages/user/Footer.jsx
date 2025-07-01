@@ -6,7 +6,7 @@ import { MdOutlineMailOutline } from "react-icons/md";
 export const Footer = () => {
   return (
     <div className="bg-accent p-8 text-white">
-      <div className="container flex flex-col md:flex-row justify-between gap-3">
+      <div className="container flex flex-col lg:flex-row justify-between gap-3">
         <Link to="/">
           <h3 className="font-semibold text-4xl title">Zahra Cake & Cookies</h3>
         </Link>

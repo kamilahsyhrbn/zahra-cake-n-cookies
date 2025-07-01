@@ -1,12 +1,14 @@
 import { create } from "zustand";
 import { axiosInstance as api } from "../config/axiosInstance";
-import { showErrorToast } from "../components/common/Toast";
 
 const useMenuStore = create((set) => ({
   menus: [],
   bestSelling: [],
   selectedMenu: null,
+  searchResult: [],
+  recommendations: [],
   isLoading: false,
+  isLikeLoading: false,
 
   getAllMenus: async ({ category, sort }) => {
     set({ isLoading: true, menus: [] });
@@ -18,7 +20,6 @@ const useMenuStore = create((set) => ({
       set({ menus: response?.data });
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });
@@ -32,7 +33,6 @@ const useMenuStore = create((set) => ({
       set({ selectedMenu: response.data });
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });
@@ -45,7 +45,6 @@ const useMenuStore = create((set) => ({
       const response = await api.post("/menu", data);
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });
@@ -58,7 +57,6 @@ const useMenuStore = create((set) => ({
       const response = await api.put(`/menu/${id}`, data);
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });
@@ -71,7 +69,6 @@ const useMenuStore = create((set) => ({
       const response = await api.delete(`/menu/${id}`);
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });
@@ -82,10 +79,9 @@ const useMenuStore = create((set) => ({
     set({ isLoading: true });
     try {
       const response = await api.get(`/menu/search?query=${query}`);
-      set({ menus: response.data });
+      set({ searchResult: response.data });
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });
@@ -99,7 +95,31 @@ const useMenuStore = create((set) => ({
       set({ bestSelling: response.data });
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
+      return error;
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  likeUnlikeMenu: async (id) => {
+    set({ isLikeLoading: true });
+    try {
+      const response = await api.post(`/menu/like/${id}`);
+      return response;
+    } catch (error) {
+      return error;
+    } finally {
+      set({ isLikeLoading: false });
+    }
+  },
+
+  getRecommendationsMenu: async (id) => {
+    set({ isLoading: true, recommendations: [] });
+    try {
+      const response = await api.get(`/menu/recommendation/${id}`);
+      set({ recommendations: response.data });
+      return response;
+    } catch (error) {
       return error;
     } finally {
       set({ isLoading: false });

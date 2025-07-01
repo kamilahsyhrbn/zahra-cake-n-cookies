@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { axiosInstance as api } from "../config/axiosInstance";
-import { showErrorToast } from "../components/common/Toast";
 
 const useOrderStore = create((set) => ({
   orders: [],
@@ -16,7 +15,6 @@ const useOrderStore = create((set) => ({
       set({ orders: response.data });
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });
@@ -30,7 +28,6 @@ const useOrderStore = create((set) => ({
       set({ order: response.data });
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });
@@ -43,7 +40,6 @@ const useOrderStore = create((set) => ({
       const response = await api.put(`/order/${id}`, data);
       return response;
     } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isOrderLoading: false });
@@ -58,7 +54,6 @@ const useOrderStore = create((set) => ({
       return response;
     } catch (error) {
       console.log("error", error);
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
       return error;
     } finally {
       set({ isLoading: false });
