@@ -4,9 +4,11 @@ import { axiosInstance as api } from "../config/axiosInstance";
 const useUserStore = create((set) => ({
   admins: [],
   users: [],
+  likedMenus: [],
   user: null,
   isLoading: false,
   isUserLoading: false,
+  isLikeLoading: false,
 
   getAllAdmins: async () => {
     set({ isLoading: true, admins: [] });
@@ -68,6 +70,19 @@ const useUserStore = create((set) => ({
       return error;
     } finally {
       set({ isLoading: false });
+    }
+  },
+
+  getLikedMenus: async () => {
+    set({ isLikeLoading: true, likedMenus: [] });
+    try {
+      const response = await api.get("/user/liked");
+      set({ likedMenus: response?.data });
+      return response;
+    } catch (error) {
+      return error;
+    } finally {
+      set({ isLikeLoading: false });
     }
   },
 }));

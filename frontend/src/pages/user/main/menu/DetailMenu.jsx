@@ -74,18 +74,16 @@ export const DetailMenu = () => {
   };
 
   const handleAddToCart = async () => {
-    try {
-      const data = {
-        menuId: selectedMenu._id,
-        quantity: count,
-      };
-      const response = await addToCart(data);
-      if (response.success) {
-        showSuccessToast("Menu berhasil ditambahkan ke keranjang");
-        setCount(1);
-      }
-    } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
+    const data = {
+      menuId: selectedMenu._id,
+      quantity: count,
+    };
+    const response = await addToCart(data);
+    if (response.success) {
+      showSuccessToast("Menu berhasil ditambahkan ke keranjang");
+      setCount(1);
+    } else {
+      showErrorToast(response.response.data.message || "Terjadi kesalahan");
     }
   };
 
@@ -228,7 +226,19 @@ export const DetailMenu = () => {
 
             <p className="whitespace-pre-line">{selectedMenu?.description}</p>
 
-            <p className="text-sm my-5">Stok: {selectedMenu?.stock}</p>
+            <p
+              className={`text-sm ${
+                selectedMenu?.isPreOrder ? "mt-5" : "my-5"
+              } `}
+            >
+              Stok: {selectedMenu?.stock}
+            </p>
+
+            {selectedMenu?.isPreOrder && (
+              <p className="text-sm mb-5 text-gray-500">
+                akan dikirim dalam waktu {selectedMenu?.preOrderEst} hari
+              </p>
+            )}
 
             {currentUser && currentUser?.role === "user" ? (
               <div className="flex items-center justify-between gap-4">

@@ -45,10 +45,8 @@ export const addToCart = async (req, res) => {
           {
             menu: menuId,
             quantity: qty,
-            total: menu.price * qty,
           },
         ],
-        totalPrice: menu.price * qty,
       });
 
       await newCart.save();
@@ -72,8 +70,6 @@ export const addToCart = async (req, res) => {
         {
           $inc: {
             "menus.$.quantity": qty,
-            "menus.$.total": menu.price * qty,
-            totalPrice: menu.price * qty,
           },
         },
         { new: true }
@@ -87,11 +83,7 @@ export const addToCart = async (req, res) => {
             menus: {
               menu: menuId,
               quantity: qty,
-              total: menu.price * qty,
             },
-          },
-          $inc: {
-            totalPrice: menu.price * qty,
           },
         },
         { new: true }
@@ -117,11 +109,7 @@ export const getCart = async (req, res) => {
     const cart = await Cart.findOne({ user: req.user.id }).populate(
       "menus.menu"
     );
-    if (!cart) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Keranjang tidak ditemukan" });
-    }
+
     res.status(200).json({
       success: true,
       message: "Berhasil mendapatkan data keranjang",
@@ -159,7 +147,6 @@ export const removeCartItem = async (req, res) => {
       { user: req.user.id },
       {
         $pull: { menus: { menu: id } },
-        $inc: { totalPrice: -item.total },
       },
       { new: true }
     );
@@ -183,7 +170,7 @@ export const clearCart = async (req, res) => {
     const updatedCart = await Cart.findOneAndUpdate(
       { user: req.user.id },
       {
-        $set: { menus: [], totalPrice: 0 },
+        $set: { menus: [] },
       },
       { new: true }
     );

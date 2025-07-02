@@ -28,6 +28,13 @@ import { Contact } from "../pages/user/main/Contact";
 import MenuUser from "../pages/user/main/menu/Menu";
 import { SearchResult } from "../pages/user/main/SearchResult";
 import { DetailMenu } from "../pages/user/main/menu/DetailMenu";
+import { Cart } from "../pages/user/main/Cart";
+import { Checkout } from "../pages/user/main/buy/Checkout";
+import { Payment } from "../pages/user/main/buy/Payment";
+import { PaymentStatus } from "../pages/user/main/buy/PaymentStatus";
+import { MyProfile } from "../pages/user/main/profile/MyProfile";
+import { UpdateProfile } from "../pages/user/main/profile/UpdateProfile";
+import { ChangePassword } from "../pages/user/main/profile/ChangePassword";
 
 export const routes = createBrowserRouter([
   {
@@ -195,6 +202,62 @@ export const routes = createBrowserRouter([
           <PublicOnlyRoute>
             <ResetPassword />
           </PublicOnlyRoute>
+        ),
+      },
+      {
+        path: "/cart",
+        element: (
+          <ProtectedRoute role="user">
+            <Cart />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/chekcout",
+        element: (
+          <ProtectedRoute role="user">
+            <Checkout />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/payment",
+        element: (
+          <ProtectedRoute role="user">
+            <Payment />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/payment-status",
+        element: (
+          <ProtectedRoute role="user">
+            <PaymentStatus />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/profile/my-profile",
+        element: (
+          <ProtectedRoute role="user">
+            <MyProfile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/profile/update-profile",
+        element: (
+          <ProtectedRoute role="user">
+            <UpdateProfile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/profile/change-password",
+        element: (
+          <ProtectedRoute role="user">
+            <ChangePassword />
+          </ProtectedRoute>
         ),
       },
     ],

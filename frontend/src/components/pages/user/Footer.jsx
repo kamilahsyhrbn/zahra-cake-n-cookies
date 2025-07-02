@@ -52,11 +52,11 @@ export const Footer = () => {
 
       <hr className="my-6 border-gray-200" />
 
-      <Link to="/" className="flex justify-center">
-        <p className="text-sm text-center hover:underline">
+      <p className="flex justify-center">
+        <Link to="/" className="text-sm text-center hover:underline">
           &copy; 2025 Zahra Cake & Cookies.
-        </p>
-      </Link>
+        </Link>
+      </p>
     </div>
   );
 };

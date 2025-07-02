@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { TitleLine } from "../../../../components/pages/user/TitleLine";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import useCategoryStore from "../../../../store/categoryStore";
 
 import { FiChevronDown } from "react-icons/fi";
@@ -9,6 +9,11 @@ import useMenuStore from "../../../../store/menuStore";
 import { Loader } from "../../../../components/common/Loader";
 
 export const Menu = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const category = queryParams.get("category");
+  console.log("category", category);
+
   const { categories, getAllCategories } = useCategoryStore();
   const { menus, getAllMenus, isLoading } = useMenuStore();
   const [filter, setFilter] = useState({
@@ -89,7 +94,7 @@ export const Menu = () => {
       {menus.length === 0 ? (
         <p className="text-center text-gray-500 my-10">Tidak ada menu</p>
       ) : (
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 my-10 w-full">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 my-10 w-full justify-items-center md:justify-items-start">
           {menus.map((menu) => (
             <MenuCard key={menu._id} menu={menu} />
           ))}

@@ -34,6 +34,19 @@ const useOrderStore = create((set) => ({
     }
   },
 
+  getUserOrder: async () => {
+    set({ isLoading: true });
+    try {
+      const response = await api.get("/order/user");
+      set({ orders: response.data });
+      return response;
+    } catch (error) {
+      return error;
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
   updateOrder: async (id, data) => {
     set({ isOrderLoading: true });
     try {

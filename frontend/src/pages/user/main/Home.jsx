@@ -1,5 +1,158 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { TitleDesc } from "../../../components/pages/user/TitleDesc";
+import { Link } from "react-router-dom";
+import useCategoryStore from "../../../store/categoryStore";
+import { Loader } from "../../../components/common/Loader";
+import useMenuStore from "../../../store/menuStore";
+import { MenuCard } from "../../../components/pages/user/MenuCard";
 
 export const Home = () => {
-  return <div>Home</div>;
+  const { getAllCategories, categories } = useCategoryStore();
+  const { getBestSelling, bestSelling, isLoading, getAllMenus, menus } =
+    useMenuStore();
+
+  useEffect(() => {
+    getAllCategories();
+    getBestSelling();
+    getAllMenus({ category: "", sort: "newest" });
+  }, []);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  return (
+    <div>
+      {/* HERO SECTION */}
+      <section className="container my-8 flex w-full flex-col md:flex-row gap-4 justify-between">
+        <div className="flex flex-col gap-2 w-full md:w-1/2">
+          <h2 className="text-4xl lg:text-5xl font-semibold title">
+            Zahra Cake & Cookies
+          </h2>
+          <p>
+            Nikmati berbagai pilihan kue dan cookies yang lembut, renyah, dan
+            selalu fresh dari oven kami. Temukan rasa manis yang membuat harimu
+            lebih istimewa.
+          </p>
+          <Link to="/menus" className="w-max">
+            <button
+              type="button"
+              className="bg-[#1D6F64] hover:bg-[#2a4d48] mt-2 focus:ring-4 focus:outline-none focus:ring-[#2a4d48] transition-colors duration-300 font-medium rounded-xl w-max px-5 py-2.5 text-center disabled:opacity-50 disabled:cursor-not-allowed text-white cursor-pointer disabled:bg-[#1D6F64]/50"
+            >
+              Beli Sekarang
+            </button>
+          </Link>
+        </div>
+        <div className="w-full md:w-1/2">
+          <img
+            src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+            alt="Zahra Cake & Cookies"
+            className="w-full lg:h-72 object-cover rounded-lg"
+          />
+        </div>
+      </section>
+
+      {/* CATEGORIES SECTION */}
+      <section className="container flex flex-col justify-center gap-4">
+        <TitleDesc
+          title="Belanja Berdasarkan Kategori"
+          desc="Temukan cake dan cookies favoritmu lebih cepat. Pilih kategori sesuai selera dan pesan dengan mudah kapan saja."
+        />
+        {categories.length === 0 ? (
+          <p className="text-center text-gray-500 text-sm italic">
+            Kategori belum tersedia
+          </p>
+        ) : (
+          <div className="flex w-full flex-row flex-wrap justify-center gap-4 md:gap-8">
+            {categories.slice(0, 4).map((category) => (
+              <Link
+                key={category._id}
+                to={`/menus?category=${category.name}`}
+                className="flex flex-col gap-2 items-center w-max justify-center"
+              >
+                <img
+                  src={category.image || "./no-image.png"}
+                  alt={category.name}
+                  className="w-32 h-32 rounded-full object-cover"
+                />
+                <p className="text-center font-medium capitalize">
+                  {category.name}
+                </p>
+              </Link>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* BEST SELLING SECTION */}
+      <section className="container flex flex-col justify-center gap-4 my-8 md:my-16 lg:my-24">
+        <div className="flex flex-col md:flex-row justify-between gap-4">
+          <h4 className="font-semibold text-2xl">
+            Coba Penjualan Terbaik Kami
+          </h4>
+          <div className="w-27 md:w-1.5 h-1.5 md:h-auto bg-[#1D6F64]"></div>
+          <p>
+            Inilah cake dan cookies yang paling banyak disukai pelanggan setia
+            kami. Rasa lezat dan kualitas premium yang selalu bikin ketagihan.
+          </p>
+        </div>
+        <div>
+          {bestSelling.length === 0 ? (
+            <p className="text-center text-gray-500 text-sm italic">
+              Menu belum tersedia
+            </p>
+          ) : (
+            <div className="flex flex-row flex-nowrap gap-4 items-center overflow-x-scroll pb-10 px-2 md:mt-5">
+              {bestSelling.map((menu) => (
+                <MenuCard key={menu._id} menu={menu} />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* CTA SECTION */}
+      <section className="bg-[#54B0A2]">
+        <div className="p-8 md:p-12 lg:px-16">
+          <div className="mx-auto max-w-lg text-center">
+            <h2 className="text-2xl font-bold text-gray-900 md:text-3xl">
+              Pesan Sekarang & Manjakan Dirimu!
+            </h2>
+
+            <p className="mt-4 text-slate-100">
+              Klik tombol di bawah untuk memesan cake dan cookies pilihanmu hari
+              ini. Kami siap mengantar kebahagiaan manis langsung ke rumahmu.
+            </p>
+          </div>
+
+          <Link to="/menus" className="mt-8 flex justify-center">
+            <button className="relative w-max flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-gray-900 bg-secondary focus:outline-none cursor-pointer">
+              Beli Sekarang
+            </button>
+          </Link>
+        </div>
+      </section>
+
+      {/* NEW MENU SECTION */}
+      <section className="container flex flex-col justify-center gap-4 my-8 md:my-16 lg:my-24">
+        <TitleDesc
+          title="Menu Terbaru"
+          desc="Coba varian cake dan cookies terbaru kami yang dibuat dengan resep istimewa dan bahan berkualitas."
+        />
+        <div>
+          {menus.length === 0 ? (
+            <p className="text-center text-gray-500 text-sm italic">
+              Menu belum tersedia
+            </p>
+          ) : (
+            <div className="flex flex-row flex-nowrap gap-4 items-center overflow-x-scroll pb-10 px-2 md:mt-5">
+              {menus.slice(0, 3).map((menu) => (
+                <MenuCard key={menu._id} menu={menu} />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
+  );
 };

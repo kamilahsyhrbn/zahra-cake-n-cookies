@@ -93,9 +93,9 @@ export const Navbar = () => {
     }
   }, [currentUser]);
 
-  if (currentUser && isLoading) {
-    return <Loader />;
-  }
+  // if (currentUser && isLoading) {
+  //   return <Loader />;
+  // }
 
   return (
     <nav className="sticky -top-1 z-50 bg-white py-4 shadow-md">
@@ -203,12 +203,14 @@ export const Navbar = () => {
             {currentUser && currentUser.role === "user" ? (
               <>
                 <Link
-                  className="hover:text-[#1D6F64] transition-colors duration-200 cursor-pointer relative"
+                  className={`hover:text-[#1D6F64] transition-colors duration-200 cursor-pointer relative ${
+                    location.pathname === "/cart" ? "text-[#1D6F64]" : ""
+                  }`}
                   to="/cart"
                 >
                   <IoCartOutline className="text-3xl" />
                   <div className="absolute -top-1 -right-1.5 w-4 h-4 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
-                    {carts?.menus?.length}
+                    {carts?.menus?.length || 0}
                   </div>
                 </Link>
                 <div className="relative">
@@ -233,15 +235,23 @@ export const Navbar = () => {
                       <div className="absolute end-0 z-10 mt-2 w-56 divide-y divide-gray-100 rounded-md border border-gray-100 bg-white shadow-lg">
                         <div className="p-2">
                           <Link
-                            to="/profile"
-                            className="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-secondary"
+                            to="/profile/my-profile"
+                            className={`block rounded-lg px-4 py-2 text-sm ${
+                              location.pathname.startsWith("/profile")
+                                ? "bg-gray-50 text-[#1D6F64] font-medium"
+                                : "text-gray-500 hover:bg-gray-50 "
+                            }`}
                           >
                             Profil
                           </Link>
 
                           <Link
                             to="/purchases"
-                            className="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-secondary"
+                            className={`block rounded-lg px-4 py-2 text-sm ${
+                              location.pathname === "/purchases"
+                                ? "text-[#1D6F64] bg-gray-50 font-medium"
+                                : "text-gray-500 hover:bg-gray-50"
+                            }`}
                           >
                             Riwayat Pembelian
                           </Link>
@@ -357,7 +367,7 @@ export const Navbar = () => {
                       <Link
                         to="/cart"
                         className={`block rounded-lg px-4 py-2 font-medium text-gray-500 hover:bg-gray-100 hover:text-[#1D6F64] transition-colors duration-200 ${
-                          location.pathname === "/profile"
+                          location.pathname.startsWith("/profile")
                             ? "bg-gray-100 text-[#1D6F64]"
                             : ""
                         }`}
@@ -431,7 +441,7 @@ export const Navbar = () => {
 
                 <div className="sticky inset-x-0 bottom-0 border-t border-gray-100">
                   <Link
-                    to="/profile"
+                    to="/profile/my-profile"
                     className="flex items-center gap-2 bg-white p-4 hover:bg-gray-50"
                   >
                     <img
