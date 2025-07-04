@@ -23,6 +23,18 @@ const useReviewStore = create((set) => ({
     }
   },
 
+  createReview: async (data) => {
+    set({ isLoading: true });
+    try {
+      const response = await api.post("/review", data);
+      return response;
+    } catch (error) {
+      return error;
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
   deleteReview: async (id) => {
     set({ isLoading: true });
     try {

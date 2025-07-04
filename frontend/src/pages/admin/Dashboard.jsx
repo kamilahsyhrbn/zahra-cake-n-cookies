@@ -31,7 +31,7 @@ export const Dashboard = () => {
   useEffect(() => {
     let total = 0;
     orders
-      .filter((order) => order.status === "completed")
+      .filter((order) => order.status === "delivered")
       .forEach((order) => {
         total += order.totalPrice;
       });
@@ -48,7 +48,7 @@ export const Dashboard = () => {
 
       {/* TOTAL CARD */}
       <section className="flex flex-col md:flex-row justify-between items-center gap-4">
-        <Link to="/admin/menu" className="w-full">
+        <Link to="/admin/menus" className="w-full">
           <div className="bg-white p-4 shadow-md rounded-xl flex flex-col items-center md:items-start lg:flex-row gap-4 justify-between group transition-all duration-300 hover:scale-105 cursor-pointer">
             <div className="bg-[#54B0A2] p-4 rounded-full group-hover:bg-[#1D6F64] transition-all duration-300">
               <MdOutlineCookie className="w-10 h-10 group-hover:text-white transition-all duration-300" />
@@ -59,7 +59,7 @@ export const Dashboard = () => {
             </div>
           </div>
         </Link>
-        <Link to="/admin/order" className="w-full">
+        <Link to="/admin/orders" className="w-full">
           <div className="bg-white p-4 shadow-md rounded-xl flex flex-col items-center md:items-start lg:flex-row gap-4 justify-between group transition-all duration-300 hover:scale-105 cursor-pointer">
             <div className="bg-[#54B0A2] p-4 rounded-full group-hover:bg-[#1D6F64] transition-all duration-300">
               <MdOutlineDeliveryDining className="w-10 h-10 group-hover:text-white transition-all duration-300" />
@@ -124,7 +124,7 @@ export const Dashboard = () => {
             </div>
           </div>
 
-          {orders?.filter((order) => order.status === "in-progress").length ===
+          {orders?.filter((order) => order.status === "processing").length ===
           0 ? (
             <p className="text-sm text-gray-400">Belum ada pesanan baru</p>
           ) : (
@@ -148,7 +148,7 @@ export const Dashboard = () => {
                 </thead>
                 <tbody>
                   {orders
-                    ?.filter((order) => order.status === "in-progress")
+                    ?.filter((order) => order.status === "processing")
                     .slice(0, 3)
                     .map((order) => (
                       <tr

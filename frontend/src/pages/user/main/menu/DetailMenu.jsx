@@ -317,16 +317,14 @@ export const DetailMenu = () => {
             Belum ada ulasan untuk menu ini.
           </p>
         ) : (
-          <div
-            className={`${
-              reviews?.length < 4
-                ? "flex flex-col gap-2"
-                : "flex flex-row flex-nowrap gap-4 items-center overflow-x-scroll pb-10 px-2"
-            }`}
-          >
-            {reviews.map((review) => (
-              <ReviewCard key={review._id} data={review} />
-            ))}
+          <div className="overflow-x-auto px-2">
+            <div className="grid grid-rows-3 grid-flow-col auto-cols-[100%] gap-3">
+              {reviews.map((review) => (
+                <div key={review._id} className="w-full">
+                  <ReviewCard data={review} />
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </section>

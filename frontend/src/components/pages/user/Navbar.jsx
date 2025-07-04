@@ -246,9 +246,9 @@ export const Navbar = () => {
                           </Link>
 
                           <Link
-                            to="/purchases"
+                            to="/order-history"
                             className={`block rounded-lg px-4 py-2 text-sm ${
-                              location.pathname === "/purchases"
+                              location.pathname === "/order-history"
                                 ? "text-[#1D6F64] bg-gray-50 font-medium"
                                 : "text-gray-500 hover:bg-gray-50"
                             }`}

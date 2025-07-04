@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import pdfMake from "pdfmake/build/pdfmake";
+import * as pdfFonts from "pdfmake/build/vfs_fonts";
+
+pdfMake.vfs = pdfFonts.vfs;
+import React, { useEffect, useRef, useState } from "react";
 import { TitleCard } from "../../../components/pages/admin/TitleCard";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import { Link } from "react-router-dom";
 import useOrderStore from "../../../store/orderStore";
 import { showErrorToast } from "../../../components/common/Toast";
 import { formatCurrency } from "../../../utils/formatNumber";
@@ -14,6 +17,7 @@ export const Report = () => {
     endDate: "",
     status: "all",
   });
+
   const [data, setData] = useState({
     startDate: "",
     endDate: "",
@@ -39,7 +43,6 @@ export const Report = () => {
       return;
     }
 
-    console.log("formData", formData);
     const response = await report(formData);
     if (response?.success) {
       console.log("response", response);
@@ -48,9 +51,131 @@ export const Report = () => {
       showErrorToast(response.response.data.message || "Terjadi kesalahan");
     }
   };
-  console.log("reportResult", reportResult);
 
-  console.log("data", data);
+  const handleDownloadPDF = () => {
+    const tableBody = [
+      [
+        { text: "No.", bold: true },
+        { text: "Nama Pembeli", bold: true },
+        { text: "Tanggal Pembelian", bold: true },
+        { text: "Status", bold: true },
+        { text: "Jumlah", bold: true },
+        { text: "Nomor Resi", bold: true },
+      ],
+    ];
+
+    reportResult.forEach((report, i) => {
+      tableBody.push([
+        i + 1,
+        report?.shipping?.name || "-",
+        new Date(report?.createdAt).toLocaleDateString("id-ID", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        }),
+        report?.status === "all"
+          ? "Semua"
+          : report?.status === "processing"
+          ? "Diproses"
+          : report?.status === "shipped"
+          ? "Dikirim"
+          : "Selesai",
+        `Rp ${report?.totalPrice?.toLocaleString("id-ID")}`,
+        report?.shipping?.trackingNumber || "-",
+      ]);
+    });
+
+    const docDefinition = {
+      pageSize: "A4",
+      pageMargins: [40, 60, 40, 60],
+      content: [
+        {
+          text: "LAPORAN PENJUALAN",
+          style: "header",
+        },
+        {
+          text: "Zahra Cake & Cookies",
+          style: "subheader",
+        },
+        {
+          text: "No. Telepon: 087856065038 | Email: zahracakencookies@gmail.com | Alamat: Jl. Malik Ibrahim No. 36",
+          style: "small",
+          margin: [0, 0, 0, 10],
+        },
+        {
+          text: `Periode: ${format(
+            new Date(formData.startDate),
+            "dd MMMM yyyy",
+            { locale: id }
+          )} - ${format(new Date(formData.endDate), "dd MMMM yyyy", {
+            locale: id,
+          })} | Status: ${
+            formData.status === "all"
+              ? "Semua"
+              : formData.status === "processing"
+              ? "Diproses"
+              : formData.status === "shipped"
+              ? "Dikirim"
+              : "Selesai"
+          }`,
+          margin: [0, 0, 0, 10],
+          alignment: "center",
+        },
+        {
+          style: "tableExample",
+          table: {
+            headerRows: 1,
+            widths: ["auto", "*", "auto", "auto", "auto", "auto"],
+            body: tableBody,
+          },
+          layout: "lightHorizontalLines",
+        },
+        {
+          columns: [
+            { width: "*", text: "" },
+            {
+              width: "auto",
+              stack: [
+                {
+                  text: `Gresik, ${format(new Date(), "dd MMMM yyyy", {
+                    locale: id,
+                  })}`,
+                  margin: [0, 30, 0, 80],
+                  alignment: "center",
+                },
+                { text: "(Admin Zahra Cake & Cookies)", alignment: "center" },
+              ],
+            },
+          ],
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 16,
+          bold: true,
+          alignment: "center",
+          margin: [0, 0, 0, 5],
+        },
+        subheader: {
+          fontSize: 12,
+          bold: true,
+          alignment: "center",
+          margin: [0, 0, 0, 5],
+        },
+        small: {
+          fontSize: 9,
+          alignment: "center",
+        },
+        tableExample: {
+          margin: [0, 5, 0, 15],
+        },
+      },
+    };
+
+    pdfMake
+      .createPdf(docDefinition)
+      .download(`laporan-${new Date().toISOString().slice(0, 10)}.pdf`);
+  };
 
   return (
     <div>
@@ -109,9 +234,9 @@ export const Report = () => {
               value={formData.status}
             >
               <option value="all">Semua</option>
-              <option value="in-progress">Diproses</option>
-              <option value="delivered">Dikirim</option>
-              <option value="completed">Selesai</option>
+              <option value="processing">Diproses</option>
+              <option value="shipped">Dikirim</option>
+              <option value="delivered">Selesai</option>
             </select>
           </div>
         </div>
@@ -143,20 +268,21 @@ export const Report = () => {
               dengan status{" "}
               {data?.status === "all"
                 ? "semua"
-                : data?.status === "in-progress"
+                : data?.status === "processing"
                 ? "diproses"
-                : data?.status === "delivered"
+                : data?.status === "shipped"
                 ? "dikirim"
                 : "selesai"}
             </h4>
 
-            <Link
-              to={`/download?startDate=${data?.startDate}&endDate=${data?.endDate}&status=${data?.status}`}
-            >
-              <button className="bg-[#1D6F64] py-2 px-4 rounded-lg text-white cursor-pointer text-nowrap hover:bg-[#2a4d48] transition-all duration-300">
+            {data && reportResult && reportResult.length > 0 && (
+              <button
+                onClick={handleDownloadPDF}
+                className="bg-[#1D6F64] py-2 px-4 rounded-lg text-white cursor-pointer text-nowrap hover:bg-[#2a4d48] transition-all duration-300"
+              >
                 Cetak Laporan
               </button>
-            </Link>
+            )}
           </section>
 
           {data && reportResult && reportResult.length === 0 ? (
@@ -206,9 +332,9 @@ export const Report = () => {
                         })}
                       </td>
                       <td className="px-6 py-4">
-                        {order.status === "in-progress"
+                        {order.status === "processing"
                           ? "Diproses"
-                          : order.status === "delivered"
+                          : order.status === "shipped"
                           ? "Dikirim"
                           : "Selesai"}
                       </td>

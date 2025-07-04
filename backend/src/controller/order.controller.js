@@ -180,8 +180,7 @@ export const getOrderById = async (req, res) => {
 export const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find({
-      status: { $ne: "pending" },
-      $or: { status: "cancelled" },
+      $or: [{ status: { $ne: "unpaid" } }, { status: "cancelled" }],
     })
       .sort({ createdAt: -1 })
       .populate("user")

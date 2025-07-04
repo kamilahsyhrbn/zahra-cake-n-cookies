@@ -10,18 +10,18 @@ export const MenuCard = ({ menu }) => {
           src={menu.images[0]}
           alt={menu.name}
           className="w-full h-64 object-cover rounded-t-lg cursor-pointer"
-          // onClick={() => navigate(`/detail-menu/${menu?._id}`)}
+          onClick={() => navigate(`/detail-menu/${menu?._id}`)}
         />
         <div className="flex flex-col p-4">
           <h2
             className="text-lg font-bold truncate cursor-pointer"
-            //   onClick={() => navigate(`/detail-menu/${menu?._id}`)}
+            onClick={() => navigate(`/detail-menu/${menu?._id}`)}
           >
             {menu.name}
           </h2>
           <p
             className="text-nowrap cursor-pointer font-semibold mb-2"
-            // onClick={() => navigate(`/detail-menu/${menu._id}`)}
+            onClick={() => navigate(`/detail-menu/${menu._id}`)}
           >
             {formatCurrency(menu.price)}
           </p>

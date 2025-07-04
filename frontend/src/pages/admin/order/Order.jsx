@@ -20,15 +20,13 @@ export const Order = () => {
   useEffect(() => {
     getOrders();
   }, [getOrders]);
-  console.log("orders", orders);
 
   useEffect(() => {
     setStatusLength({
       semua: orders?.length,
-      diproses: orders?.filter((order) => order.status === "in-progress")
-        .length,
-      dikirim: orders?.filter((order) => order.status === "delivered").length,
-      selesai: orders?.filter((order) => order.status === "completed").length,
+      diproses: orders?.filter((order) => order.status === "processing").length,
+      dikirim: orders?.filter((order) => order.status === "shipped").length,
+      selesai: orders?.filter((order) => order.status === "delivered").length,
     });
   }, [orders]);
 
@@ -65,9 +63,9 @@ export const Order = () => {
               Semua <span className="text-xs">({statusLength?.semua})</span>
             </button>
             <button
-              onClick={() => setSelectedStatus("in-progress")}
+              onClick={() => setSelectedStatus("processing")}
               className={`shrink-0 border-b-2 px-1 pb-4 text-sm font-medium hover:border-[#1D6F64] hover:text-[#1D6F64] cursor-pointer ${
-                selectedStatus === "proses"
+                selectedStatus === "processing"
                   ? "border-[#1D6F64] text-[#1D6F64]"
                   : "border-transparent text-gray-500"
               }`}
@@ -76,9 +74,9 @@ export const Order = () => {
               <span className="text-xs">({statusLength?.diproses})</span>
             </button>
             <button
-              onClick={() => setSelectedStatus("delivered")}
+              onClick={() => setSelectedStatus("shipped")}
               className={`shrink-0 border-b-2 px-1 pb-4 text-sm font-medium hover:border-[#1D6F64] hover:text-[#1D6F64] cursor-pointer ${
-                selectedStatus === "kirim"
+                selectedStatus === "shipped"
                   ? "border-[#1D6F64] text-[#1D6F64]"
                   : "border-transparent text-gray-500"
               }`}
@@ -86,9 +84,9 @@ export const Order = () => {
               Dikirim <span className="text-xs">({statusLength?.dikirim})</span>
             </button>
             <button
-              onClick={() => setSelectedStatus("completed")}
+              onClick={() => setSelectedStatus("delivered")}
               className={`shrink-0 border-b-2 px-1 pb-4 text-sm font-medium hover:border-[#1D6F64] hover:text-[#1D6F64] cursor-pointer ${
-                selectedStatus === "selesai"
+                selectedStatus === "delivered"
                   ? "border-[#1D6F64] text-[#1D6F64]"
                   : "border-transparent text-gray-500"
               }`}
@@ -102,9 +100,9 @@ export const Order = () => {
       {filteredOrders?.length === 0 ? (
         <p className="text-center text-gray-500">
           Belum ada pesanan dengan status{" "}
-          {selectedStatus === "in-progress"
+          {selectedStatus === "processing"
             ? "diproses"
-            : selectedStatus === "delivered"
+            : selectedStatus === "shipped"
             ? "dikirim"
             : "selesai"}
         </p>
@@ -157,9 +155,9 @@ export const Order = () => {
                     {formatCurrency(order?.totalPrice)}
                   </td>
                   <td className="px-6 py-4">
-                    {order?.status === "in-progress"
+                    {order?.status === "processing"
                       ? "Diproses"
-                      : order?.status === "delivered"
+                      : order?.status === "shipped"
                       ? "Dikirim"
                       : "Selesai"}
                   </td>

@@ -12,12 +12,11 @@ export const Menu = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const category = queryParams.get("category");
-  console.log("category", category);
 
   const { categories, getAllCategories } = useCategoryStore();
   const { menus, getAllMenus, isLoading } = useMenuStore();
   const [filter, setFilter] = useState({
-    category: "",
+    category: category || "",
     sort: "newest",
   });
 

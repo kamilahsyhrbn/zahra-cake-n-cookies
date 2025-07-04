@@ -8,16 +8,11 @@ import { showErrorToast, showSuccessToast } from "../../common/Toast";
 
 export const ReviewCard = ({ data }) => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const { currentUser } = useAuthStore();
   const { deleteReview } = useReviewStore();
 
   const handleModalDelete = () => {
     setIsDeleteOpen(!isDeleteOpen);
-  };
-
-  const handleModalUpdate = () => {
-    setIsUpdateOpen(!isUpdateOpen);
   };
 
   const handleDelete = async () => {
@@ -35,7 +30,7 @@ export const ReviewCard = ({ data }) => {
   };
 
   return (
-    <div className="min-w-full md:min-w-1/2 min-h-40 border border-[#1D6F64] rounded-xl p-3">
+    <div className="min-w-full md:min-w-1/2 min-h-32 border border-[#1D6F64] rounded-xl p-3">
       <div className="flex flex-col-reverse md:flex-row gap-1 justify-between">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
@@ -76,24 +71,8 @@ export const ReviewCard = ({ data }) => {
 
       <p className="my-3">{data?.comment}</p>
 
-      {data?.user?._id === currentUser?._id && (
-        <div className="flex items-center gap-2 text-sm">
-          <button
-            onClick={handleModalUpdate}
-            className="text-gray-400 hover:text-[#1D6F64] cursor-pointer hover:font-medium"
-          >
-            Ubah
-          </button>
-          <button
-            onClick={handleModalDelete}
-            className="text-gray-400 hover:text-red-500 cursor-pointer hover:font-medium"
-          >
-            Hapus
-          </button>
-        </div>
-      )}
-
-      {currentUser?.role === "admin" && (
+      {(data?.user?._id === currentUser?._id ||
+        currentUser?.role === "admin") && (
         <button
           onClick={handleModalDelete}
           className="text-gray-400 hover:text-red-500 cursor-pointer hover:font-medium"

@@ -192,37 +192,35 @@ export const MenuForm = () => {
       });
     }
 
-    try {
-      let response;
+    let response;
+    if (isUpdate) {
+      response = await updateMenu(id, data);
+    } else {
+      response = await createMenu(data);
+    }
+    if (response?.success) {
       if (isUpdate) {
-        response = await updateMenu(id, data);
+        showSuccessToast("Menu berhasil diubah");
       } else {
-        response = await createMenu(data);
+        showSuccessToast("Menu berhasil ditambahkan");
       }
-      if (response?.success) {
-        if (isUpdate) {
-          showSuccessToast("Menu berhasil diubah");
-        } else {
-          showSuccessToast("Menu berhasil ditambahkan");
-        }
-        navigate("/admin/menus");
+      navigate("/admin/menus");
 
-        setFormData({
-          name: "",
-          category: "",
-          price: 0,
-          weight: 0,
-          description: "",
-          isPreOrder: false,
-          preOrderEst: 0,
-          stock: 0,
-          images: [],
-        });
-        setDeletedImages([]);
-      }
-    } catch (error) {
+      setFormData({
+        name: "",
+        category: "",
+        price: 0,
+        weight: 0,
+        description: "",
+        isPreOrder: false,
+        preOrderEst: 0,
+        stock: 0,
+        images: [],
+      });
+      setDeletedImages([]);
+    } else {
       console.log("Error in creating menu", error);
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
+      showErrorToast(response.response.data.message || "Terjadi kesalahan");
     }
   };
 

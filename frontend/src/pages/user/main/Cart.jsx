@@ -73,7 +73,7 @@ export const Cart = () => {
       <TitleLine title="Keranjang Belanja" />
 
       {/* CART */}
-      {carts.length === 0 || carts.menus.length === 0 ? (
+      {carts && (carts.length === 0 || carts.menus.length === 0) ? (
         <div className="flex flex-col gap-4 justify-center items-center my-10">
           <img
             src="/empty-cart.svg"

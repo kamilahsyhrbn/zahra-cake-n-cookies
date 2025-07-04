@@ -67,8 +67,8 @@ export const Home = () => {
             {categories.slice(0, 4).map((category) => (
               <Link
                 key={category._id}
-                to={`/menus?category=${category.name}`}
-                className="flex flex-col gap-2 items-center w-max justify-center"
+                to={`/menus?category=${category._id}`}
+                className="flex flex-col gap-2 items-center w-max justify-center hover:scale-105 transition-all duration-300 ease-in-out"
               >
                 <img
                   src={category.image || "./no-image.png"}
@@ -103,7 +103,7 @@ export const Home = () => {
             </p>
           ) : (
             <div className="flex flex-row flex-nowrap gap-4 items-center overflow-x-scroll pb-10 px-2 md:mt-5">
-              {bestSelling.map((menu) => (
+              {bestSelling.slice(0, 3).map((menu) => (
                 <MenuCard key={menu._id} menu={menu} />
               ))}
             </div>

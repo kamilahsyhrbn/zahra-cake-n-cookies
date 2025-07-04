@@ -1,3 +1,4 @@
+import Review from "../models/review.model.js";
 import User from "../models/user.model.js";
 import { v2 as cloudinary } from "cloudinary";
 
@@ -133,6 +134,12 @@ export const deleteAccount = async (req, res) => {
     if (user.image) {
       const publicId = user.image.split("/").pop().split(".")[0];
       await cloudinary.uploader.destroy(`zahra-cakencookies/${publicId}`);
+    }
+
+    const reviews = await Review.find({ user: id });
+
+    for (const review of reviews) {
+      await Review.findByIdAndDelete(review._id);
     }
 
     res.status(200).json({

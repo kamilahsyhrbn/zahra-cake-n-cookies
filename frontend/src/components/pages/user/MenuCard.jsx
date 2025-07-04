@@ -33,7 +33,7 @@ export const MenuCard = ({ menu }) => {
   };
 
   return (
-    <div className="bg-white shadow-lg hover:shadow-2xl rounded-lg w-72 md:w-90 hover:scale-105 transition duration-300 ease-in-out border-gray-300">
+    <div className="bg-white shadow-lg hover:shadow-2xl rounded-lg min-w-72 md:min-w-90 hover:scale-105 transition duration-300 ease-in-out border-gray-300">
       <div className="flex flex-col">
         <div className="relative">
           <img

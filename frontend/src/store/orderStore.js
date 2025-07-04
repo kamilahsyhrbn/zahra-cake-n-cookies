@@ -59,6 +59,18 @@ const useOrderStore = create((set) => ({
     }
   },
 
+  deleteOrder: async (id) => {
+    set({ isOrderLoading: true });
+    try {
+      const response = await api.delete(`/order/${id}`);
+      return response;
+    } catch (error) {
+      return error;
+    } finally {
+      set({ isOrderLoading: false });
+    }
+  },
+
   report: async (data) => {
     set({ isLoading: true });
     try {

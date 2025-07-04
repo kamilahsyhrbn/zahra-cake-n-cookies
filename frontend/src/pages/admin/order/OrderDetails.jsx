@@ -107,7 +107,7 @@ export const OrderDetails = () => {
 
         <hr className="my-6 border-gray-300" />
 
-        <section className="flex flex-col md:flex-row gap-1 justify-between">
+        <section className="flex gap-1 justify-between">
           <p className="font-semibold text-lg">Total</p>
           <p className="font-semibold text-lg">
             {formatCurrency(order?.totalPrice)}
@@ -159,7 +159,7 @@ export const OrderDetails = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, trackingNumber: e.target.value })
                 }
-                disabled={order?.status === "completed"}
+                disabled={order?.status === "delivered"}
               />
             </div>
 
@@ -173,13 +173,13 @@ export const OrderDetails = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, status: e.target.value })
                 }
-                disabled={order?.status === "completed"}
+                disabled={order?.status === "delivered"}
               >
-                <option value="in-progress" disabled>
+                <option value="processing" disabled>
                   Diproses
                 </option>
-                <option value="delivered">Dikirim</option>
-                <option value="completed">Selesai</option>
+                <option value="shipped">Dikirim</option>
+                <option value="delivered">Selesai</option>
               </select>
             </div>
 
@@ -200,7 +200,7 @@ export const OrderDetails = () => {
               </div>
             </section>
 
-            {order?.status !== "completed" && (
+            {order?.status !== "delivered" && (
               <button
                 type="submit"
                 disabled={isOrderLoading}

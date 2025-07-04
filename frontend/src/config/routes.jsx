@@ -14,7 +14,6 @@ import { CategoryForm } from "../pages/admin/category/CategoryForm";
 import { Order } from "../pages/admin/order/Order";
 import { OrderDetails } from "../pages/admin/order/OrderDetails";
 import { Users } from "../pages/admin/Users";
-import { Download } from "../pages/admin/report/Download";
 import { Report } from "../pages/admin/report/Report";
 
 import LoginUser from "../pages/user/auth/Login";
@@ -35,15 +34,13 @@ import { PaymentStatus } from "../pages/user/main/buy/PaymentStatus";
 import { MyProfile } from "../pages/user/main/profile/MyProfile";
 import { UpdateProfile } from "../pages/user/main/profile/UpdateProfile";
 import { ChangePassword } from "../pages/user/main/profile/ChangePassword";
+import { OrderHistory } from "../pages/user/main/order/OrderHistory";
+import { OrderHistoryDetail } from "../pages/user/main/order/OrderHistoryDetail";
 
 export const routes = createBrowserRouter([
   {
     path: "*",
     element: <NotFound />,
-  },
-  {
-    path: "/download",
-    element: <Download />,
   },
   // Admin
   {
@@ -213,7 +210,7 @@ export const routes = createBrowserRouter([
         ),
       },
       {
-        path: "/chekcout",
+        path: "/checkout",
         element: (
           <ProtectedRoute role="user">
             <Checkout />
@@ -257,6 +254,22 @@ export const routes = createBrowserRouter([
         element: (
           <ProtectedRoute role="user">
             <ChangePassword />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/order-history",
+        element: (
+          <ProtectedRoute role="user">
+            <OrderHistory />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/order-history/:id",
+        element: (
+          <ProtectedRoute role="user">
+            <OrderHistoryDetail />
           </ProtectedRoute>
         ),
       },

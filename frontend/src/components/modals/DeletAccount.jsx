@@ -4,7 +4,6 @@ import useUserStore from "../../store/userStore";
 import useAuthStore from "../../store/authStore";
 import { useNavigate } from "react-router-dom";
 import { IoMdRefresh } from "react-icons/io";
-import captcha from "../../../public/captcha.png";
 import useOrderStore from "../../store/orderStore";
 
 export const DeletAccount = ({ onClose }) => {
@@ -75,8 +74,7 @@ export const DeletAccount = ({ onClose }) => {
 
     if (
       orders?.filter(
-        (order) =>
-          order.status === "in-progress" || order.status === "delivered"
+        (order) => order.status === "processing" || order.status === "shipped"
       ).length > 0
     ) {
       showErrorToast("Anda masih memiliki pesanan yang belum selesai!");
@@ -170,7 +168,7 @@ export const DeletAccount = ({ onClose }) => {
                 <div className="flex justify-center items-start mb-4">
                   <div
                     style={{
-                      backgroundImage: `url(${captcha})`,
+                      backgroundImage: `url(/captcha.png)`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }}
