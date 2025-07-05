@@ -218,18 +218,10 @@ export const routes = createBrowserRouter([
         ),
       },
       {
-        path: "/payment",
+        path: "/payment/:id",
         element: (
           <ProtectedRoute role="user">
             <Payment />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "/payment-status",
-        element: (
-          <ProtectedRoute role="user">
-            <PaymentStatus />
           </ProtectedRoute>
         ),
       },
@@ -274,5 +266,13 @@ export const routes = createBrowserRouter([
         ),
       },
     ],
+  },
+  {
+    path: "/payment-status",
+    element: (
+      <ProtectedRoute role="user">
+        <PaymentStatus />
+      </ProtectedRoute>
+    ),
   },
 ]);

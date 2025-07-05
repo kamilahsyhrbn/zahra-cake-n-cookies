@@ -338,12 +338,15 @@ export const getBestSellingMenu = async (req, res) => {
     const menus = await Menu.find();
 
     if (menus.length === 0) {
-      console.log("Tidak ada data kue");
+      res.status(200).json({
+        success: true,
+        message: "Tidak ada data menu",
+        data: [],
+      });
       return;
     }
 
     const salesData = menus.map((menu) => menu.totalSold);
-    const names = menus.map((menu) => menu.name);
 
     const salesTensor = tf.tensor(salesData);
 
@@ -387,6 +390,7 @@ export const getRecommendationMenus = async (req, res) => {
 
     const menus = await Menu.find({
       _id: { $ne: id },
+      stock: { $gte: 1 },
     }).limit(4);
 
     res.status(200).json({

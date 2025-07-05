@@ -22,16 +22,10 @@ export const OrderHistoryDetail = () => {
   const navigate = useNavigate();
   const orderId = useParams().id;
 
-  const {
-    getOrderById,
-    order,
-    isLoading,
-    updateOrder,
-    deleteOrder,
-    isOrderLoading,
-  } = useOrderStore();
+  const { getOrderById, order, isLoading, updateOrder, isOrderLoading } =
+    useOrderStore();
   const { currentUser, isLoading: isLoadingUser } = useAuthStore();
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
   const [subtotal, setSubtotal] = useState(0);
 
@@ -67,19 +61,19 @@ export const OrderHistoryDetail = () => {
     }
   };
 
-  const handleDelete = async () => {
-    const response = await deleteOrder(order._id);
+  const handleCancel = async () => {
+    const response = await updateOrder(order._id, { status: "cancelled" });
 
     if (response?.success) {
-      showSuccessToast("Pesanan berhasil dihapus");
+      showSuccessToast("Pesanan berhasil dibatalkan");
       navigate("/order-history");
     } else {
       showErrorToast(response.response.data.message || "Terjadi kesalahan");
     }
   };
 
-  const handleDeleteModal = () => {
-    setIsDeleteModalOpen(!isDeleteModalOpen);
+  const handleCancelModal = () => {
+    setIsCancelModalOpen(!isCancelModalOpen);
   };
 
   const handlePrintNota = () => {
@@ -191,10 +185,10 @@ export const OrderHistoryDetail = () => {
       })}.pdf`
     );
   };
+
   if (isLoading) {
     return <Loader />;
   }
-  console.log("order", order);
 
   return (
     <div className="container mb-10">
@@ -240,11 +234,18 @@ export const OrderHistoryDetail = () => {
         {order?.items?.map((item) => (
           <section key={item?._id} className="flex flex-col gap-3 my-5">
             <div className="flex gap-3">
-              <img
-                src={item?.menu?.images[0]}
-                alt={item?.menu?.name}
-                className="w-16 h-16 object-cover rounded-md"
-              />
+              <div className="relative">
+                <img
+                  src={item?.menu?.images[0]}
+                  alt={item?.menu?.name}
+                  className="w-16 h-16 rounded-xl object-cover"
+                />
+                {order.status === "unpaid" && item?.menu?.stock === 0 && (
+                  <div className="absolute inset-0 bg-black/50 grid place-items-center rounded-xl text-white">
+                    Habis
+                  </div>
+                )}
+              </div>
               <div className="flex flex-col">
                 <p className="font-semibold">{item?.menu?.name}</p>
                 <p className="text-gray-500 text-xs">
@@ -323,10 +324,7 @@ export const OrderHistoryDetail = () => {
           <div className="flex flex-col gap-2 bg-[#F2FDFC] border border-gray-100 rounded-lg p-4">
             <p className="font-semibold">{order?.shipping?.name}</p>
             <p>{order?.shipping?.phone}</p>
-            <p className="my-6">
-              {order?.shipping?.address}, {order?.shipping?.city},{" "}
-              {order?.shipping?.province}
-            </p>
+            <p className="my-6">{order?.shipping?.address}</p>
             <p className="text-sm">
               Catatan untuk penjual: {order?.shipping?.note || "-"}
             </p>
@@ -343,7 +341,20 @@ export const OrderHistoryDetail = () => {
             </button>
           )}
 
-          {order?.status === "unpaid" ? (
+          {order?.status === "unpaid" &&
+          (order?.items?.some((item) => item?.menu?.stock === 0) ||
+            order.items.some((item) => item.quantity > item?.menu?.stock)) ? (
+            <button
+              onClick={handleCancelModal}
+              className="bg-transparent border border-[#54B0A2] hover:bg-[#1D6F64] hover:border-[#1D6F64] hover:text-white transition-colors duration-300 px-4 py-2 rounded-xl cursor-pointer"
+            >
+              Batalkan Pesanan
+            </button>
+          ) : order?.status === "unpaid" &&
+            (order?.items?.some((item) => item?.menu?.stock !== 0) ||
+              order.items.some(
+                (item) => item.quantity <= item?.menu?.stock
+              )) ? (
             <div className="flex gap-10 items-center">
               <Link to={`/payment/${order?._id}`}>
                 <button className="bg-transparent border border-[#54B0A2] hover:bg-[#1D6F64] hover:border-[#1D6F64] hover:text-white transition-colors duration-300 px-4 py-2 rounded-xl cursor-pointer">
@@ -352,7 +363,7 @@ export const OrderHistoryDetail = () => {
               </Link>
 
               <button
-                onClick={handleDeleteModal}
+                onClick={handleCancelModal}
                 className="bg-transparent border border-[#54B0A2] hover:bg-[#1D6F64] hover:border-[#1D6F64] hover:text-white transition-colors duration-300 px-4 py-2 rounded-xl cursor-pointer"
               >
                 Batalkan Pesanan
@@ -376,12 +387,12 @@ export const OrderHistoryDetail = () => {
         </section>
       </div>
 
-      {isDeleteModalOpen && (
+      {isCancelModalOpen && (
         <Danger
           title="Hapus Pesanan"
           message="Anda yakin ingin menghapus pesanan ini?"
-          onClose={handleDeleteModal}
-          onSubmit={handleDelete}
+          onClose={handleCancelModal}
+          onSubmit={handleCancel}
         />
       )}
     </div>

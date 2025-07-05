@@ -13,10 +13,12 @@ export const Cart = () => {
   const { getCarts, isLoading, carts, removeFromCart, clearCart } =
     useCartStore();
   const [totalPrice, setTotalPrice] = useState(0);
+  const [isAvailable, setIsAvailable] = useState(true);
 
   useEffect(() => {
     getCarts();
   }, []);
+  console.log("carts", carts);
 
   const total = () => {
     let total = 0;
@@ -28,8 +30,24 @@ export const Cart = () => {
     setTotalPrice(total);
   };
 
+  const isMenuAvailable = () => {
+    let isAvailable = true;
+    if (carts && carts.menus) {
+      carts.menus.forEach((item) => {
+        if (item.menu.stock === 0) {
+          isAvailable = false;
+        }
+        if (item.quantity > item.menu.stock) {
+          isAvailable = false;
+        }
+      });
+    }
+    setIsAvailable(isAvailable);
+  };
+
   useEffect(() => {
     total();
+    isMenuAvailable();
   }, [carts]);
 
   if (isLoading) {
@@ -73,7 +91,8 @@ export const Cart = () => {
       <TitleLine title="Keranjang Belanja" />
 
       {/* CART */}
-      {carts && (carts.length === 0 || carts.menus.length === 0) ? (
+      {carts === null ||
+      (carts && (carts.length === 0 || carts.menus.length === 0)) ? (
         <div className="flex flex-col gap-4 justify-center items-center my-10">
           <img
             src="/empty-cart.svg"
@@ -88,34 +107,42 @@ export const Cart = () => {
         <div className="flex flex-col lg:flex-row gap-20 mt-10">
           <div className="lg:w-1/2 w-full">
             <div className="flex flex-col divide-y divide-gray-300">
-              {carts.menus.map((item) => (
-                <div key={item?._id} className="flex gap-3 py-3 items-center">
-                  <img
-                    src={item?.menu.images[0]}
-                    alt="Produk"
-                    className="w-24 h-20 object-cover rounded-md"
-                  />
-                  <div className="flex justify-between items-start w-full">
-                    <div>
-                      <h6 className="mb-1 font-medium">{item?.menu.name}</h6>
-                      <p className="text-sm opacity-75">
-                        {formatCurrency(item?.menu.price)}
-                      </p>
-                      <p className="text-sm opacity-75">
-                        Jumlah : {item?.quantity}
-                      </p>
+              {carts &&
+                carts.menus.map((item) => (
+                  <div key={item?._id} className="flex gap-3 py-3 items-center">
+                    <div className="relative">
+                      <img
+                        src={item?.menu?.images[0]}
+                        alt={item?.menu?.name}
+                        className="w-24 h-20 rounded-xl object-cover"
+                      />
+                      {item?.menu?.stock === 0 && (
+                        <div className="absolute inset-0 bg-black/50 grid place-items-center rounded-xl text-white">
+                          Habis
+                        </div>
+                      )}
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteItem(item?.menu._id)}
-                      className="text-gray-500 hover:text-red-600 text-2xl cursor-pointer w-max"
-                      aria-label="Hapus"
-                    >
-                      &times;
-                    </button>
+                    <div className="flex justify-between items-start w-full">
+                      <div>
+                        <h6 className="mb-1 font-medium">{item?.menu.name}</h6>
+                        <p className="text-sm opacity-75">
+                          {formatCurrency(item?.menu.price)}
+                        </p>
+                        <p className="text-sm opacity-75">
+                          Jumlah : {item?.quantity}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteItem(item?.menu._id)}
+                        className="text-gray-500 hover:text-red-600 text-2xl cursor-pointer w-max"
+                        aria-label="Hapus"
+                      >
+                        &times;
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
 
             <div className="mt-5 flex">
@@ -132,35 +159,47 @@ export const Cart = () => {
             <div className="border-b pb-3">
               <h3 className="text-xl font-semibold mb-3">Total Keranjang</h3>
               <div className="flex flex-col gap-3">
-                {carts.menus.map((item) => (
-                  <div className="flex justify-between" key={item?._id}>
-                    <div className="flex flex-col">
-                      <p className="font-medium">{item?.menu.name}</p>
-                      <p className="text-sm opacity-75">
-                        {item?.quantity} x {formatCurrency(item?.menu.price)}
+                {carts &&
+                  carts.menus.map((item) => (
+                    <div className="flex justify-between" key={item?._id}>
+                      <div className="flex flex-col">
+                        <p className="font-medium">{item?.menu.name}</p>
+                        <p className="text-sm opacity-75">
+                          {item?.quantity} x {formatCurrency(item?.menu.price)}
+                        </p>
+                      </div>
+                      <p className="font-semibold">
+                        {formatCurrency(item?.quantity * item?.menu.price)}
                       </p>
                     </div>
-                    <p className="font-semibold">
-                      {formatCurrency(item?.quantity * item?.menu.price)}
-                    </p>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
 
             <div className="mt-3 flex justify-between">
-              <p className="font-semibold">TOTAL HARGA</p>
+              <p className="font-semibold">Total Harga</p>
               <p className="font-semibold">{formatCurrency(totalPrice)}</p>
             </div>
 
-            <div className="flex justify-center mt-5">
+            {isAvailable ? (
+              <div className="w-full mt-5">
+                <Link to="/checkout">
+                  <button
+                    type="button"
+                    className="bg-[#1D6F64] hover:bg-[#2a4d48] w-full mt-2 focus:ring-4 focus:outline-none focus:ring-[#2a4d48] transition-colors duration-300 font-medium rounded-xl px-5 py-2.5 text-center disabled:opacity-50 disabled:cursor-not-allowed text-white cursor-pointer disabled:bg-[#1D6F64]/50"
+                  >
+                    Lanjut ke Pembelian
+                  </button>
+                </Link>
+              </div>
+            ) : (
               <button
                 type="button"
-                className="bg-[#1D6F64] hover:bg-[#2a4d48] mt-2 focus:ring-4 focus:outline-none focus:ring-[#2a4d48] transition-colors duration-300 font-medium rounded-xl w-full px-5 py-2.5 text-center disabled:opacity-50 disabled:cursor-not-allowed text-white cursor-pointer disabled:bg-[#1D6F64]/50"
+                className="w-full mt-5 focus:ring-4 focus:outline-none focus:ring-[#2a4d48] transition-colors duration-300 font-medium rounded-xl px-5 py-2.5 text-center cursor-not-allowed text-white bg-[#1D6F64]/50"
               >
-                LANJUTKAN KE PEMBELIAN
+                Jumlah kuantitas menu tidak mencukupi
               </button>
-            </div>
+            )}
           </div>
         </div>
       )}

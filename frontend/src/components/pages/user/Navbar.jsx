@@ -12,7 +12,6 @@ import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import useAuthStore from "../../../store/authStore";
 import Danger from "../../modals/Danger";
 import { showSuccessToast } from "../../common/Toast";
-import { Loader } from "../../common/Loader";
 import useCartStore from "../../../store/cartStore";
 import { getAccessToken } from "../../../utils/tokenManager";
 
@@ -93,10 +92,6 @@ export const Navbar = () => {
     }
   }, [currentUser]);
 
-  // if (currentUser && isLoading) {
-  //   return <Loader />;
-  // }
-
   return (
     <nav className="sticky -top-1 z-50 bg-white py-4 shadow-md">
       <div className="container flex flex-row items-center justify-between w-full">
@@ -113,7 +108,12 @@ export const Navbar = () => {
           </div>
           {/* LOGO BRAND */}
           <Link to="/" className={`${showSearch ? "hidden" : "block"}`}>
-            <h1 className="title text-3xl">Zahra Cake & Cookies</h1>
+            <h1 className="title text-3xl md:hidden">Zahra Cake & Cookies</h1>
+            <img
+              src="/logo.png"
+              alt="Logo Zahra Cake & Cookies"
+              className="w-15 hidden md:block"
+            />
           </Link>
         </div>
 

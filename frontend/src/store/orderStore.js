@@ -8,6 +8,18 @@ const useOrderStore = create((set) => ({
   isLoading: false,
   isOrderLoading: false,
 
+  createOrder: async (data) => {
+    set({ isLoading: true });
+    try {
+      const response = await api.post("/order", data);
+      return response;
+    } catch (error) {
+      return error;
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
   getOrders: async () => {
     set({ isLoading: true });
     try {

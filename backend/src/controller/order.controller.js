@@ -1,15 +1,36 @@
 import Order from "../models/order.model.js";
 import Cart from "../models/cart.model.js";
-import axios from "axios";
 import Menu from "../models/menu.model.js";
 import snap from "../utils/midtrans.js";
 import Transaction from "../models/transaction.model.js";
 
 export const createOrder = async (req, res) => {
   try {
-    const { items, name, phone, address, province, city, notes } = req.body;
+    const {
+      items,
+      name,
+      phone,
+      address,
+      province,
+      city,
+      courier,
+      cost,
+      service,
+      estimation,
+      notes,
+    } = req.body;
 
-    if (!items || !name || !phone || !address || !province || !city) {
+    if (
+      !items ||
+      !name ||
+      !phone ||
+      !address ||
+      !province ||
+      !city ||
+      !courier ||
+      !cost ||
+      !service
+    ) {
       return res.status(400).json({
         success: false,
         message: "Semua field harus diisi",
@@ -23,7 +44,10 @@ export const createOrder = async (req, res) => {
     let totalPrice = 0;
 
     for (let item of items) {
-      const menu = menus.find((p) => p._id.toString() === item.menu);
+      const menu = menus.find(
+        (p) => p._id.toString() === item.menu._id.toString()
+      );
+
       if (!menu)
         return res.status(404).json({ message: "Menu tidak ditemukan" });
 
@@ -36,26 +60,8 @@ export const createOrder = async (req, res) => {
       totalPrice += menu.price * item.quantity;
     }
 
-    const rajaOngkir = await axios.post(
-      `${process.env.RAJAONGKIR_BASE_URL}/cost`,
-      new URLSearchParams({
-        origin: "133",
-        destination: city,
-        weight: totalWeight,
-        courier: "jne",
-      }),
-      {
-        headers: {
-          key: process.env.RAJAONGKIR_API_KEY,
-          "content-type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
-
-    const shippingData = rajaOngkir.data.rajaongkir.results[0].costs[0];
-    const shippingCost = shippingData.cost[0].value;
-    const grandTotal = totalPrice + shippingCost;
-    const orderId = `ZCNC-${new Date().getTime().toString().slice(-4)}`;
+    const grandTotal = totalPrice + cost;
+    const orderId = `ZCNC-${new Date().getTime().toString()}`;
 
     const midtransResponse = await snap.createTransaction({
       transaction_details: {
@@ -70,17 +76,21 @@ export const createOrder = async (req, res) => {
 
     const order = new Order({
       user: req.user.id,
-      items,
+      items: items.map((item) => ({
+        menu: item.menu._id,
+        price: item.menu.price,
+        quantity: item.quantity,
+      })),
       shipping: {
         name,
         phone,
         address,
         province,
         city,
-        courier: "jne",
-        service: shippingData.service + "-" + shippingData.description,
-        cost: shippingCost,
-        estimation: shippingData.cost[0].etd,
+        courier,
+        service,
+        cost,
+        estimation,
         notes,
       },
       totalWeight,
@@ -99,14 +109,13 @@ export const createOrder = async (req, res) => {
     await order.save();
 
     const cart = await Cart.findOne({ user: req.user.id });
-    if (cart) {
-      cart.menus = cart.menus.filter(
-        (item) =>
-          !items.some(
-            (orderItem) => orderItem.menu.toString() === item.menu.toString()
-          )
-      );
-      await cart.save();
+    if (!cart) {
+      return res.status(404).json({
+        success: false,
+        message: "Keranjang tidak ditemukan",
+      });
+    } else {
+      await Cart.findOneAndDelete({ user: req.user.id });
     }
 
     res.status(201).json({
@@ -180,7 +189,7 @@ export const getOrderById = async (req, res) => {
 export const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find({
-      $or: [{ status: { $ne: "unpaid" } }, { status: "cancelled" }],
+      status: { $nin: ["unpaid", "cancelled"] },
     })
       .sort({ createdAt: -1 })
       .populate("user")
@@ -214,6 +223,18 @@ export const updateOrder = async (req, res) => {
         success: false,
         message: "Order tidak ditemukan",
       });
+    }
+
+    if (status === "cancelled") {
+      const transaction = await Transaction.findByIdAndDelete(
+        order.transaction
+      );
+      if (!transaction) {
+        return res.status(404).json({
+          success: false,
+          message: "Transaksi tidak ditemukan",
+        });
+      }
     }
 
     order.status = status || order.status;

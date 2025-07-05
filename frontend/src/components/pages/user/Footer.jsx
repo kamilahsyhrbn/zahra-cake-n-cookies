@@ -8,7 +8,7 @@ export const Footer = () => {
     <div className="bg-accent p-8 text-white">
       <div className="container flex flex-col lg:flex-row justify-between gap-3">
         <Link to="/">
-          <h3 className="font-semibold text-4xl title">Zahra Cake & Cookies</h3>
+          <img src="/logo.png" alt="logo" className="w-32 cursor-pointer" />
         </Link>
 
         <div className="flex flex-col md:flex-row gap-3 md:gap-10">

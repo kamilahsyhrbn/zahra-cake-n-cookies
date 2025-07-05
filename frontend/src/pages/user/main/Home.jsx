@@ -45,7 +45,7 @@ export const Home = () => {
         </div>
         <div className="w-full md:w-1/2">
           <img
-            src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+            src="/hero.png"
             alt="Zahra Cake & Cookies"
             className="w-full lg:h-72 object-cover rounded-lg"
           />
@@ -146,9 +146,12 @@ export const Home = () => {
             </p>
           ) : (
             <div className="flex flex-row flex-nowrap gap-4 items-center overflow-x-scroll pb-10 px-2 md:mt-5">
-              {menus.slice(0, 3).map((menu) => (
-                <MenuCard key={menu._id} menu={menu} />
-              ))}
+              {menus
+                .filter((menu) => menu.stock > 0)
+                .slice(0, 3)
+                .map((menu) => (
+                  <MenuCard key={menu._id} menu={menu} />
+                ))}
             </div>
           )}
         </div>

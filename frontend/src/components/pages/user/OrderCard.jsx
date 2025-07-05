@@ -7,17 +7,9 @@ import Danger from "../../modals/Danger";
 import { Review } from "../../modals/Review";
 
 export const OrderCard = ({ order }) => {
-  // console.log("order", order);
-
-  const navigate = useNavigate();
   const { updateOrder, deleteOrder, isOrderLoading } = useOrderStore();
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-
-  const handlePayment = () => {
-    localStorage.setItem("selectedOrderId", order._id);
-    navigate("/payment");
-  };
 
   const handleReceived = async () => {
     const response = await updateOrder(order._id, { status: "delivered" });
@@ -32,11 +24,11 @@ export const OrderCard = ({ order }) => {
     }
   };
 
-  const handleDelete = async () => {
-    const response = await deleteOrder(order._id);
+  const handleCancel = async () => {
+    const response = await updateOrder(order._id, { status: "cancelled" });
 
     if (response?.success) {
-      showSuccessToast("Pesanan berhasil dihapus");
+      showSuccessToast("Pesanan berhasil dibatalkan");
       setTimeout(() => {
         window.location.reload();
       }, 500);
@@ -45,8 +37,8 @@ export const OrderCard = ({ order }) => {
     }
   };
 
-  const handleDeleteModal = () => {
-    setIsDeleteModalOpen(!isDeleteModalOpen);
+  const handleCancelModal = () => {
+    setIsCancelModalOpen(!isCancelModalOpen);
   };
 
   const handleReviewModal = () => {
@@ -64,7 +56,7 @@ export const OrderCard = ({ order }) => {
                 alt={item?.menu?.name}
                 className="w-20 h-20 rounded-xl object-cover"
               />
-              {item?.menu?.stock === 0 && (
+              {order.status === "unpaid" && item?.menu?.stock === 0 && (
                 <div className="absolute inset-0 bg-black/50 grid place-items-center rounded-xl text-white">
                   Habis
                 </div>
@@ -114,20 +106,22 @@ export const OrderCard = ({ order }) => {
           </button>
         </Link>
         {order.status === "unpaid" &&
-        order.items.every((item) => item.menu.stock === 0) ? (
+        (order?.items?.some((item) => item?.menu?.stock === 0) ||
+          order.items.some((item) => item.quantity > item?.menu?.stock)) ? (
           <button
-            onClick={handleDeleteModal}
+            onClick={handleCancelModal}
             className="bg-transparent border border-[#54B0A2] hover:bg-[#1D6F64] hover:border-[#1D6F64] hover:text-white transition-colors duration-300 px-4 py-2 rounded-xl cursor-pointer"
           >
-            Hapus Pesanan
+            Batalkan Pesanan
           </button>
-        ) : order.status === "unpaid" ? (
-          <button
-            onClick={() => handlePayment(order._id)}
-            className="bg-transparent border border-[#54B0A2] hover:bg-[#1D6F64] hover:border-[#1D6F64] hover:text-white transition-colors duration-300 px-4 py-2 rounded-xl cursor-pointer"
-          >
-            Bayar Sekarang
-          </button>
+        ) : order.status === "unpaid" &&
+          (order?.items?.some((item) => item?.menu?.stock !== 0) ||
+            order.items.some((item) => item.quantity <= item?.menu?.stock)) ? (
+          <Link to={`/payment/${order._id}`}>
+            <button className="bg-transparent border border-[#54B0A2] hover:bg-[#1D6F64] hover:border-[#1D6F64] hover:text-white transition-colors duration-300 px-4 py-2 rounded-xl cursor-pointer">
+              Bayar Sekarang
+            </button>
+          </Link>
         ) : order.status === "shipped" ? (
           <button
             onClick={handleReceived}
@@ -148,12 +142,12 @@ export const OrderCard = ({ order }) => {
         )}
       </div>
 
-      {isDeleteModalOpen && (
+      {isCancelModalOpen && (
         <Danger
           title="Hapus Pesanan"
           message="Anda yakin ingin menghapus pesanan ini?"
-          onClose={handleDeleteModal}
-          onSubmit={handleDelete}
+          onClose={handleCancelModal}
+          onSubmit={handleCancel}
         />
       )}
 

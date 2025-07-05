@@ -71,10 +71,8 @@ export const Sidebar = () => {
         } fixed md:sticky top-16 md:top-0 md:h-screen flex-col justify-between bg-white w-full md:w-80 z-50 overflow-x-hidden transition-all duration-300 ease-in-out`}
       >
         <div className="px-4 py-6">
-          <Link to="/admin/dashboard" className="hidden md:block">
-            <h1 className="title lg:text-4xl md:text-3xl text-center">
-              Zahra <br /> Cake & Cookies
-            </h1>
+          <Link to="/admin/dashboard" className="flex justify-center">
+            <img src="/logo.png" alt="brand" className="w-24" />
           </Link>
 
           <ul className="md:mt-6 space-y-1">

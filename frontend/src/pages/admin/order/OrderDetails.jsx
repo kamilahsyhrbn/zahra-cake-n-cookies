@@ -190,10 +190,7 @@ export const OrderDetails = () => {
               <div className="flex flex-col gap-2 bg-[#F2FDFC] border border-gray-100 rounded-lg p-4">
                 <p className="font-semibold">{order?.shipping?.name}</p>
                 <p>{order?.shipping?.phone}</p>
-                <p className="my-6">
-                  {order?.shipping?.address}, {order?.shipping?.city},{" "}
-                  {order?.shipping?.province}
-                </p>
+                <p className="my-6">{order?.shipping?.address}</p>
                 <p className="text-sm">
                   Catatan untuk penjual: {order?.shipping?.note || "-"}
                 </p>
