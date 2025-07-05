@@ -42,8 +42,6 @@ export const AdminForm = () => {
       formData.role
     );
 
-    console.log("response", response);
-
     if (response?.success) {
       showSuccessToast("Berhasil menambahkan admin baru");
       navigate("/admin/admins");

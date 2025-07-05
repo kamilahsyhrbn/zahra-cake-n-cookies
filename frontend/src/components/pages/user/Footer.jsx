@@ -41,10 +41,10 @@ export const Footer = () => {
             </p>
             <p
               className="text-sm hover:underline hover:text-secondary flex items-center gap-1 cursor-pointer w-max"
-              onClick={() => window.open("mailto:zahracakencookies@gmail.com")}
+              onClick={() => window.open("mailto:info.zahracnc@gmail.com")}
             >
               <MdOutlineMailOutline className="text-lg" />{" "}
-              zahracakencookies@gmail.com
+              info.zahracnc@gmail.com
             </p>
           </div>
         </div>

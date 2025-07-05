@@ -103,7 +103,7 @@ export const Category = () => {
                     <img
                       src={category.image || "/no-image.png"}
                       alt="Kue"
-                      className="w-16 h-16 object-cover rounded-md"
+                      className="min-w-16 md:w-16 h-16 object-cover rounded-md"
                     />
                   </td>
                   <td className="px-6 py-7 flex gap-3">

@@ -24,19 +24,45 @@ export const OrderHistory = () => {
   useEffect(() => {
     setStatusLength({
       semua: orders?.length,
-      unpaid: orders?.filter((order) => order.status === "unpaid").length,
-      diproses: orders?.filter((order) => order.status === "processing").length,
-      dikirim: orders?.filter((order) => order.status === "shipped").length,
-      selesai: orders?.filter((order) => order.status === "delivered").length,
-      dibatalkan: orders?.filter((order) => order.status === "cancelled")
-        .length,
+      unpaid: orders?.filter(
+        (order) =>
+          order.status === "unpaid" &&
+          order.items.every((item) => item.menu !== null)
+      ).length,
+      diproses: orders?.filter(
+        (order) =>
+          order.status === "processing" &&
+          order.items.every((item) => item.menu !== null)
+      ).length,
+      dikirim: orders?.filter(
+        (order) =>
+          order.status === "shipped" &&
+          order.items.every((item) => item.menu !== null)
+      ).length,
+      selesai: orders?.filter(
+        (order) =>
+          order.status === "delivered" &&
+          order.items.every((item) => item.menu !== null)
+      ).length,
+      dibatalkan: orders?.filter(
+        (order) =>
+          order.status === "cancelled" &&
+          order.items.every((item) => item.menu !== null)
+      ).length,
     });
   }, [orders]);
 
   const filteredOrders =
     selectedStatus === "semua"
-      ? orders
-      : orders.filter((order) => order.status === selectedStatus);
+      ? orders.filter((order) =>
+          order.items.every((item) => item.menu !== null)
+        )
+      : orders.filter(
+          (order) =>
+            order.status === selectedStatus &&
+            order.items.every((item) => item.menu !== null)
+        );
+  console.log("order", orders);
 
   if (isLoading) {
     return <Loader />;

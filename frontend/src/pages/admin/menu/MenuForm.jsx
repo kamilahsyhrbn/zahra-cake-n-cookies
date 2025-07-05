@@ -170,7 +170,6 @@ export const MenuForm = () => {
       return;
     }
 
-    console.log("formData", formData);
     const data = new FormData();
 
     data.append("name", formData.name);

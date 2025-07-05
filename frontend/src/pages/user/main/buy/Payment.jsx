@@ -36,9 +36,8 @@ export const Payment = () => {
       ) {
         navigate("/order-history");
       }
-
-      updateTransactionStatus(order?.transaction?.orderId);
     }
+    updateTransactionStatus(order?.transaction?.orderId);
 
     let total = 0;
     order?.items?.forEach((item) => {
@@ -65,8 +64,6 @@ export const Payment = () => {
   if (isLoading) {
     return <Loader />;
   }
-
-  console.log("order", order);
 
   return (
     <div className="container mb-10">

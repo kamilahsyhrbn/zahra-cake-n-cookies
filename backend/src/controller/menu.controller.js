@@ -338,20 +338,21 @@ export const getBestSellingMenu = async (req, res) => {
     const menus = await Menu.find();
 
     if (menus.length === 0) {
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
         message: "Tidak ada data menu",
         data: [],
       });
-      return;
     }
 
-    const salesData = menus.map((menu) => menu.totalSold);
+    const scoreData = menus.map((menu) => {
+      return menu.totalSold * 10000 + menu.averageRating;
+    });
 
-    const salesTensor = tf.tensor(salesData);
+    const scoreTensor = tf.tensor(scoreData);
 
     const sortedIndices = tf
-      .topk(salesTensor, menus.length)
+      .topk(scoreTensor, menus.length)
       .indices.arraySync();
 
     const BestSellingMenu = sortedIndices.map((index) => {

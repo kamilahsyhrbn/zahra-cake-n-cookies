@@ -55,6 +55,14 @@ const menuSchema = new mongoose.Schema(
         default: [],
       },
     ],
+    totalReview: {
+      type: Number,
+      default: 0,
+    },
+    totalRating: {
+      type: Number,
+      default: 0,
+    },
     averageRating: {
       type: Number,
       min: 0,

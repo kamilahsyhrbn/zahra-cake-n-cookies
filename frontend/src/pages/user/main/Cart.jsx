@@ -8,6 +8,7 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "../../../components/common/Toast";
+import { motion } from "framer-motion";
 
 export const Cart = () => {
   const { getCarts, isLoading, carts, removeFromCart, clearCart } =
@@ -18,7 +19,6 @@ export const Cart = () => {
   useEffect(() => {
     getCarts();
   }, []);
-  console.log("carts", carts);
 
   const total = () => {
     let total = 0;
@@ -77,7 +77,13 @@ export const Cart = () => {
   };
 
   return (
-    <div className="container mb-10">
+    <motion.div
+      className="container mb-10"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: false, amount: 0.2 }}
+      transition={{ duration: 0.8 }}
+    >
       {/* STEPPER */}
       <nav className="text-sm text-accent pt-4">
         <Link to="/" className="hover:underline hover:text-[#1D6F64]">
@@ -203,6 +209,6 @@ export const Cart = () => {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };

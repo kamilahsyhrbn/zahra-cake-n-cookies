@@ -117,7 +117,7 @@ export const AdminProfile = ({ onClose }) => {
           />
 
           <p className="text-sm text-red-500">
-            *Biarkan kosong jika tidak ingin mengganti kata sandi
+            *Biarkan kosong jika tidak ingin mengubah kata sandi
           </p>
 
           <div className="flex gap-3 justify-end mt-5">

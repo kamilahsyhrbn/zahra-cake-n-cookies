@@ -45,7 +45,6 @@ export const Report = () => {
 
     const response = await report(formData);
     if (response?.success) {
-      console.log("response", response);
       setData(formData);
     } else {
       showErrorToast(response.response.data.message || "Terjadi kesalahan");
@@ -98,7 +97,7 @@ export const Report = () => {
           style: "subheader",
         },
         {
-          text: "No. Telepon: 087856065038 | Email: zahracakencookies@gmail.com | Alamat: Jl. Malik Ibrahim No. 36",
+          text: "No. Telepon: 087856065038 | Email: info.zahracnc@gmail.com | Alamat: Jl. Malik Ibrahim No. 36",
           style: "small",
           margin: [0, 0, 0, 10],
         },

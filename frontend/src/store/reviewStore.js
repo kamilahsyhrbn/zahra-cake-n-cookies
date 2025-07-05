@@ -35,10 +35,12 @@ const useReviewStore = create((set) => ({
     }
   },
 
-  deleteReview: async (id) => {
+  deleteReview: async (menuId, reviewId, orderId) => {
     set({ isLoading: true });
     try {
-      const response = await api.delete(`/review/${id}`);
+      const response = await api.delete(
+        `/review/${menuId}/${reviewId}/${orderId}`
+      );
       return response;
     } catch (error) {
       return error;

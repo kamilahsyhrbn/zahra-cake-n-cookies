@@ -94,10 +94,9 @@ export const getCategoryById = async (req, res) => {
 export const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description } = req.body;
+    const { name, description, image } = req.body;
 
     const category = await Category.findById(id);
-    console.log("category", category);
 
     if (!category) {
       return res.status(404).json({
@@ -109,7 +108,13 @@ export const updateCategory = async (req, res) => {
     category.name = name || category.name;
     category.description = description || category.description;
 
-    if (req.file) {
+    if (image === "") {
+      if (category.image) {
+        const publicId = category.image.split("/").pop().split(".")[0];
+        await cloudinary.uploader.destroy(`zahra-cakencookies/${publicId}`);
+      }
+      category.image = "";
+    } else if (req.file) {
       if (category.image) {
         const publicId = category.image.split("/").pop().split(".")[0];
         await cloudinary.uploader.destroy(`zahra-cakencookies/${publicId}`);

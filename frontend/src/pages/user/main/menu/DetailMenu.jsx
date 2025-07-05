@@ -99,7 +99,13 @@ export const DetailMenu = () => {
   }
 
   return (
-    <div className="container mb-10">
+    <motion.div
+      className="container mb-10"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: false, amount: 0.2 }}
+      transition={{ duration: 0.8 }}
+    >
       {/* STEPPER */}
       <nav className="text-sm text-accent pt-4">
         <Link to="/" className="hover:underline hover:text-[#1D6F64]">
@@ -217,7 +223,7 @@ export const DetailMenu = () => {
                     d="M22,9.81a1,1,0,0,0-.83-.69l-5.7-.78L12.88,3.53a1,1,0,0,0-1.76,0L8.57,8.34l-5.7.78a1,1,0,0,0-.82.69,1,1,0,0,0,.28,1l4.09,3.73-1,5.24A1,1,0,0,0,6.88,20.9L12,18.38l5.12,2.52a1,1,0,0,0,.44.1,1,1,0,0,0,1-1.18l-1-5.24,4.09-3.73A1,1,0,0,0,22,9.81Z"
                   />
                 </svg>{" "}
-                {selectedMenu.averageRating}
+                {selectedMenu.averageRating.toFixed(1)}
               </span>
               <span className="text-lg">•</span> Kategori:{" "}
               <span className="capitalize">{selectedMenu?.category?.name}</span>
@@ -254,7 +260,9 @@ export const DetailMenu = () => {
                   <button
                     className="px-2 cursor-pointer disabled:cursor-not-allowed"
                     onClick={() => setCount(count + 1)}
-                    disabled={count === selectedMenu?.stock}
+                    disabled={
+                      count === selectedMenu?.stock || selectedMenu?.stock === 0
+                    }
                   >
                     +
                   </button>
@@ -318,7 +326,15 @@ export const DetailMenu = () => {
           </p>
         ) : (
           <div className="overflow-x-auto px-2">
-            <div className="grid grid-rows-3 grid-flow-col auto-cols-[100%] gap-3">
+            <div
+              className={`grid ${
+                reviews.length === 1
+                  ? "grid-cols-1"
+                  : reviews.length === 2
+                  ? "grid-cols-2"
+                  : "grid-rows-3"
+              }  grid-flow-col auto-cols-[100%] gap-3`}
+            >
               {reviews.map((review) => (
                 <div key={review._id} className="w-full">
                   <ReviewCard data={review} />
@@ -340,6 +356,6 @@ export const DetailMenu = () => {
           ))}
         </div>
       </section>
-    </div>
+    </motion.div>
   );
 };

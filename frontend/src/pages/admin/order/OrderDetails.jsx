@@ -66,12 +66,14 @@ export const OrderDetails = () => {
       <TitleCard title="Detail Pesanan Masuk" />
 
       <div className="bg-white py-4 px-8 shadow-md rounded-xl w-full mb-5">
-        <section className="flex flex-col md:flex-row justify-between md:items-center gap-4">
+        <section className="flex flex-row justify-between md:items-center gap-4">
           <Link to="/admin/orders">
             <IoIosArrowBack className="w-5 h-5" />
           </Link>
-          <h4 className="font-semibold text-xl text-center">Detail Pesanan</h4>
-          <div></div>
+          <h4 className="font-semibold text-xl text-center flex-1">
+            Detail Pesanan
+          </h4>
+          <div className="hidden md:block"></div>
         </section>
 
         {/* PESANAN */}
@@ -166,7 +168,7 @@ export const OrderDetails = () => {
             <div className="flex flex-col md:flex-row gap-2 justify-between">
               <p className="font-medium">Status</p>
               <select
-                className="border border-gray-300 rounded-md px-2 disabled:cursor-not-allowed"
+                className="border border-gray-300 rounded-md p-2 cursor-pointer disabled:cursor-not-allowed"
                 name="status"
                 id="status"
                 value={formData.status}

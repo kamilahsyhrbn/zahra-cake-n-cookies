@@ -108,14 +108,11 @@ export const updateTransactionStatus = async (req, res) => {
     }
 
     res.status(200).json({
-      message: "Status transaksi berhasil diperbaharui",
+      message: "Status transaksi berhasil diperbarui",
       data: updatedTransaction,
     });
   } catch (error) {
-    console.error(
-      "Midtrans status update error:",
-      error.response?.data || error
-    );
+    console.log("Midtrans status update error:", error.response?.data || error);
     res.status(500).json({
       success: false,
       message: "Gagal memperbarui status transaksi",
@@ -132,7 +129,6 @@ export const handleMidtransNotification = async (req, res) => {
 
   const transaction = await Transaction.findOne({ orderId: orderId });
   if (!transaction) {
-    console.log("Transaction not found for orderId:", orderId);
     return res
       .status(404)
       .json({ success: false, message: "Transaksi tidak ditemukan" });
@@ -169,11 +165,11 @@ export const handleMidtransNotification = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Status transaksi berhasil diperbaharui",
+      message: "Status transaksi berhasil diperbarui",
       data: updated,
     });
   } catch (error) {
-    console.error(error);
+    console.log("Midtrans status update error", error);
     res.status(500).send("Webhook update failed");
   }
 };

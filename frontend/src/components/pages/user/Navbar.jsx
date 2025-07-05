@@ -108,7 +108,9 @@ export const Navbar = () => {
           </div>
           {/* LOGO BRAND */}
           <Link to="/" className={`${showSearch ? "hidden" : "block"}`}>
-            <h1 className="title text-3xl md:hidden">Zahra Cake & Cookies</h1>
+            <h1 className="md:hidden text-xl flex items-center gap-2">
+              <span className="title2 text-3xl">Zahra</span> Cake & Cookies
+            </h1>
             <img
               src="/logo.png"
               alt="Logo Zahra Cake & Cookies"
@@ -302,10 +304,13 @@ export const Navbar = () => {
               {/* LOGO AND X BUTTON */}
               <div className="flex flex-row items-start justify-between gap-2 px-4 py-2">
                 <Link to="/">
-                  <h1 className="title text-2xl">Zahra Cake & Cookies</h1>
+                  <h1 className="md:hidden text-xl flex flex-col items-center gap-2">
+                    <span className="title2 text-3xl">Zahra</span> Cake &
+                    Cookies
+                  </h1>
                 </Link>
                 <button onClick={toggleDrawer}>
-                  <IoClose className="text-3xl hover:text-[#1D6F64] transition-colors duration-200" />
+                  <IoClose className="text-3xl hover:text-[#1D6F64] transition-colors duration-200 cursor-pointer" />
                 </button>
               </div>
 
@@ -365,7 +370,7 @@ export const Navbar = () => {
                     </li>
                     <li>
                       <Link
-                        to="/cart"
+                        to="/profile/my-profile"
                         className={`block rounded-lg px-4 py-2 font-medium text-gray-500 hover:bg-gray-100 hover:text-[#1D6F64] transition-colors duration-200 ${
                           location.pathname.startsWith("/profile")
                             ? "bg-gray-100 text-[#1D6F64]"
@@ -377,7 +382,7 @@ export const Navbar = () => {
                     </li>
                     <li>
                       <Link
-                        to="/cart"
+                        to="/order-history"
                         className={`block rounded-lg px-4 py-2 font-medium text-gray-500 hover:bg-gray-100 hover:text-[#1D6F64] transition-colors duration-200 ${
                           location.pathname === "/purchases"
                             ? "bg-gray-100 text-[#1D6F64]"

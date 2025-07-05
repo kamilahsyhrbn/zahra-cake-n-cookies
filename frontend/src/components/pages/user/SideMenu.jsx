@@ -1,19 +1,34 @@
 import React, { useState } from "react";
 import { FiLogIn } from "react-icons/fi";
 import { IoPersonOutline, IoPersonRemoveOutline } from "react-icons/io5";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { TbEdit } from "react-icons/tb";
 import useAuthStore from "../../../store/authStore";
 import { DeletAccount } from "../../modals/DeletAccount";
+import Danger from "../../modals/Danger";
+import { showSuccessToast } from "../../common/Toast";
 
 export const SideMenu = () => {
-  const { currentUser, isLoading } = useAuthStore();
+  const navigate = useNavigate();
+  const { currentUser, logout, isLoading } = useAuthStore();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const location = useLocation();
 
   const handleDeleteModalOpen = () => {
     setIsDeleteModalOpen(!isDeleteModalOpen);
+  };
+
+  const handleLogoutModalOpen = () => {
+    setIsLogoutModalOpen(!isLogoutModalOpen);
+  };
+
+  const handleLogout = () => {
+    logout();
+    setIsLogoutModalOpen(false);
+    showSuccessToast("Berhasil keluar, sampai jumpa kembali!");
+    navigate("/");
   };
 
   return (
@@ -86,13 +101,22 @@ export const SideMenu = () => {
       <div className=" bg-white rounded-b-3xl shadow mb-2">
         <div
           className="flex items-center hover:bg-[#EEF5FF] p-4 w-full rounded-b-3xl text-[#1D6F64] cursor-pointer"
-          //   onClick={handleConfirmModalToggle}
+          onClick={handleLogoutModalOpen}
         >
           <FiLogIn className="rotate-180 mr-2 text-2xl" /> Keluar
         </div>
       </div>
 
       {isDeleteModalOpen && <DeletAccount onClose={handleDeleteModalOpen} />}
+
+      {isLogoutModalOpen && (
+        <Danger
+          title="Keluar"
+          onClose={handleLogoutModalOpen}
+          message="Apakah anda yakin ingin keluar?"
+          onSubmit={handleLogout}
+        />
+      )}
     </div>
   );
 };

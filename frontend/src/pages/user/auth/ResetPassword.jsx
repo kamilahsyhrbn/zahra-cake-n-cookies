@@ -100,12 +100,12 @@ export const ResetPassword = () => {
               htmlFor="password"
               className="block text-sm font-medium mb-1"
             >
-              Kata Sandi
+              Kata Sandi Baru
             </label>
             <input
               type={showPassword.password ? "text" : "password"}
               id="password"
-              placeholder="Masukkan kata sandi Anda"
+              placeholder="Masukkan kata sandi baru"
               name="password"
               value={formData.password}
               onChange={handleChange}
@@ -134,7 +134,7 @@ export const ResetPassword = () => {
             <input
               type={showPassword.confirm ? "text" : "password"}
               id="confirmPassword"
-              placeholder="Masukkan kata sandi Anda"
+              placeholder="Konfirmasi kata sandi baru"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}

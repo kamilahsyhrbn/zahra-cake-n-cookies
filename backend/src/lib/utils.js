@@ -24,6 +24,6 @@ export const sendEmail = async (email, subject, htmlContent) => {
 
     await transporter.sendMail(mailOptions);
   } catch (error) {
-    console.error("Terjadi kesalahan saat mengirim email:", error);
+    console.log("Terjadi kesalahan saat mengirim email:", error);
   }
 };

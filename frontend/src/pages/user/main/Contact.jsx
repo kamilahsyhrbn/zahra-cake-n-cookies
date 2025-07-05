@@ -31,10 +31,10 @@ export const Contact = () => {
 
         <div
           className="h-32 rounded bg-[#54B0A2]/25 flex flex-col items-center justify-center gap-3 cursor-pointer"
-          onClick={() => window.open("mailto:zahracakencookies@gmail.com")}
+          onClick={() => window.open("mailto:info.zahracnc@gmail.com")}
         >
           <h4 className="font-medium text-xl">Email</h4>
-          <p className="">zahracakencookies@gmail.com</p>
+          <p className="">info.zahracnc@gmail.com</p>
         </div>
 
         <div

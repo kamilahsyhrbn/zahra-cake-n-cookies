@@ -7,6 +7,7 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "../../../components/common/Toast";
+import { IoMdClose } from "react-icons/io";
 
 export const CategoryForm = () => {
   const { id } = useParams();
@@ -55,6 +56,11 @@ export const CategoryForm = () => {
       setPreview(URL.createObjectURL(file));
       setFormData({ ...formData, image: file });
     }
+  };
+
+  const handleDeleteImage = () => {
+    setFormData({ ...formData, image: "" });
+    setPreview(null);
   };
 
   const handleSubmit = async (e) => {
@@ -151,11 +157,20 @@ export const CategoryForm = () => {
           </label>
 
           {preview && (
-            <img
-              src={preview}
-              alt="Preview"
-              className="w-48 h-48 object-cover rounded shadow-md"
-            />
+            <div className="relative">
+              <img
+                src={preview}
+                alt="Preview"
+                className="w-48 h-48 object-cover rounded shadow-md"
+              />
+              <button
+                type="button"
+                onClick={handleDeleteImage}
+                className="absolute top-2 right-2 bg-red-500 text-white rounded-full cursor-pointer"
+              >
+                <IoMdClose size={20} />
+              </button>
+            </div>
           )}
         </div>
 

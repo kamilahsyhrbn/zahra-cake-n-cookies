@@ -1,32 +1,35 @@
 import Review from "../models/review.model.js";
 import Order from "../models/order.model.js";
+import Menu from "../models/menu.model.js";
 
 export const createReview = async (req, res) => {
   try {
     const { orderId, menuId, rating, comment } = req.body;
 
+    // Cek order
     const order = await Order.findById(orderId);
     if (!order)
       return res.status(404).json({ message: "Order tidak ditemukan" });
 
+    // Pastikan menu ada dalam order
     const item = order.items.find(
       (i) => i.menu.toString() === menuId.toString()
     );
-
     if (!item)
       return res.status(400).json({ message: "Menu tidak ada dalam order" });
 
+    // Cek existing review
     const existing = await Review.findOne({
       user: req.user.id,
       menu: menuId,
       order: orderId,
     });
-
     if (existing)
       return res
         .status(400)
         .json({ message: "Kamu sudah memberikan review untuk menu ini" });
 
+    // Buat review baru
     const review = await Review.create({
       user: req.user.id,
       menu: menuId,
@@ -35,12 +38,23 @@ export const createReview = async (req, res) => {
       comment,
     });
 
+    // Tandai item sudah direview
     item.isReviewed = true;
     await order.save();
 
+    // Update totalReview, totalRating, averageRating di Menu
+    const menu = await Menu.findById(menuId);
+    if (!menu) return res.status(404).json({ message: "Menu tidak ditemukan" });
+
+    menu.totalReview += 1;
+    menu.totalRating += rating;
+    menu.averageRating = menu.totalRating / menu.totalReview;
+
+    await menu.save();
+
     res.status(201).json({
       success: true,
-      message: "Ulasan berhasil dibuat",
+      message: "Ulasan berhasil dibuat dan averageRating terupdate",
       data: review,
     });
   } catch (error) {
@@ -124,34 +138,57 @@ export const updateReview = async (req, res) => {
 
 export const deleteReview = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { menuId, reviewId, orderId } = req.params;
 
-    const review = await Review.findByIdAndDelete(id);
-
+    const review = await Review.findById(reviewId);
     if (!review) {
       return res.status(404).json({
         success: false,
-        message: "Ulasan tidak ditemukan",
+        message: "Review tidak ditemukan",
       });
     }
 
-    const order = await Order.findById(review.order);
-    order.items.forEach((item) => {
-      if (item.menu.toString() === review.menu.toString()) {
-        item.isReviewed = false;
-      }
-    });
-    await order.save();
+    const ratingToRemove = review.rating;
+
+    await Review.findByIdAndDelete(reviewId);
+
+    const menu = await Menu.findById(menuId);
+
+    if (menu.totalReview > 1) {
+      menu.totalReview -= 1;
+      menu.totalRating -= ratingToRemove;
+      menu.averageRating = menu.totalRating / menu.totalReview;
+    } else {
+      menu.totalReview = 0;
+      menu.totalRating = 0;
+      menu.averageRating = 0;
+    }
+
+    await menu.save();
+
+    // 4. Update order terkait
+    const order = await Order.findById(orderId);
+
+    if (order) {
+      order.items.forEach((item) => {
+        if (item.menu.toString() === menuId) {
+          item.isReviewed = false;
+        }
+      });
+
+      await order.save();
+    }
 
     res.status(200).json({
       success: true,
-      message: "Review berhasil dihapus",
+      message: "Review berhasil dihapus dan averageRating terupdate",
+      data: menu,
     });
   } catch (error) {
-    console.log("Error in deleting review", error);
+    console.log("Error deleting review", error);
     res.status(500).json({
       success: false,
-      message: "Error in deleting review",
+      message: "Error deleting review",
       error: error.message,
     });
   }

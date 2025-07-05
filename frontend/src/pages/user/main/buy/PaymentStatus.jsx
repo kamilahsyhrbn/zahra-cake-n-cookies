@@ -23,7 +23,6 @@ export const PaymentStatus = () => {
         order_id,
         transaction_status,
       });
-      console.log("response", response);
 
       if (response?.success) {
         setIsSuccess(true);

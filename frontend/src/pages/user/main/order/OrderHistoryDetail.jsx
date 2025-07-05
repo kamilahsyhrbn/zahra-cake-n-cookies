@@ -30,7 +30,14 @@ export const OrderHistoryDetail = () => {
   const [subtotal, setSubtotal] = useState(0);
 
   useEffect(() => {
-    getOrderById(orderId);
+    const fetchOrder = async () => {
+      const response = await getOrderById(orderId);
+      if (!response?.success) {
+        navigate("/order-history");
+      }
+    };
+
+    fetchOrder();
   }, [orderId]);
 
   useEffect(() => {

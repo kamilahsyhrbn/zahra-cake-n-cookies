@@ -64,7 +64,7 @@ export const Review = ({ data, onClose }) => {
       showErrorToast("Beberapa ulasan gagal dikirim");
     }
   };
-  console.log("data", data);
+
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center z-50">
       <div

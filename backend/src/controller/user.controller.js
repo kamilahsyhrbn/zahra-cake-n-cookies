@@ -105,7 +105,7 @@ export const updateUser = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Berhasil memperbaharui pengguna",
+      message: "Berhasil memperbarui pengguna",
       data: user,
     });
   } catch (error) {

@@ -23,7 +23,6 @@ const useTransactionStore = create((set) => ({
         "/transaction/midtrans-callback",
         notification
       );
-      console.log("response", response);
       return response;
     } catch (error) {
       return error;

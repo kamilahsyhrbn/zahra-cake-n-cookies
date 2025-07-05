@@ -19,7 +19,6 @@ export const Admin = () => {
   useEffect(() => {
     getAllAdmins();
   }, []);
-  console.log("admins", admins);
 
   const handleShowDeleteModal = (id) => {
     setSelectedAdmin(id);
@@ -27,14 +26,13 @@ export const Admin = () => {
   };
 
   const handleDeleteAdmin = async () => {
-    console.log("selectedAdmin", selectedAdmin);
     if (selectedAdmin === currentUser?._id) {
       showErrorToast("Tidak dapat menghapus diri sendiri");
       setShowDeleteModal(false);
       return;
     }
     const response = await deleteUser(selectedAdmin);
-    console.log("response", response);
+
     if (response?.success) {
       showSuccessToast("Admin berhasil dihapus");
       getAllAdmins();

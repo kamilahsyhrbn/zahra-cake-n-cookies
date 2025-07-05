@@ -111,7 +111,7 @@ export const Menu = () => {
                     <img
                       src={menu?.images[0]}
                       alt={menu?.name}
-                      className="w-20 h-20 object-cover rounded-md"
+                      className="min-w-20 md:w-20 h-20 object-cover rounded-md"
                     />
                   </td>
                   <td className="px-6 py-10 flex gap-3">

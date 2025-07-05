@@ -36,6 +36,7 @@ import { UpdateProfile } from "../pages/user/main/profile/UpdateProfile";
 import { ChangePassword } from "../pages/user/main/profile/ChangePassword";
 import { OrderHistory } from "../pages/user/main/order/OrderHistory";
 import { OrderHistoryDetail } from "../pages/user/main/order/OrderHistoryDetail";
+import { Error } from "../pages/Error";
 
 export const routes = createBrowserRouter([
   {
@@ -53,6 +54,7 @@ export const routes = createBrowserRouter([
   },
   {
     element: <AdminLayout />,
+    errorElement: <Error />,
     children: [
       {
         path: "/admin/dashboard",
@@ -148,6 +150,7 @@ export const routes = createBrowserRouter([
   // User
   {
     element: <UserLayout />,
+    errorElement: <Error />,
     children: [
       {
         path: "/",
@@ -269,6 +272,7 @@ export const routes = createBrowserRouter([
   },
   {
     path: "/payment-status",
+    errorElement: <Error />,
     element: (
       <ProtectedRoute role="user">
         <PaymentStatus />

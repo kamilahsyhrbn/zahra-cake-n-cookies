@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { TitleLine } from "../../../../components/pages/user/TitleLine";
 import { Link, useLocation, useParams } from "react-router-dom";
 import useCategoryStore from "../../../../store/categoryStore";
-
-import { FiChevronDown } from "react-icons/fi";
 import { MenuCard } from "../../../../components/pages/user/MenuCard";
 import useMenuStore from "../../../../store/menuStore";
 import { Loader } from "../../../../components/common/Loader";
+import { motion } from "framer-motion";
 
 export const Menu = () => {
   const location = useLocation();
@@ -93,11 +92,17 @@ export const Menu = () => {
       {menus.length === 0 ? (
         <p className="text-center text-gray-500 my-10">Tidak ada menu</p>
       ) : (
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 my-10 w-full justify-items-center md:justify-items-start">
+        <motion.div
+          className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 my-10 w-full justify-items-center md:justify-items-start"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.8 }}
+        >
           {menus.map((menu) => (
             <MenuCard key={menu._id} menu={menu} />
           ))}
-        </div>
+        </motion.div>
       )}
     </div>
   );

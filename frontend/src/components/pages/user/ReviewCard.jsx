@@ -16,7 +16,7 @@ export const ReviewCard = ({ data }) => {
   };
 
   const handleDelete = async () => {
-    const response = await deleteReview(data?._id);
+    const response = await deleteReview(data?.menu, data?._id, data?.order);
 
     if (response?.success) {
       showSuccessToast("Review berhasil dihapus");

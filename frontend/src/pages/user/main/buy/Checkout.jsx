@@ -209,7 +209,7 @@ export const Checkout = () => {
     };
 
     const response = await createOrder(data);
-    console.log("response", response);
+
     if (response?.success) {
       showSuccessToast("Pesanan Berhasil Dibuat");
       navigate(`/payment/${response.data._id}`);
@@ -221,8 +221,6 @@ export const Checkout = () => {
   if (isLoading) {
     return <Loader />;
   }
-
-  console.log("formData", formData);
 
   return (
     <div className="container mb-10">
@@ -322,7 +320,7 @@ export const Checkout = () => {
                     {cities &&
                       cities.map((city) => (
                         <option key={city?.city_id} value={city?.city_id}>
-                          {city?.type} {city?.city_name}, {city?.postal_code}
+                          {city?.type} {city?.city_name}
                         </option>
                       ))}
                   </select>

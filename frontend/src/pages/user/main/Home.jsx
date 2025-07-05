@@ -5,6 +5,8 @@ import useCategoryStore from "../../../store/categoryStore";
 import { Loader } from "../../../components/common/Loader";
 import useMenuStore from "../../../store/menuStore";
 import { MenuCard } from "../../../components/pages/user/MenuCard";
+import { motion } from "framer-motion";
+import { Hero } from "../../../components/pages/user/Hero";
 
 export const Home = () => {
   const { getAllCategories, categories } = useCategoryStore();
@@ -24,36 +26,15 @@ export const Home = () => {
   return (
     <div>
       {/* HERO SECTION */}
-      <section className="container my-8 flex w-full flex-col md:flex-row gap-4 justify-between">
-        <div className="flex flex-col gap-2 w-full md:w-1/2">
-          <h2 className="text-4xl lg:text-5xl font-semibold title">
-            Zahra Cake & Cookies
-          </h2>
-          <p>
-            Nikmati berbagai pilihan kue dan cookies yang lembut, renyah, dan
-            selalu fresh dari oven kami. Temukan rasa manis yang membuat harimu
-            lebih istimewa.
-          </p>
-          <Link to="/menus" className="w-max">
-            <button
-              type="button"
-              className="bg-[#1D6F64] hover:bg-[#2a4d48] mt-2 focus:ring-4 focus:outline-none focus:ring-[#2a4d48] transition-colors duration-300 font-medium rounded-xl w-max px-5 py-2.5 text-center disabled:opacity-50 disabled:cursor-not-allowed text-white cursor-pointer disabled:bg-[#1D6F64]/50"
-            >
-              Beli Sekarang
-            </button>
-          </Link>
-        </div>
-        <div className="w-full md:w-1/2">
-          <img
-            src="/hero.png"
-            alt="Zahra Cake & Cookies"
-            className="w-full lg:h-72 object-cover rounded-lg"
-          />
-        </div>
-      </section>
-
+      <Hero />
       {/* CATEGORIES SECTION */}
-      <section className="container flex flex-col justify-center gap-4">
+      <motion.section
+        className="container flex flex-col justify-center gap-4"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.2 }}
+        transition={{ duration: 0.8 }}
+      >
         <TitleDesc
           title="Belanja Berdasarkan Kategori"
           desc="Temukan cake dan cookies favoritmu lebih cepat. Pilih kategori sesuai selera dan pesan dengan mudah kapan saja."
@@ -82,18 +63,23 @@ export const Home = () => {
             ))}
           </div>
         )}
-      </section>
-
+      </motion.section>
       {/* BEST SELLING SECTION */}
-      <section className="container flex flex-col justify-center gap-4 my-8 md:my-16 lg:my-24">
+      <motion.section
+        className="container flex flex-col justify-center gap-4 my-8 md:my-16 lg:my-24"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.2 }}
+        transition={{ duration: 0.8 }}
+      >
         <div className="flex flex-col md:flex-row justify-between gap-4">
           <h4 className="font-semibold text-2xl">
             Coba Penjualan Terbaik Kami
           </h4>
           <div className="w-27 md:w-1.5 h-1.5 md:h-auto bg-[#1D6F64]"></div>
           <p>
-            Inilah cake dan cookies yang paling banyak disukai pelanggan setia
-            kami. Rasa lezat dan kualitas premium yang selalu bikin ketagihan.
+            Cobalah menu yang paling banyak disukai pelanggan setia kami! Rasa
+            lezat dan kualitas premium yang selalu bikin ketagihan!
           </p>
         </div>
         <div>
@@ -109,10 +95,15 @@ export const Home = () => {
             </div>
           )}
         </div>
-      </section>
-
+      </motion.section>
       {/* CTA SECTION */}
-      <section className="bg-[#54B0A2]">
+      <motion.section
+        className="bg-[#54B0A2]"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.2 }}
+        transition={{ duration: 0.8 }}
+      >
         <div className="p-8 md:p-12 lg:px-16">
           <div className="mx-auto max-w-lg text-center">
             <h2 className="text-2xl font-bold text-gray-900 md:text-3xl">
@@ -131,10 +122,15 @@ export const Home = () => {
             </button>
           </Link>
         </div>
-      </section>
-
+      </motion.section>
       {/* NEW MENU SECTION */}
-      <section className="container flex flex-col justify-center gap-4 my-8 md:my-16 lg:my-24">
+      <motion.section
+        className="container flex flex-col justify-center gap-4 my-8 md:my-16 lg:my-24"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.2 }}
+        transition={{ duration: 0.8 }}
+      >
         <TitleDesc
           title="Menu Terbaru"
           desc="Coba varian cake dan cookies terbaru kami yang dibuat dengan resep istimewa dan bahan berkualitas."
@@ -155,7 +151,13 @@ export const Home = () => {
             </div>
           )}
         </div>
-      </section>
+
+        <Link to="/menus" className="flex justify-center">
+          <button className="bg-transparent w-max border border-[#54B0A2] hover:bg-[#1D6F64] hover:border-[#1D6F64] hover:text-white transition-colors duration-300 px-4 py-2 rounded-xl cursor-pointer">
+            Lihat Semua
+          </button>
+        </Link>
+      </motion.section>
     </div>
   );
 };
