@@ -142,12 +142,11 @@ export const Home = () => {
             </p>
           ) : (
             <div className="flex flex-row flex-nowrap gap-4 items-center overflow-x-scroll pb-10 px-2 md:mt-5">
-              {menus
-                .filter((menu) => menu.stock > 0)
-                .slice(0, 3)
-                .map((menu) => (
-                  <MenuCard key={menu._id} menu={menu} />
-                ))}
+              {menus &&
+                menus
+                  .filter((menu) => menu.stock > 0)
+                  .slice(0, 3)
+                  .map((menu) => <MenuCard key={menu._id} menu={menu} />)}
             </div>
           )}
         </div>
