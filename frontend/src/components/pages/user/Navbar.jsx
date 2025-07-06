@@ -212,7 +212,7 @@ export const Navbar = () => {
                 >
                   <IoCartOutline className="text-3xl" />
                   <div className="absolute -top-1 -right-1.5 w-4 h-4 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
-                    {carts?.menus?.length || 0}
+                    {(carts && carts.menus && carts?.menus?.length) || 0}
                   </div>
                 </Link>
                 <div className="relative">

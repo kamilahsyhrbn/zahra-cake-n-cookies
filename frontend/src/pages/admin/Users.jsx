@@ -53,10 +53,12 @@ export const Users = () => {
 
       <section className="flex flex-col">
         <h4>Jumlah Pelanggan</h4>
-        <p className="font-medium text-lg">{users?.length} Pelanggan</p>
+        <p className="font-medium text-lg">
+          {users && users?.length} Pelanggan
+        </p>
       </section>
 
-      {users.length === 0 ? (
+      {users && users.length === 0 ? (
         <p className="text-center text-gray-500">Belum ada pelanggan</p>
       ) : (
         <section className="relative overflow-x-auto shadow-md rounded-lg mt-5">

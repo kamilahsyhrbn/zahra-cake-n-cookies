@@ -36,7 +36,7 @@ export const SearchResult = () => {
         </h2>
       </section>
 
-      {searchResult?.length === 0 ? (
+      {searchResult && searchResult?.length === 0 ? (
         <p className="text-center text-gray-500 my-10">
           Hasil pencarian tidak ditemukan.
         </p>

@@ -320,7 +320,7 @@ export const DetailMenu = () => {
             </select>
           </div>
         </div>
-        {reviews?.length === 0 ? (
+        {reviews && reviews?.length === 0 ? (
           <p className="text-sm text-gray-500">
             Belum ada ulasan untuk menu ini.
           </p>

@@ -41,7 +41,7 @@ export const Menu = () => {
       <section className="flex flex-row md:items-center justify-between gap-4 mb-5">
         <div className="flex flex-col">
           <h4>Jumlah Menu</h4>
-          <p className="font-medium text-lg">{menus?.length} Menu</p>
+          <p className="font-medium text-lg">{menus && menus?.length} Menu</p>
         </div>
 
         <button>
@@ -54,7 +54,7 @@ export const Menu = () => {
         </button>
       </section>
 
-      {menus?.length === 0 ? (
+      {menus && menus?.length === 0 ? (
         <p className="text-center text-gray-500">Belum ada menu</p>
       ) : (
         <section className="relative overflow-x-auto shadow-md rounded-lg">

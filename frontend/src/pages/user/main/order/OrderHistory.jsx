@@ -153,7 +153,7 @@ export const OrderHistory = () => {
         </div>
       </section>
 
-      {filteredOrders?.length === 0 ? (
+      {filteredOrders && filteredOrders?.length === 0 ? (
         <p className="text-center text-gray-500">
           Belum ada pesanan{" "}
           {selectedStatus !== "semua" &&

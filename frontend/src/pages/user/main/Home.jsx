@@ -39,7 +39,7 @@ export const Home = () => {
           title="Belanja Berdasarkan Kategori"
           desc="Temukan cake dan cookies favoritmu lebih cepat. Pilih kategori sesuai selera dan pesan dengan mudah kapan saja."
         />
-        {categories.length === 0 ? (
+        {categories && categories.length === 0 ? (
           <p className="text-center text-gray-500 text-sm italic">
             Kategori belum tersedia
           </p>
@@ -83,7 +83,7 @@ export const Home = () => {
           </p>
         </div>
         <div>
-          {bestSelling.length === 0 ? (
+          {bestSelling && bestSelling.length === 0 ? (
             <p className="text-center text-gray-500 text-sm italic">
               Menu belum tersedia
             </p>
@@ -136,7 +136,7 @@ export const Home = () => {
           desc="Coba varian cake dan cookies terbaru kami yang dibuat dengan resep istimewa dan bahan berkualitas."
         />
         <div>
-          {menus.length === 0 ? (
+          {menus && menus.length === 0 ? (
             <p className="text-center text-gray-500 text-sm italic">
               Menu belum tersedia
             </p>

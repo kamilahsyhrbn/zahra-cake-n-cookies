@@ -47,7 +47,9 @@ export const Category = () => {
       <section className="flex flex-row md:items-center justify-between gap-4 mb-5">
         <div className="flex flex-col">
           <h4>Jumlah Kategori</h4>
-          <p className="font-medium text-lg">{categories.length} Kategori</p>
+          <p className="font-medium text-lg">
+            {categories && categories.length} Kategori
+          </p>
         </div>
 
         <button>
@@ -60,7 +62,7 @@ export const Category = () => {
         </button>
       </section>
 
-      {categories?.length === 0 ? (
+      {categories && categories?.length === 0 ? (
         <p className="text-center text-gray-500">Belum ada kategori</p>
       ) : (
         <section className="relative overflow-x-auto shadow-md rounded-lg">

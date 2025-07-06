@@ -97,7 +97,7 @@ export const Order = () => {
         </div>
       </section>
 
-      {filteredOrders?.length === 0 ? (
+      {filteredOrders && filteredOrders?.length === 0 ? (
         <p className="text-center text-gray-500">
           Belum ada pesanan dengan status{" "}
           {selectedStatus === "processing"

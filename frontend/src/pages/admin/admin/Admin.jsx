@@ -53,7 +53,9 @@ export const Admin = () => {
       <section className="flex flex-row md:items-center justify-between gap-4 mb-5">
         <div className="flex flex-col">
           <h4>Jumlah Admin</h4>
-          <p className="font-medium text-lg">{admins?.length} Admin</p>
+          <p className="font-medium text-lg">
+            {admins && admins?.length} Admin
+          </p>
         </div>
 
         <button>
@@ -66,7 +68,7 @@ export const Admin = () => {
         </button>
       </section>
 
-      {admins.length === 0 ? (
+      {admins && admins.length === 0 ? (
         <p className="text-center text-gray-500">Belum ada admin</p>
       ) : (
         <section className="relative overflow-x-auto shadow-md rounded-lg">

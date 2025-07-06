@@ -55,7 +55,9 @@ export const Dashboard = () => {
             </div>
             <div className="flex flex-col gap-1 text-center md:text-end">
               <h4 className="font-semibold text-xl text-accent">Total Menu</h4>
-              <p className="font-medium text-gray-600">{menus?.length} Menu</p>
+              <p className="font-medium text-gray-600">
+                {menus && menus?.length} Menu
+              </p>
             </div>
           </div>
         </Link>
@@ -69,7 +71,7 @@ export const Dashboard = () => {
                 Total Pesanan
               </h4>
               <p className="font-medium text-gray-600">
-                {orders?.length} Pesanan
+                {orders && orders?.length} Pesanan
               </p>
             </div>
           </div>
@@ -95,7 +97,7 @@ export const Dashboard = () => {
       <section className="my-7">
         <SubTitle title="Menu paling banyak dibeli pelanggan" />
 
-        {bestSelling.length === 0 ? (
+        {bestSelling && bestSelling.length === 0 ? (
           <p className="text-center text-gray-500 mt-4 mb-20">
             Belum ada menu paling banyak dibeli
           </p>
@@ -124,8 +126,9 @@ export const Dashboard = () => {
             </div>
           </div>
 
-          {orders?.filter((order) => order.status === "processing").length ===
-          0 ? (
+          {orders &&
+          orders?.filter((order) => order.status === "processing").length ===
+            0 ? (
             <p className="text-sm text-gray-400">Belum ada pesanan baru</p>
           ) : (
             <div className="relative overflow-x-auto shadow-md rounded-lg">
@@ -195,7 +198,7 @@ export const Dashboard = () => {
             </div>
           </div>
 
-          {users?.length === 0 ? (
+          {users && users?.length === 0 ? (
             <p className="text-sm text-gray-400">Belum ada pelanggan baru</p>
           ) : (
             <div className="relative overflow-x-auto shadow-md rounded-lg">

@@ -101,7 +101,7 @@ export const MyProfile = () => {
           {/* LIKED MENUS */}
           <div className="flex flex-col gap-3 w-full">
             <h4 className="font-semibold text-2xl">Menu yang Saya Sukai</h4>
-            {likedMenus.length === 0 ? (
+            {likedMenus && likedMenus.length === 0 ? (
               <p className="text-sm text-gray-500">
                 Belum ada menu yang disukai
               </p>

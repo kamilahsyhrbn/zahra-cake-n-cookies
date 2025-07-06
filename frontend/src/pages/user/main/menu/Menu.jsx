@@ -89,7 +89,7 @@ export const Menu = () => {
       </div>
 
       {/* MENU */}
-      {menus.length === 0 ? (
+      {menus && menus.length === 0 ? (
         <p className="text-center text-gray-500 my-10">Tidak ada menu</p>
       ) : (
         <motion.div
