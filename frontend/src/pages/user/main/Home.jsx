@@ -45,22 +45,23 @@ export const Home = () => {
           </p>
         ) : (
           <div className="flex w-full flex-row flex-wrap justify-center gap-4 md:gap-8">
-            {categories.slice(0, 4).map((category) => (
-              <Link
-                key={category._id}
-                to={`/menus?category=${category._id}`}
-                className="flex flex-col gap-2 items-center w-max justify-center hover:scale-105 transition-all duration-300 ease-in-out"
-              >
-                <img
-                  src={category.image || "./no-image.png"}
-                  alt={category.name}
-                  className="w-32 h-32 rounded-full object-cover"
-                />
-                <p className="text-center font-medium capitalize">
-                  {category.name}
-                </p>
-              </Link>
-            ))}
+            {categories &&
+              categories.slice(0, 4).map((category) => (
+                <Link
+                  key={category._id}
+                  to={`/menus?category=${category._id}`}
+                  className="flex flex-col gap-2 items-center w-max justify-center hover:scale-105 transition-all duration-300 ease-in-out"
+                >
+                  <img
+                    src={category.image || "./no-image.png"}
+                    alt={category.name}
+                    className="w-32 h-32 rounded-full object-cover"
+                  />
+                  <p className="text-center font-medium capitalize">
+                    {category.name}
+                  </p>
+                </Link>
+              ))}
           </div>
         )}
       </motion.section>
@@ -89,9 +90,10 @@ export const Home = () => {
             </p>
           ) : (
             <div className="flex flex-row flex-nowrap gap-4 items-center overflow-x-scroll pb-10 px-2 md:mt-5">
-              {bestSelling.slice(0, 3).map((menu) => (
-                <MenuCard key={menu._id} menu={menu} />
-              ))}
+              {bestSelling &&
+                bestSelling
+                  .slice(0, 3)
+                  .map((menu) => <MenuCard key={menu._id} menu={menu} />)}
             </div>
           )}
         </div>

@@ -169,9 +169,10 @@ export const OrderHistory = () => {
         </p>
       ) : (
         <div className="flex flex-col gap-4">
-          {filteredOrders.map((order) => (
-            <OrderCard order={order} key={order._id} />
-          ))}
+          {filteredOrders &&
+            filteredOrders.map((order) => (
+              <OrderCard order={order} key={order._id} />
+            ))}
         </div>
       )}
     </div>

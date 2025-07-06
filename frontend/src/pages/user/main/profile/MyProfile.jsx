@@ -107,9 +107,10 @@ export const MyProfile = () => {
               </p>
             ) : (
               <div className="flex flex-row flex-wrap gap-4 justify-center md:justify-start">
-                {likedMenus.map((menu) => (
-                  <MenuCard key={menu._id} menu={menu} />
-                ))}
+                {likedMenus &&
+                  likedMenus.map((menu) => (
+                    <MenuCard key={menu._id} menu={menu} />
+                  ))}
               </div>
             )}
           </div>

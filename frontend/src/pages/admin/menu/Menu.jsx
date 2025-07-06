@@ -88,48 +88,51 @@ export const Menu = () => {
               </tr>
             </thead>
             <tbody>
-              {menus?.map((menu, i) => (
-                <tr
-                  key={menu?._id}
-                  className="bg-white border-b border-gray-200 hover:bg-gray-100"
-                >
-                  <td scope="row" className="pl-6 py-4 w-max">
-                    {i + 1}
-                  </td>
-                  <td className="px-6 py-4 max-w-50 truncate">{menu?.name}</td>
-                  <td className="px-6 py-4 max-w-50 truncate capitalize">
-                    {menu?.category ? menu?.category?.name : "-"}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {formatCurrency(menu?.price)}
-                  </td>
-                  <td className="px-6 py-4">{menu?.stock}</td>
-                  <td className="px-6 py-4 max-w-48 truncate">
-                    {menu?.description ? menu?.description : "-"}
-                  </td>
-                  <td className="px-6 py-4">
-                    <img
-                      src={menu?.images[0]}
-                      alt={menu?.name}
-                      className="min-w-20 md:w-20 h-20 object-cover rounded-md"
-                    />
-                  </td>
-                  <td className="px-6 py-10 flex gap-3">
-                    <Link
-                      to={`/admin/menu-form/${menu?._id}`}
-                      className="text-[#54B0A2] hover:underline font-medium"
-                    >
-                      Ubah
-                    </Link>
-                    <button
-                      onClick={() => handleShowDeleteModal(menu?._id)}
-                      className="text-red-500 hover:underline font-medium cursor-pointer"
-                    >
-                      Hapus
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {menus &&
+                menus?.map((menu, i) => (
+                  <tr
+                    key={menu?._id}
+                    className="bg-white border-b border-gray-200 hover:bg-gray-100"
+                  >
+                    <td scope="row" className="pl-6 py-4 w-max">
+                      {i + 1}
+                    </td>
+                    <td className="px-6 py-4 max-w-50 truncate">
+                      {menu?.name}
+                    </td>
+                    <td className="px-6 py-4 max-w-50 truncate capitalize">
+                      {menu?.category ? menu?.category?.name : "-"}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {formatCurrency(menu?.price)}
+                    </td>
+                    <td className="px-6 py-4">{menu?.stock}</td>
+                    <td className="px-6 py-4 max-w-48 truncate">
+                      {menu?.description ? menu?.description : "-"}
+                    </td>
+                    <td className="px-6 py-4">
+                      <img
+                        src={menu?.images[0]}
+                        alt={menu?.name}
+                        className="min-w-20 md:w-20 h-20 object-cover rounded-md"
+                      />
+                    </td>
+                    <td className="px-6 py-10 flex gap-3">
+                      <Link
+                        to={`/admin/menu-form/${menu?._id}`}
+                        className="text-[#54B0A2] hover:underline font-medium"
+                      >
+                        Ubah
+                      </Link>
+                      <button
+                        onClick={() => handleShowDeleteModal(menu?._id)}
+                        className="text-red-500 hover:underline font-medium cursor-pointer"
+                      >
+                        Hapus
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </section>

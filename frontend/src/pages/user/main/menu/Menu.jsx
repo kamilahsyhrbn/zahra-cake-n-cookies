@@ -63,11 +63,12 @@ export const Menu = () => {
             onChange={handleFilterChange}
           >
             <option value="">Semua</option>
-            {categories.map((category) => (
-              <option key={category._id} value={category._id}>
-                {category.name}
-              </option>
-            ))}
+            {categories &&
+              categories.map((category) => (
+                <option key={category._id} value={category._id}>
+                  {category.name}
+                </option>
+              ))}
           </select>
         </div>
 
@@ -99,9 +100,8 @@ export const Menu = () => {
           viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.8 }}
         >
-          {menus.map((menu) => (
-            <MenuCard key={menu._id} menu={menu} />
-          ))}
+          {menus &&
+            menus.map((menu) => <MenuCard key={menu._id} menu={menu} />)}
         </motion.div>
       )}
     </div>

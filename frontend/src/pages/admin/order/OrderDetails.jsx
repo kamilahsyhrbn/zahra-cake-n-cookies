@@ -77,26 +77,27 @@ export const OrderDetails = () => {
         </section>
 
         {/* PESANAN */}
-        {order?.items?.map((item) => (
-          <section key={item?._id} className="flex flex-col gap-3 my-5">
-            <div className="flex gap-3">
-              <img
-                src={item?.menu?.images[0]}
-                alt={item?.menu?.name}
-                className="w-16 h-16 object-cover rounded-md"
-              />
-              <div className="flex flex-col">
-                <p className="font-semibold">{item?.menu?.name}</p>
-                <p className="text-gray-500 text-xs">
-                  {item?.quantity} x {formatCurrency(item?.price)}
-                </p>
-                <p className="font-semibold text-sm">
-                  {formatCurrency(item?.quantity * item?.price)}
-                </p>
+        {order &&
+          order?.items?.map((item) => (
+            <section key={item?._id} className="flex flex-col gap-3 my-5">
+              <div className="flex gap-3">
+                <img
+                  src={item?.menu?.images[0]}
+                  alt={item?.menu?.name}
+                  className="w-16 h-16 object-cover rounded-md"
+                />
+                <div className="flex flex-col">
+                  <p className="font-semibold">{item?.menu?.name}</p>
+                  <p className="text-gray-500 text-xs">
+                    {item?.quantity} x {formatCurrency(item?.price)}
+                  </p>
+                  <p className="font-semibold text-sm">
+                    {formatCurrency(item?.quantity * item?.price)}
+                  </p>
+                </div>
               </div>
-            </div>
-          </section>
-        ))}
+            </section>
+          ))}
 
         <hr className="my-6 border-gray-300" />
 

@@ -90,28 +90,29 @@ export const Admin = () => {
               </tr>
             </thead>
             <tbody>
-              {admins?.map((admin, i) => (
-                <tr
-                  key={admin?._id}
-                  className="bg-white border-b border-gray-200 hover:bg-gray-100"
-                >
-                  <td scope="row" className="pl-6 py-4 w-max">
-                    {i + 1}
-                  </td>
-                  <td className="px-6 py-4 truncate">{admin?.name}</td>
-                  <td className="px-6 py-4 max-w-48 truncate">
-                    {admin?.email}
-                  </td>
-                  <td className="px-6 py-4">
-                    <button
-                      onClick={() => handleShowDeleteModal(admin?._id)}
-                      className="text-red-500 hover:underline font-medium cursor-pointer"
-                    >
-                      Hapus
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {admins &&
+                admins?.map((admin, i) => (
+                  <tr
+                    key={admin?._id}
+                    className="bg-white border-b border-gray-200 hover:bg-gray-100"
+                  >
+                    <td scope="row" className="pl-6 py-4 w-max">
+                      {i + 1}
+                    </td>
+                    <td className="px-6 py-4 truncate">{admin?.name}</td>
+                    <td className="px-6 py-4 max-w-48 truncate">
+                      {admin?.email}
+                    </td>
+                    <td className="px-6 py-4">
+                      <button
+                        onClick={() => handleShowDeleteModal(admin?._id)}
+                        className="text-red-500 hover:underline font-medium cursor-pointer"
+                      >
+                        Hapus
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </section>

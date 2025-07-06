@@ -238,33 +238,35 @@ export const OrderHistoryDetail = () => {
           </p>
         </section>
 
-        {order?.items?.map((item) => (
-          <section key={item?._id} className="flex flex-col gap-3 my-5">
-            <div className="flex gap-3">
-              <div className="relative">
-                <img
-                  src={item?.menu?.images[0]}
-                  alt={item?.menu?.name}
-                  className="w-16 h-16 rounded-xl object-cover"
-                />
-                {order.status === "unpaid" && item?.menu?.stock === 0 && (
-                  <div className="absolute inset-0 bg-black/50 grid place-items-center rounded-xl text-white">
-                    Habis
-                  </div>
-                )}
+        {order &&
+          order?.items &&
+          order?.items?.map((item) => (
+            <section key={item?._id} className="flex flex-col gap-3 my-5">
+              <div className="flex gap-3">
+                <div className="relative">
+                  <img
+                    src={item?.menu?.images[0]}
+                    alt={item?.menu?.name}
+                    className="w-16 h-16 rounded-xl object-cover"
+                  />
+                  {order.status === "unpaid" && item?.menu?.stock === 0 && (
+                    <div className="absolute inset-0 bg-black/50 grid place-items-center rounded-xl text-white">
+                      Habis
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <p className="font-semibold">{item?.menu?.name}</p>
+                  <p className="text-gray-500 text-xs">
+                    {item?.quantity} x {formatCurrency(item?.price)}
+                  </p>
+                  <p className="font-semibold text-sm">
+                    {formatCurrency(item?.quantity * item?.price)}
+                  </p>
+                </div>
               </div>
-              <div className="flex flex-col">
-                <p className="font-semibold">{item?.menu?.name}</p>
-                <p className="text-gray-500 text-xs">
-                  {item?.quantity} x {formatCurrency(item?.price)}
-                </p>
-                <p className="font-semibold text-sm">
-                  {formatCurrency(item?.quantity * item?.price)}
-                </p>
-              </div>
-            </div>
-          </section>
-        ))}
+            </section>
+          ))}
 
         <hr className="my-6 border-gray-300" />
 

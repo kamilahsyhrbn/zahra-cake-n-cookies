@@ -335,11 +335,12 @@ export const DetailMenu = () => {
                   : "grid-rows-3"
               }  grid-flow-col auto-cols-[100%] gap-3`}
             >
-              {reviews.map((review) => (
-                <div key={review._id} className="w-full">
-                  <ReviewCard data={review} />
-                </div>
-              ))}
+              {reviews &&
+                reviews.map((review) => (
+                  <div key={review._id} className="w-full">
+                    <ReviewCard data={review} />
+                  </div>
+                ))}
             </div>
           </div>
         )}
@@ -351,9 +352,10 @@ export const DetailMenu = () => {
         </h2>
 
         <div className="flex flex-row flex-nowrap gap-4 items-center overflow-x-scroll pb-10 px-2">
-          {recommendations.map((recommendation) => (
-            <MenuCard key={recommendation._id} menu={recommendation} />
-          ))}
+          {recommendations &&
+            recommendations.map((recommendation) => (
+              <MenuCard key={recommendation._id} menu={recommendation} />
+            ))}
         </div>
       </section>
     </motion.div>

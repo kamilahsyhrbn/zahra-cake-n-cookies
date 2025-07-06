@@ -87,43 +87,44 @@ export const Category = () => {
               </tr>
             </thead>
             <tbody>
-              {categories?.map((category, i) => (
-                <tr
-                  key={category._id}
-                  className="bg-white border-b border-gray-200 hover:bg-gray-100"
-                >
-                  <td scope="row" className="pl-6 py-4 w-max">
-                    {i + 1}
-                  </td>
-                  <td className="px-6 py-4 truncate capitalize">
-                    {category.name}
-                  </td>
-                  <td className="px-6 py-4 max-w-48 truncate">
-                    {category.description || "-"}
-                  </td>
-                  <td className="px-6 py-4">
-                    <img
-                      src={category.image || "/no-image.png"}
-                      alt="Kue"
-                      className="min-w-16 md:w-16 h-16 object-cover rounded-md"
-                    />
-                  </td>
-                  <td className="px-6 py-7 flex gap-3">
-                    <Link
-                      to={`/admin/category-form/${category._id}`}
-                      className="text-[#54B0A2] hover:underline font-medium"
-                    >
-                      Ubah
-                    </Link>
-                    <button
-                      onClick={() => handleShowDeleteModal(category._id)}
-                      className="text-red-500 hover:underline font-medium cursor-pointer"
-                    >
-                      Hapus
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {categories &&
+                categories?.map((category, i) => (
+                  <tr
+                    key={category._id}
+                    className="bg-white border-b border-gray-200 hover:bg-gray-100"
+                  >
+                    <td scope="row" className="pl-6 py-4 w-max">
+                      {i + 1}
+                    </td>
+                    <td className="px-6 py-4 truncate capitalize">
+                      {category.name}
+                    </td>
+                    <td className="px-6 py-4 max-w-48 truncate">
+                      {category.description || "-"}
+                    </td>
+                    <td className="px-6 py-4">
+                      <img
+                        src={category.image || "/no-image.png"}
+                        alt="Kue"
+                        className="min-w-16 md:w-16 h-16 object-cover rounded-md"
+                      />
+                    </td>
+                    <td className="px-6 py-7 flex gap-3">
+                      <Link
+                        to={`/admin/category-form/${category._id}`}
+                        className="text-[#54B0A2] hover:underline font-medium"
+                      >
+                        Ubah
+                      </Link>
+                      <button
+                        onClick={() => handleShowDeleteModal(category._id)}
+                        className="text-red-500 hover:underline font-medium cursor-pointer"
+                      >
+                        Hapus
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </section>

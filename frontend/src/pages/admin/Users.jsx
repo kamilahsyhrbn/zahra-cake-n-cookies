@@ -86,47 +86,48 @@ export const Users = () => {
               </tr>
             </thead>
             <tbody>
-              {users?.map((user, i) => (
-                <tr
-                  key={user?._id}
-                  className="bg-white border-b border-gray-200 hover:bg-gray-100"
-                >
-                  <td className="px-6 py-4 align-middle">{i + 1}</td>
-                  <td className="px-6 py-4 align-middle">
-                    <div className="flex items-center">
-                      <img
-                        className="w-10 h-10 rounded-full"
-                        src={user?.image || "/avatar.png"}
-                        alt={user?.name}
-                      />
-                      <p className="font-medium ps-3">{user?.name}</p>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 align-middle text-gray-500">
-                    {user?.email}
-                  </td>
-                  <td className="px-6 py-4 align-middle text-gray-500 text-nowrap">
-                    {format(new Date(user?.createdAt), "dd MMMM yyyy", {
-                      locale: id,
-                    })}
-                  </td>
-                  <td className="px-6 py-7 align-middle text-center flex justify-center gap-3">
-                    <button
-                      onClick={() => handleShowDetailModal(user)}
-                      className="font-medium text-[#54B0A2] hover:underline cursor-pointer"
-                    >
-                      Lihat
-                    </button>
+              {users &&
+                users?.map((user, i) => (
+                  <tr
+                    key={user?._id}
+                    className="bg-white border-b border-gray-200 hover:bg-gray-100"
+                  >
+                    <td className="px-6 py-4 align-middle">{i + 1}</td>
+                    <td className="px-6 py-4 align-middle">
+                      <div className="flex items-center">
+                        <img
+                          className="w-10 h-10 rounded-full"
+                          src={user?.image || "/avatar.png"}
+                          alt={user?.name}
+                        />
+                        <p className="font-medium ps-3">{user?.name}</p>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 align-middle text-gray-500">
+                      {user?.email}
+                    </td>
+                    <td className="px-6 py-4 align-middle text-gray-500 text-nowrap">
+                      {format(new Date(user?.createdAt), "dd MMMM yyyy", {
+                        locale: id,
+                      })}
+                    </td>
+                    <td className="px-6 py-7 align-middle text-center flex justify-center gap-3">
+                      <button
+                        onClick={() => handleShowDetailModal(user)}
+                        className="font-medium text-[#54B0A2] hover:underline cursor-pointer"
+                      >
+                        Lihat
+                      </button>
 
-                    <button
-                      onClick={() => handleShowDeleteModal(user?._id)}
-                      className="font-medium text-red-600 hover:underline cursor-pointer"
-                    >
-                      Hapus
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                      <button
+                        onClick={() => handleShowDeleteModal(user?._id)}
+                        className="font-medium text-red-600 hover:underline cursor-pointer"
+                      >
+                        Hapus
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </section>

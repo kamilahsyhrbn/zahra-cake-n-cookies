@@ -135,45 +135,46 @@ export const Order = () => {
               </tr>
             </thead>
             <tbody className="w-full">
-              {filteredOrders?.map((order) => (
-                <tr
-                  key={order?._id}
-                  className="bg-white border-b border-gray-200 hover:bg-gray-100 "
-                >
-                  <td scope="row" className="pl-6 py-4 w-max">
-                    {order?.transaction?.orderId}
-                  </td>
-                  <td className="px-6 py-4 truncate">
-                    {order?.shipping?.name}
-                  </td>
-                  <td className="px-6 py-4">
-                    {format(new Date(order?.createdAt), "dd MMMM yyyy", {
-                      locale: id,
-                    })}
-                  </td>
-                  <td className="px-6 py-4">
-                    {formatCurrency(order?.totalPrice)}
-                  </td>
-                  <td className="px-6 py-4">
-                    {order?.status === "processing"
-                      ? "Diproses"
-                      : order?.status === "shipped"
-                      ? "Dikirim"
-                      : "Selesai"}
-                  </td>
-                  <td className="px-6 py-4 uppercase">
-                    {order?.shipping?.courier}
-                  </td>
-                  <td className="px-6 py-4">
-                    <Link
-                      to={`/admin/order-detail/${order?._id}`}
-                      className="text-[#1D6F64]  hover:underline font-medium"
-                    >
-                      Detail
-                    </Link>
-                  </td>
-                </tr>
-              ))}
+              {filteredOrders &&
+                filteredOrders?.map((order) => (
+                  <tr
+                    key={order?._id}
+                    className="bg-white border-b border-gray-200 hover:bg-gray-100 "
+                  >
+                    <td scope="row" className="pl-6 py-4 w-max">
+                      {order?.transaction?.orderId}
+                    </td>
+                    <td className="px-6 py-4 truncate">
+                      {order?.shipping?.name}
+                    </td>
+                    <td className="px-6 py-4">
+                      {format(new Date(order?.createdAt), "dd MMMM yyyy", {
+                        locale: id,
+                      })}
+                    </td>
+                    <td className="px-6 py-4">
+                      {formatCurrency(order?.totalPrice)}
+                    </td>
+                    <td className="px-6 py-4">
+                      {order?.status === "processing"
+                        ? "Diproses"
+                        : order?.status === "shipped"
+                        ? "Dikirim"
+                        : "Selesai"}
+                    </td>
+                    <td className="px-6 py-4 uppercase">
+                      {order?.shipping?.courier}
+                    </td>
+                    <td className="px-6 py-4">
+                      <Link
+                        to={`/admin/order-detail/${order?._id}`}
+                        className="text-[#1D6F64]  hover:underline font-medium"
+                      >
+                        Detail
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </section>

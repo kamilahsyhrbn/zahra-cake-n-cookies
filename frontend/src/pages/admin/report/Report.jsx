@@ -314,37 +314,38 @@ export const Report = () => {
                   </tr>
                 </thead>
                 <tbody className="w-full">
-                  {reportResult.map((order, i) => (
-                    <tr
-                      key={order._id}
-                      className="bg-white border-b border-gray-200 hover:bg-gray-100 "
-                    >
-                      <td scope="row" className="pl-6 py-4 w-max">
-                        {i + 1}
-                      </td>
-                      <td className="px-6 py-4 truncate">
-                        {order.shipping.name}
-                      </td>
-                      <td className="px-6 py-4">
-                        {format(new Date(order.createdAt), "dd MMMM yyyy", {
-                          locale: id,
-                        })}
-                      </td>
-                      <td className="px-6 py-4">
-                        {order.status === "processing"
-                          ? "Diproses"
-                          : order.status === "shipped"
-                          ? "Dikirim"
-                          : "Selesai"}
-                      </td>
-                      <td className="px-6 py-4">
-                        {formatCurrency(order.totalPrice)}
-                      </td>
-                      <td className="px-6 py-4">
-                        {order.shipping.trackingNumber || "-"}
-                      </td>
-                    </tr>
-                  ))}
+                  {reportResult &&
+                    reportResult?.map((order, i) => (
+                      <tr
+                        key={order._id}
+                        className="bg-white border-b border-gray-200 hover:bg-gray-100 "
+                      >
+                        <td scope="row" className="pl-6 py-4 w-max">
+                          {i + 1}
+                        </td>
+                        <td className="px-6 py-4 truncate">
+                          {order.shipping.name}
+                        </td>
+                        <td className="px-6 py-4">
+                          {format(new Date(order.createdAt), "dd MMMM yyyy", {
+                            locale: id,
+                          })}
+                        </td>
+                        <td className="px-6 py-4">
+                          {order.status === "processing"
+                            ? "Diproses"
+                            : order.status === "shipped"
+                            ? "Dikirim"
+                            : "Selesai"}
+                        </td>
+                        <td className="px-6 py-4">
+                          {formatCurrency(order.totalPrice)}
+                        </td>
+                        <td className="px-6 py-4">
+                          {order.shipping.trackingNumber || "-"}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </section>

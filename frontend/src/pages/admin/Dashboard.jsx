@@ -97,15 +97,16 @@ export const Dashboard = () => {
       <section className="my-7">
         <SubTitle title="Menu paling banyak dibeli pelanggan" />
 
-        {bestSelling && bestSelling.length === 0 ? (
+        {bestSelling && bestSelling?.length === 0 ? (
           <p className="text-center text-gray-500 mt-4 mb-20">
             Belum ada menu paling banyak dibeli
           </p>
         ) : (
           <div className="flex flex-row flex-nowrap gap-4 items-center overflow-x-scroll py-5 px-2">
-            {bestSelling.map((menu) => (
-              <MenuCard key={menu._id} menu={menu} />
-            ))}
+            {bestSelling &&
+              bestSelling?.map((menu) => (
+                <MenuCard key={menu._id} menu={menu} />
+              ))}
           </div>
         )}
       </section>
@@ -150,33 +151,38 @@ export const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {orders
-                    ?.filter((order) => order.status === "processing")
-                    .slice(0, 3)
-                    .map((order) => (
-                      <tr
-                        className="bg-white border-b border-gray-200 hover:bg-gray-100"
-                        key={order._id}
-                      >
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                  {orders &&
+                    orders
+                      ?.filter((order) => order.status === "processing")
+                      .slice(0, 3)
+                      .map((order) => (
+                        <tr
+                          className="bg-white border-b border-gray-200 hover:bg-gray-100"
+                          key={order._id}
                         >
-                          {order.transaction.orderId}
-                        </th>
-                        <td className="px-6 py-4 truncate">
-                          {format(new Date(order?.createdAt), "dd MMMM yyyy", {
-                            locale: id,
-                          })}
-                        </td>
-                        <td className="px-6 py-4 max-w-48 truncate">
-                          {order?.shipping?.name}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {formatCurrency(order.totalPrice)}
-                        </td>
-                      </tr>
-                    ))}
+                          <th
+                            scope="row"
+                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                          >
+                            {order.transaction.orderId}
+                          </th>
+                          <td className="px-6 py-4 truncate">
+                            {format(
+                              new Date(order?.createdAt),
+                              "dd MMMM yyyy",
+                              {
+                                locale: id,
+                              }
+                            )}
+                          </td>
+                          <td className="px-6 py-4 max-w-48 truncate">
+                            {order?.shipping?.name}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            {formatCurrency(order.totalPrice)}
+                          </td>
+                        </tr>
+                      ))}
                 </tbody>
               </table>
             </div>
@@ -204,31 +210,32 @@ export const Dashboard = () => {
             <div className="relative overflow-x-auto shadow-md rounded-lg">
               <table className="w-full text-sm text-left   text-gray-500">
                 <tbody>
-                  {users?.slice(0, 4).map((user) => (
-                    <tr
-                      className="bg-white border-b border-gray-200 hover:bg-gray-100"
-                      key={user._id}
-                    >
-                      <td
-                        scope="row"
-                        className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap"
+                  {users &&
+                    users?.slice(0, 4).map((user) => (
+                      <tr
+                        className="bg-white border-b border-gray-200 hover:bg-gray-100"
+                        key={user._id}
                       >
-                        <img
-                          className="w-10 h-10 rounded-full object-cover"
-                          src={user?.image || "/avatar.png"}
-                          alt={user?.name}
-                        />
-                        <div className="ps-3">
-                          <div className="text-base font-semibold">
-                            {user?.name}
+                        <td
+                          scope="row"
+                          className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap"
+                        >
+                          <img
+                            className="w-10 h-10 rounded-full object-cover"
+                            src={user?.image || "/avatar.png"}
+                            alt={user?.name}
+                          />
+                          <div className="ps-3">
+                            <div className="text-base font-semibold">
+                              {user?.name}
+                            </div>
+                            <div className="font-normal text-gray-500 w-36 lg:w-64 truncate">
+                              {user?.email}
+                            </div>
                           </div>
-                          <div className="font-normal text-gray-500 w-36 lg:w-64 truncate">
-                            {user?.email}
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>

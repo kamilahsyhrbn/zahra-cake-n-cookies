@@ -42,9 +42,8 @@ export const SearchResult = () => {
         </p>
       ) : (
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 my-10 w-full">
-          {searchResult.map((menu) => (
-            <MenuCard key={menu._id} menu={menu} />
-          ))}
+          {searchResult &&
+            searchResult.map((menu) => <MenuCard key={menu._id} menu={menu} />)}
         </div>
       )}
     </div>
