@@ -84,7 +84,6 @@ export const Menu = () => {
             <option value="oldest">Terlama</option>
             <option value="price-asc">Harga Tertinggi</option>
             <option value="price-desc">Harga Terendah</option>
-            <option value="top-menus">Terlaris</option>
           </select>
         </div>
       </div>

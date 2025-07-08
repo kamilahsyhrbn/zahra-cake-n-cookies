@@ -83,6 +83,11 @@ export const UpdateProfile = () => {
       return;
     }
 
+    if (formData.image && formData.image.size > 5 * 1024 * 1024) {
+      showErrorToast("Ukuran gambar maksimal 5MB.");
+      return;
+    }
+
     const data = new FormData();
     data.append("name", formData.name);
     data.append("phone", formData.phone);
@@ -94,7 +99,7 @@ export const UpdateProfile = () => {
       showSuccessToast("Profil berhasil diperbarui.");
       navigate("/profile/my-profile");
     } else {
-      setErrorMessage(response.message);
+      showErrorToast(response.message || "Terjadi kesalahan.");
     }
   };
 

@@ -329,9 +329,9 @@ export const DetailMenu = () => {
             <div
               className={`grid ${
                 reviews.length === 1
-                  ? "grid-cols-1"
+                  ? "grid-rows-1"
                   : reviews.length === 2
-                  ? "grid-cols-2"
+                  ? "grid-rows-2"
                   : "grid-rows-3"
               }  grid-flow-col auto-cols-[100%] gap-3`}
             >

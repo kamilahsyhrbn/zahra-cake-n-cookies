@@ -72,6 +72,11 @@ export const CategoryForm = () => {
       data.append("image", formData.image || "");
       let response;
 
+      if (formData.image && formData.image.size > 5 * 1024 * 1024) {
+        showErrorToast("Ukuran gambar maksimal 5MB.");
+        return;
+      }
+
       if (isUpdate) {
         response = await updateCategory(id, data);
       } else {

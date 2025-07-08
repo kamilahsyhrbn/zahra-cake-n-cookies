@@ -78,8 +78,6 @@ export const getAllMenus = async (req, res) => {
       sortOptions.createdAt = -1;
     } else if (sort === "oldest") {
       sortOptions.createdAt = 1;
-    } else if (sort === "top-menus") {
-      sortOptions.totalSold = -1;
     }
 
     const menus = await Menu.find(filter)

@@ -79,7 +79,7 @@ export const Home = () => {
           </h4>
           <div className="w-27 md:w-1.5 h-1.5 md:h-auto bg-[#1D6F64]"></div>
           <p>
-            Cobalah menu yang paling banyak disukai pelanggan setia kami! Rasa
+            Cobalah menu yang paling banyak dibeli pelanggan setia kami! Rasa
             lezat dan kualitas premium yang selalu bikin ketagihan!
           </p>
         </div>

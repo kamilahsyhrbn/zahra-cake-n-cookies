@@ -6,19 +6,16 @@ export const createReview = async (req, res) => {
   try {
     const { orderId, menuId, rating, comment } = req.body;
 
-    // Cek order
     const order = await Order.findById(orderId);
     if (!order)
       return res.status(404).json({ message: "Order tidak ditemukan" });
 
-    // Pastikan menu ada dalam order
     const item = order.items.find(
       (i) => i.menu.toString() === menuId.toString()
     );
     if (!item)
       return res.status(400).json({ message: "Menu tidak ada dalam order" });
 
-    // Cek existing review
     const existing = await Review.findOne({
       user: req.user.id,
       menu: menuId,
@@ -29,7 +26,6 @@ export const createReview = async (req, res) => {
         .status(400)
         .json({ message: "Kamu sudah memberikan review untuk menu ini" });
 
-    // Buat review baru
     const review = await Review.create({
       user: req.user.id,
       menu: menuId,
@@ -38,11 +34,9 @@ export const createReview = async (req, res) => {
       comment,
     });
 
-    // Tandai item sudah direview
     item.isReviewed = true;
     await order.save();
 
-    // Update totalReview, totalRating, averageRating di Menu
     const menu = await Menu.findById(menuId);
     if (!menu) return res.status(404).json({ message: "Menu tidak ditemukan" });
 

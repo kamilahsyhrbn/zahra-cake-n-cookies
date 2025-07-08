@@ -49,7 +49,7 @@ export const Users = () => {
 
   return (
     <div>
-      <TitleCard title="Daftar Pengguna" />
+      <TitleCard title="Daftar Pelanggan" />
 
       <section className="flex flex-col">
         <h4>Jumlah Pelanggan</h4>

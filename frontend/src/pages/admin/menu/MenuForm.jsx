@@ -218,7 +218,6 @@ export const MenuForm = () => {
       });
       setDeletedImages([]);
     } else {
-      console.log("Error in creating menu", error);
       showErrorToast(response.response.data.message || "Terjadi kesalahan");
     }
   };
