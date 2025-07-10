@@ -150,6 +150,15 @@ export const MenuForm = () => {
       return;
     }
 
+    if (
+      formData.images.some(
+        (image) => image.file && image.file.size > 5 * 1024 * 1024
+      )
+    ) {
+      showErrorToast("Foto Menu tidak boleh lebih dari 5MB");
+      return;
+    }
+
     if (formData.stock < 0) {
       showErrorToast("Stok tidak boleh kurang dari 0");
       return;

@@ -25,9 +25,10 @@ export const Menu = () => {
     const response = await deleteMenu(selectedMenu);
     if (response?.success) {
       showSuccessToast("Menu berhasil dihapus");
-      getAllMenus();
+      await getAllMenus({ category: "", sort: "newest" });
     }
     setShowDeleteModal(false);
+    setSelectedMenu(null);
   };
 
   if (isLoading) {

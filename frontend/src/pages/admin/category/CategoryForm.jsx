@@ -65,42 +65,38 @@ export const CategoryForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const data = new FormData();
-      data.append("name", formData.name.toLocaleLowerCase());
-      data.append("description", formData.description || "");
-      data.append("image", formData.image || "");
-      let response;
+    const data = new FormData();
+    data.append("name", formData.name.toLocaleLowerCase());
+    data.append("description", formData.description || "");
+    data.append("image", formData.image || "");
+    let response;
 
-      if (formData.image && formData.image.size > 5 * 1024 * 1024) {
-        showErrorToast("Ukuran gambar maksimal 5MB.");
-        return;
-      }
-
-      if (isUpdate) {
-        response = await updateCategory(id, data);
-      } else {
-        response = await createCategory(data);
-      }
-
-      if (response?.success) {
-        showSuccessToast(
-          isUpdate
-            ? "Kategori berhasil diubah"
-            : "Kategori berhasil ditambahkan"
-        );
-        navigate("/admin/categories");
-
-        setFormData({
-          name: "",
-          description: "",
-          image: null,
-        });
-        setPreview(null);
-      }
-    } catch (error) {
-      showErrorToast(error.response.data.message || "Terjadi kesalahan");
+    if (formData.image && formData.image.size > 5 * 1024 * 1024) {
+      showErrorToast("Ukuran gambar maksimal 5MB.");
+      return;
     }
+
+    if (isUpdate) {
+      response = await updateCategory(id, data);
+    } else {
+      response = await createCategory(data);
+    }
+
+    if (response?.success) {
+      showSuccessToast(
+        isUpdate ? "Kategori berhasil diubah" : "Kategori berhasil ditambahkan"
+      );
+      navigate("/admin/categories");
+
+      setFormData({
+        name: "",
+        description: "",
+        image: null,
+      });
+      setPreview(null);
+    }
+
+    showErrorToast(response.response.data.message || "Terjadi kesalahan");
   };
 
   return (

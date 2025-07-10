@@ -5,6 +5,7 @@ import useAuthStore from "../../store/authStore";
 import { useNavigate } from "react-router-dom";
 import { IoMdRefresh } from "react-icons/io";
 import useOrderStore from "../../store/orderStore";
+import { removeAccessToken } from "../../utils/tokenManager";
 
 export const DeletAccount = ({ onClose }) => {
   const navigate = useNavigate();
@@ -87,6 +88,7 @@ export const DeletAccount = ({ onClose }) => {
       showSuccessToast("Akun berhasil dihapus");
       navigate("/");
       onClose();
+      removeAccessToken();
     } else {
       showErrorToast(response.response.data.message || "Terjadi kesalahan");
     }

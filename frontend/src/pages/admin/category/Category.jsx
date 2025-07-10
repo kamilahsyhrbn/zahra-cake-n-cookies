@@ -29,7 +29,7 @@ export const Category = () => {
     const response = await deleteCategory(selectedCategory);
     if (response?.success) {
       showSuccessToast("Kategori berhasil dihapus");
-      getAllCategories();
+      await getAllCategories();
     } else {
       showErrorToast(response.response.data.message || "Terjadi kesalahan");
     }

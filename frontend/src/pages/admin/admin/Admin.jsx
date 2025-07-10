@@ -35,7 +35,7 @@ export const Admin = () => {
 
     if (response?.success) {
       showSuccessToast("Admin berhasil dihapus");
-      getAllAdmins();
+      await getAllAdmins();
     } else {
       showErrorToast(response.response.data.message || "Terjadi kesalahan");
     }

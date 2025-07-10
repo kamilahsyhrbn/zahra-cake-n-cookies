@@ -1,5 +1,7 @@
 import User from "../models/user.model.js";
 import Menu from "../models/menu.model.js";
+import Cart from "../models/cart.model.js";
+
 import cloudinary from "../lib/cloudinary.js";
 import tf from "@tensorflow/tfjs";
 
@@ -84,10 +86,12 @@ export const getAllMenus = async (req, res) => {
       .sort(sortOptions)
       .populate("category");
 
+    const availableMenus = menus.filter((menu) => menu.isDeleted === false);
+
     res.status(200).json({
       success: true,
       message: "Berhasil mendapatkan semua data menu",
-      data: menus,
+      data: availableMenus,
     });
   } catch (error) {
     console.log("Error in getting all Menus", error);
@@ -211,13 +215,16 @@ export const deleteMenu = async (req, res) => {
         message: "Menu tidak ditemukan",
       });
     }
-    // hapus foto dari cloudinary
-    for (const imageUrl of menu.images) {
-      const imageId = imageUrl.split("/").pop().split(".")[0];
-      await cloudinary.uploader.destroy(`zahra-cakencookies/${imageId}`);
-    }
 
-    await Menu.findByIdAndDelete(id);
+    menu.isDeleted = true;
+    menu.likes = [];
+    await menu.save();
+
+    await User.updateMany({ likedMenus: id }, { $pull: { likedMenus: id } });
+    await Cart.updateMany(
+      { "menus.menu": id },
+      { $pull: { menus: { menu: id } } }
+    );
 
     res.status(200).json({
       success: true,
@@ -246,6 +253,7 @@ export const searchMenu = async (req, res) => {
 
     const menus = await Menu.find({
       name: { $regex: query, $options: "i" },
+      isDeleted: false,
     });
 
     res.status(200).json({
@@ -333,7 +341,9 @@ export const likeUnlikeMenu = async (req, res) => {
 
 export const getBestSellingMenu = async (req, res) => {
   try {
-    const menus = await Menu.find();
+    const menus = await Menu.find({
+      $or: [{ isDeleted: false }, { isDeleted: { $exists: true } }],
+    });
 
     if (menus.length === 0) {
       return res.status(200).json({
@@ -390,6 +400,8 @@ export const getRecommendationMenus = async (req, res) => {
     const menus = await Menu.find({
       _id: { $ne: id },
       stock: { $gte: 1 },
+      category: menu.category,
+      isDeleted: false,
     }).limit(4);
 
     res.status(200).json({

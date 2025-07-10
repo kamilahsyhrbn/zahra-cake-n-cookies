@@ -157,7 +157,7 @@ export const DetailMenu = () => {
                   <svg
                     aria-hidden="true"
                     role="status"
-                    class="inline w-5 h-5 text-[#1D6F64] animate-spin"
+                    className="inline w-5 h-5 text-[#1D6F64] animate-spin"
                     viewBox="0 0 100 101"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -351,12 +351,18 @@ export const DetailMenu = () => {
           Rekomendasi menu lainnya
         </h2>
 
-        <div className="flex flex-row flex-nowrap gap-4 items-center overflow-x-scroll pb-10 px-2">
-          {recommendations &&
-            recommendations.map((recommendation) => (
-              <MenuCard key={recommendation._id} menu={recommendation} />
-            ))}
-        </div>
+        {recommendations && recommendations?.length === 0 ? (
+          <p className="text-sm text-gray-500">
+            Belum ada rekomendasi untuk menu ini.
+          </p>
+        ) : (
+          <div className="flex flex-row flex-nowrap gap-4 items-center overflow-x-scroll pb-10 px-2">
+            {recommendations &&
+              recommendations.map((recommendation) => (
+                <MenuCard key={recommendation._id} menu={recommendation} />
+              ))}
+          </div>
+        )}
       </section>
     </motion.div>
   );

@@ -46,7 +46,7 @@ export const createCategory = async (req, res) => {
 
 export const getAllCategories = async (req, res) => {
   try {
-    const categories = await Category.find();
+    const categories = await Category.find({ isDeleted: false });
 
     res.status(200).json({
       success: true,
@@ -152,12 +152,8 @@ export const deleteCategory = async (req, res) => {
       });
     }
 
-    if (category.image) {
-      const publicId = category.image.split("/").pop().split(".")[0];
-      await cloudinary.uploader.destroy(`zahra-cakencookies/${publicId}`);
-    }
-
-    await Category.findByIdAndDelete(id);
+    category.isDeleted = true;
+    await category.save();
 
     res.status(200).json({
       success: true,

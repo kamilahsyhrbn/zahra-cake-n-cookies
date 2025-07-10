@@ -1,10 +1,12 @@
-import Review from "../models/review.model.js";
+import Menu from "../models/menu.model.js";
 import User from "../models/user.model.js";
 import { v2 as cloudinary } from "cloudinary";
 
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({ role: "user" }).sort({ createdAt: -1 });
+    const users = await User.find({ role: "user", isDeleted: false }).sort({
+      createdAt: -1,
+    });
 
     res.status(200).json({
       success: true,
@@ -23,7 +25,9 @@ export const getAllUsers = async (req, res) => {
 
 export const getAllAdmins = async (req, res) => {
   try {
-    const admins = await User.find({ role: "admin" }).sort({ createdAt: -1 });
+    const admins = await User.find({ role: "admin", isDeleted: false }).sort({
+      createdAt: -1,
+    });
 
     res.status(200).json({
       success: true,
@@ -122,7 +126,7 @@ export const deleteAccount = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const user = await User.findByIdAndDelete(id);
+    const user = await User.findById(id);
 
     if (!user) {
       return res.status(404).json({
@@ -131,16 +135,15 @@ export const deleteAccount = async (req, res) => {
       });
     }
 
-    if (user.image) {
-      const publicId = user.image.split("/").pop().split(".")[0];
-      await cloudinary.uploader.destroy(`zahra-cakencookies/${publicId}`);
-    }
+    user.isDeleted = true;
+    user.likedMenus = [];
+    await user.save();
 
-    const reviews = await Review.find({ user: id });
-
-    for (const review of reviews) {
-      await Review.findByIdAndDelete(review._id);
-    }
+    await Menu.updateMany(
+      { likes: id },
+      { $pull: { likes: id } },
+      { new: true }
+    );
 
     res.status(200).json({
       success: true,
