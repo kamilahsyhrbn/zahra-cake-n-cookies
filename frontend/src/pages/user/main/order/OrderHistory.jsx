@@ -37,7 +37,6 @@ export const OrderHistory = () => {
     selectedStatus === "semua"
       ? orders
       : orders.filter((order) => order.status === selectedStatus);
-  console.log("order", orders);
 
   if (isLoading) {
     return <Loader />;
