@@ -173,9 +173,7 @@ export const OrderHistoryDetail = () => {
         {
           text: `${order?.shipping?.name}\n${order?.shipping?.phone}\n${
             order?.shipping?.address
-          }, ${order?.shipping?.city}, ${
-            order?.shipping?.province
-          }\nCatatan untuk penjual: ${order?.shipping?.note || "-"}`,
+          },\nCatatan untuk penjual: ${order?.shipping?.note || "-"}`,
           margin: [0, 0, 0, 10],
         },
       ],
