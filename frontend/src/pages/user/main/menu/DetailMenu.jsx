@@ -204,7 +204,7 @@ export const DetailMenu = () => {
             <h4 className="font-medium text-lg">
               {formatCurrency(selectedMenu?.price)}
             </h4>
-            <p className="text-sm flex items-center gap-1">
+            <p className="text-sm flex flex-wrap items-center gap-1">
               Terjual {selectedMenu?.totalSold}{" "}
               <span className="text-lg">•</span>{" "}
               <span className="flex items-center gap-1">

@@ -28,22 +28,27 @@ export const Payment = () => {
   }, [orderId]);
 
   useEffect(() => {
-    if (order) {
-      if (
-        !isLoadingUser &&
-        !isLoading &&
-        currentUser?._id !== order?.user._id
-      ) {
-        navigate("/order-history");
-      }
-    }
-    updateTransactionStatus(order?.transaction?.orderId);
+    const updateStatusAndCalculateTotal = async () => {
+      if (order !== null) {
+        if (
+          !isLoadingUser &&
+          !isLoading &&
+          currentUser?._id !== order?.user._id
+        ) {
+          navigate("/order-history");
+        } else {
+          await updateTransactionStatus(order?.transaction?.orderId);
 
-    let total = 0;
-    order?.items?.forEach((item) => {
-      total += parseFloat(item?.price) * item?.quantity;
-    });
-    setSubtotal(total);
+          let total = 0;
+          order?.items?.forEach((item) => {
+            total += parseFloat(item?.price) * item?.quantity;
+          });
+          setSubtotal(total);
+        }
+      }
+    };
+
+    updateStatusAndCalculateTotal();
   }, [order]);
 
   const handleDeleteModal = () => {

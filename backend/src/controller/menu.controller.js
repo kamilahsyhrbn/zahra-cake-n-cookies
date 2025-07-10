@@ -342,7 +342,7 @@ export const likeUnlikeMenu = async (req, res) => {
 export const getBestSellingMenu = async (req, res) => {
   try {
     const menus = await Menu.find({
-      $or: [{ isDeleted: false }, { isDeleted: { $exists: true } }],
+      $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }],
     });
 
     if (menus.length === 0) {

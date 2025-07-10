@@ -7,7 +7,7 @@ import Danger from "../../modals/Danger";
 import { Review } from "../../modals/Review";
 
 export const OrderCard = ({ order }) => {
-  const { updateOrder, deleteOrder, isOrderLoading } = useOrderStore();
+  const { updateOrder, isOrderLoading } = useOrderStore();
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
@@ -127,7 +127,7 @@ export const OrderCard = ({ order }) => {
             onClick={handleReceived}
             className="bg-transparent border border-[#54B0A2] hover:bg-[#1D6F64] hover:border-[#1D6F64] hover:text-white transition-colors duration-300 px-4 py-2 rounded-xl cursor-pointer"
           >
-            {isOrderLoading ? "Memproses..." : "Pesan Diterima"}
+            {isOrderLoading ? "Memproses..." : "Pesanan Diterima"}
           </button>
         ) : order.status === "delivered" &&
           !order.items.every((item) => item.isReviewed) ? (

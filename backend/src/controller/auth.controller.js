@@ -33,18 +33,34 @@ export const register = async (req, res) => {
 
     const existingEmail = await User.findOne({ email });
     if (existingEmail) {
-      return res.status(400).json({
-        success: false,
-        message: "Email sudah terdaftar",
-      });
+      if (existingEmail.isDeleted) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Email ini sudah terdaftar namun saat ini dinonaktifkan. Silakan hubungi admin untuk mengaktifkannya kembali.",
+        });
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: "Email sudah terdaftar",
+        });
+      }
     }
 
     const existingPhone = await User.findOne({ phone });
     if (role === "user" && existingPhone) {
-      return res.status(400).json({
-        success: false,
-        message: "Nomor telepon sudah terdaftar",
-      });
+      if (existingPhone.isDeleted) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Nomor telepon ini sudah terdaftar namun saat ini dinonaktifkan. Silakan hubungi admin untuk mengaktifkannya kembali.",
+        });
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: "Nomor telepon sudah terdaftar",
+        });
+      }
     }
 
     const user = await User.create({

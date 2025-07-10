@@ -19,16 +19,22 @@ export const PaymentStatus = () => {
 
   useEffect(() => {
     const fetchTransactionStatus = async () => {
-      const response = await webHookMidtrans({
-        order_id,
-        transaction_status,
-      });
-
-      if (response?.success) {
-        setIsSuccess(true);
-        showSuccessToast("Pembayaran berhasil");
+      if (!transaction_status || transaction_status === null) {
+        return;
       } else {
-        showErrorToast(response?.response?.data?.message || "Pembayaran gagal");
+        const response = await webHookMidtrans({
+          order_id,
+          transaction_status,
+        });
+
+        if (response?.success) {
+          setIsSuccess(true);
+          showSuccessToast("Pembayaran berhasil");
+        } else {
+          showErrorToast(
+            response?.response?.data?.message || "Pembayaran gagal"
+          );
+        }
       }
     };
 

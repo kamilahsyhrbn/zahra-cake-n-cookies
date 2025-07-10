@@ -117,7 +117,7 @@ export const updateReview = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Review berhasil diperbarui",
+      message: "Ulasan berhasil diperbarui",
       data: review,
     });
   } catch (error) {
@@ -175,7 +175,7 @@ export const deleteReview = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Review berhasil dihapus dan averageRating terupdate",
+      message: "Ulasan berhasil dihapus",
       data: menu,
     });
   } catch (error) {

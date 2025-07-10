@@ -34,7 +34,7 @@ const useOrderStore = create((set) => ({
   },
 
   getOrderById: async (id) => {
-    set({ isLoading: true, order: null });
+    set({ isLoading: true });
     try {
       const response = await api.get(`/order/${id}`);
       set({ order: response.data });

@@ -63,7 +63,6 @@ export const updateTransactionStatus = async (req, res) => {
   const auth = Buffer.from(midtransServerKey).toString("base64");
 
   try {
-    // Fetch status dari Midtrans
     const response = await axios.get(
       `https://api.sandbox.midtrans.com/v2/${orderId}/status`,
       {
@@ -135,6 +134,12 @@ export const handleMidtransNotification = async (req, res) => {
   }
 
   if (transactionStatus === transaction?.transactionStatus) {
+    return res
+      .status(200)
+      .json({ success: false, message: "Status transaksi sama" });
+  }
+
+  if (transactionStatus === null) {
     return res
       .status(200)
       .json({ success: false, message: "Status transaksi sama" });

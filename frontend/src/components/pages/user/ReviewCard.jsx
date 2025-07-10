@@ -19,7 +19,7 @@ export const ReviewCard = ({ data }) => {
     const response = await deleteReview(data?.menu, data?._id, data?.order);
 
     if (response?.success) {
-      showSuccessToast("Review berhasil dihapus");
+      showSuccessToast("Ulasan berhasil dihapus");
       setIsDeleteOpen(false);
       setTimeout(() => {
         window.location.reload();

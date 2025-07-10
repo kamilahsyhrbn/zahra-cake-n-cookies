@@ -17,10 +17,18 @@ export const createCategory = async (req, res) => {
     const existingCategory = await Category.findOne({ name: nameLower });
 
     if (existingCategory) {
-      return res.status(400).json({
-        success: false,
-        message: "Kategori sudah ada",
-      });
+      if (existingCategory.isDeleted) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Kategori ini sudah terdaftar namun saat ini dinonaktifkan. Silakan hubungi developer untuk mengaktifkannya kembali.",
+        });
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: "Kategori sudah ada",
+        });
+      }
     }
 
     const category = await Category.create({
@@ -103,6 +111,24 @@ export const updateCategory = async (req, res) => {
         success: false,
         message: "Kategori tidak ditemukan",
       });
+    }
+    if (category.name !== name) {
+      const nameLower = name.toLowerCase();
+      const existingCategory = await Category.findOne({ name: nameLower });
+      if (existingCategory) {
+        if (existingCategory.isDeleted) {
+          return res.status(400).json({
+            success: false,
+            message:
+              "Kategori ini sudah terdaftar namun saat ini dinonaktifkan. Silakan hubungi developer untuk mengaktifkannya kembali.",
+          });
+        } else {
+          return res.status(400).json({
+            success: false,
+            message: "Kategori sudah ada",
+          });
+        }
+      }
     }
 
     category.name = name || category.name;

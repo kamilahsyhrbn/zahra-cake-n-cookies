@@ -17,6 +17,7 @@ import {
   showErrorToast,
   showSuccessToast,
 } from "../../../../components/common/Toast";
+import { Review } from "../../../../components/modals/Review";
 
 export const OrderHistoryDetail = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export const OrderHistoryDetail = () => {
     useOrderStore();
   const { currentUser, isLoading: isLoadingUser } = useAuthStore();
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
   const [subtotal, setSubtotal] = useState(0);
 
@@ -41,7 +43,7 @@ export const OrderHistoryDetail = () => {
   }, [orderId]);
 
   useEffect(() => {
-    if (order) {
+    if (order !== null) {
       if (
         !isLoadingUser &&
         !isLoading &&
@@ -81,6 +83,10 @@ export const OrderHistoryDetail = () => {
 
   const handleCancelModal = () => {
     setIsCancelModalOpen(!isCancelModalOpen);
+  };
+
+  const handleReviewModal = () => {
+    setIsReviewModalOpen(!isReviewModalOpen);
   };
 
   const handlePrintNota = () => {
@@ -383,11 +389,14 @@ export const OrderHistoryDetail = () => {
               onClick={handleReceived}
               className="bg-transparent border border-[#54B0A2] hover:bg-[#1D6F64] hover:border-[#1D6F64] hover:text-white transition-colors duration-300 px-4 py-2 rounded-xl cursor-pointer"
             >
-              {isOrderLoading ? "Memproses..." : "Pesan Diterima"}
+              {isOrderLoading ? "Memproses..." : "Pesanan Diterima"}
             </button>
           ) : order?.status === "delivered" &&
             !order.items.every((menu) => menu.isReviewed) ? (
-            <button className="bg-transparent border border-[#54B0A2] hover:bg-[#1D6F64] hover:border-[#1D6F64] hover:text-white transition-colors duration-300 px-4 py-2 rounded-xl cursor-pointer">
+            <button
+              onClick={handleReviewModal}
+              className="bg-transparent border border-[#54B0A2] hover:bg-[#1D6F64] hover:border-[#1D6F64] hover:text-white transition-colors duration-300 px-4 py-2 rounded-xl cursor-pointer"
+            >
               Berikan Ulasan
             </button>
           ) : (
@@ -404,6 +413,8 @@ export const OrderHistoryDetail = () => {
           onSubmit={handleCancel}
         />
       )}
+
+      {isReviewModalOpen && <Review data={order} onClose={handleReviewModal} />}
     </div>
   );
 };
