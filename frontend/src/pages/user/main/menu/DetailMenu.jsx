@@ -25,7 +25,7 @@ export const DetailMenu = () => {
     recommendations,
   } = useMenuStore();
   const { currentUser } = useAuthStore();
-  const { addToCart, isLoading: cartLoading } = useCartStore();
+  const { addToCart, isLoading: cartLoading, getCarts } = useCartStore();
   const { getAllReviews, reviews } = useReviewStore();
 
   const { id } = useParams();
@@ -45,6 +45,10 @@ export const DetailMenu = () => {
     getMenuById(id);
     getRecommendationsMenu(id);
   }, [id]);
+
+  useEffect(() => {
+    getCarts();
+  }, []);
 
   useEffect(() => {
     getAllReviews(id, filter.sort, filter.rating);
@@ -82,6 +86,7 @@ export const DetailMenu = () => {
     if (response.success) {
       showSuccessToast("Menu berhasil ditambahkan ke keranjang");
       setCount(1);
+      getCarts();
     } else {
       showErrorToast(response.response.data.message || "Terjadi kesalahan");
     }

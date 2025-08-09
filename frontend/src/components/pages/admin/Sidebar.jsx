@@ -60,7 +60,9 @@ export const Sidebar = () => {
         </button>
 
         <Link to="/admin/dashboard">
-          <h1 className="title text-3xl text-center">Zahra Cake & Cookies</h1>
+          <h1 className="md:hidden text-xl flex items-center gap-2">
+            <span className="title2 text-3xl">Zahra</span> Cake & Cookies
+          </h1>
         </Link>
       </div>
 
